@@ -15,7 +15,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
-public class CampaignLoaderController implements Initializable{
+public class CampaignLoaderController extends Controller implements Initializable{
 	
 	private Campaign currentCampaign;
 
