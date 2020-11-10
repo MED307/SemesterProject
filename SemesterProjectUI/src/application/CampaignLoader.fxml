@@ -1,32 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="300.0" minWidth="500.0" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.CampaignLoaderController">
+<AnchorPane id="Body" minHeight="300.0" minWidth="500.0" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.CampaignLoaderController">
 	<children>
-		<ListView fx:id="campaignList" layoutX="800.0" onMouseClicked="#displayCampaign" prefHeight="600.0" prefWidth="200.0" style="-fx-background-color: darkgray;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <effect>
-            <InnerShadow color="#0000005a" />
-         </effect>
-      </ListView>
-		<Button fx:id="newCampaignBtn" layoutX="694.0" layoutY="14.0" mnemonicParsing="false" onAction="#createCampaign" text="new Campaign" AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="20.0" />
-		<Button fx:id="loadCampaignBtn" layoutX="692.0" layoutY="552.0" mnemonicParsing="false" text="Load Campaign" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="210.0" />
-		<Label fx:id="chosenCampaign" layoutX="42.0" layoutY="37.0" minWidth="500.0" prefHeight="50.0" prefWidth="500.0" text="  " AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="30.0">
-        	<font>
-            	<Font name="System Bold" size="29.0" />
-        	</font>
-      	</Label>
-      <Pane layoutX="65.0" layoutY="200.0" prefHeight="325.0" prefWidth="500.0" style="-fx-background-color: darkGray;">
-         <effect>
-            <InnerShadow color="#00000059" />
-         </effect>
+      <Pane prefHeight="600.0" prefWidth="200.0">
+         <children>
+      		<ListView fx:id="campaignList" onMouseClicked="#displayCampaign" prefHeight="525.0" prefWidth="200.0" style="-fx-background-color: darkgray;">
+               <effect>
+                  <InnerShadow color="#0000005a" />
+               </effect>
+            </ListView>
+      		<Button fx:id="newCampaignBtn" layoutY="525.0" mnemonicParsing="false" onAction="#createCampaign" prefHeight="25.0" prefWidth="200.0" text="Create New Campaign" />
+      		<Button fx:id="loadCampaignBtn" disable="true" layoutY="549.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="200.0" text="Load Campaign" />
+            <Button fx:id="deleteCampaignBtn" disable="true" layoutY="574.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="200.0" text="Delete Campaign" />
+         </children>
       </Pane>
-      <Button fx:id="addPlayerBtn" layoutX="65.0" layoutY="530.0" mnemonicParsing="false" text="Add Player" />
+      <AnchorPane id="CampaignInfoPane" layoutX="200.0" layoutY="106.0" prefHeight="600.0" prefWidth="800.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Pane layoutX="36.0" layoutY="138.0" prefHeight="325.0" prefWidth="500.0" style="-fx-background-color: darkGray;">
+               <effect>
+                  <InnerShadow color="#00000059" />
+               </effect>
+               <children>
+                  <TextArea id="DescriptionTextArea" fx:id="descriptionTextarea" prefHeight="325.0" prefWidth="500.0" text="As Nahiri climbed, she smiled. The Murasa Skyclave loomed above her, growing closer with each step. Soon, all the hurts of this plane would be healed. With the Lithoform Core, she would erase the Roil and make Zendikar as beautiful and tranquil as it was millennia ago.&#10;&#10;Like she remembered it.&#10;&#10;She noticed the labored breathing of Akiri, Zareth, Orah, and Kaza behind her, but she didn't slow her breakneck pace. Not when she was so close to her goal." wrapText="true" />
+               </children>
+            </Pane>
+            <Text fx:id="chosenCampaign" layoutX="366.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Campaign Name" textAlignment="RIGHT" wrappingWidth="368.13671875">
+               <font>
+                  <Font name="System Bold" size="29.0" />
+               </font>
+            </Text>
+            <Pane id="PlayerPane" layoutX="536.0" layoutY="114.0" prefHeight="372.0" prefWidth="200.0">
+               <children>
+                  <ListView id="PlayerListView" layoutY="24.0" prefHeight="325.0" prefWidth="200.0" />
+                  <Button fx:id="removePlayerBtn" layoutX="100.0" layoutY="347.0" minWidth="100.0" mnemonicParsing="false" text="Remove Player" />
+                  <Button fx:id="addPlayerBtn" layoutY="347.0" minWidth="100.0" mnemonicParsing="false" text="Add Player" />
+                  <Text layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Players" textAlignment="CENTER" wrappingWidth="200.0" />
+               </children>
+            </Pane>
+            <Pane layoutX="73.0" layoutY="-72.0" prefHeight="200.0" prefWidth="200.0" />
+            <Button fx:id="editBtn" layoutX="286.0" layoutY="463.0" mnemonicParsing="false" text="Edit" />
+         </children>
+      </AnchorPane>
 	</children>
 </AnchorPane>

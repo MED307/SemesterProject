@@ -1,32 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="300.0" minWidth="500.0" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.CampaignLoaderController">
+<AnchorPane id="Body" minHeight="300.0" minWidth="500.0" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.CampaignLoaderController">
 	<children>
-		<ListView fx:id="campaignList" layoutX="800.0" onMouseClicked="#displayCampaign" prefHeight="600.0" prefWidth="200.0" style="-fx-background-color: darkgray;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <effect>
-            <InnerShadow color="#0000005a" />
-         </effect>
-      </ListView>
-		<Button fx:id="newCampaignBtn" layoutX="694.0" layoutY="14.0" mnemonicParsing="false" onAction="#createCampaign" text="new Campaign" AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="20.0" />
-		<Button fx:id="loadCampaignBtn" layoutX="692.0" layoutY="552.0" mnemonicParsing="false" text="Load Campaign" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="210.0" />
-		<Label fx:id="chosenCampaign" layoutX="42.0" layoutY="37.0" minWidth="500.0" prefHeight="50.0" prefWidth="500.0" text="  " AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="30.0">
-        	<font>
-            	<Font name="System Bold" size="29.0" />
-        	</font>
-      	</Label>
-      <Pane layoutX="65.0" layoutY="200.0" prefHeight="325.0" prefWidth="500.0" style="-fx-background-color: darkGray;">
-         <effect>
-            <InnerShadow color="#00000059" />
-         </effect>
-      </Pane>
-      <Button fx:id="addPlayerBtn" layoutX="65.0" layoutY="530.0" mnemonicParsing="false" text="Add Player" />
+      <AnchorPane id="CampaginPane" prefHeight="600.0" prefWidth="1000.0">
+         <children>
+      		<ListView fx:id="campaignList" onMouseClicked="#displayCampaign" prefHeight="525.0" prefWidth="200.0" style="-fx-background-color: darkgray;" AnchorPane.bottomAnchor="75.0" AnchorPane.rightAnchor="800.0" AnchorPane.topAnchor="0.0">
+               <effect>
+                  <InnerShadow color="#0000005a" />
+               </effect>
+            </ListView>
+      		<Button fx:id="newCampaignBtn" mnemonicParsing="false" onAction="#createCampaign" prefHeight="25.0" prefWidth="200.0" text="Create New Campaign" AnchorPane.rightAnchor="800.0" AnchorPane.topAnchor="524.0" />
+      		<Button fx:id="loadCampaignBtn" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="200.0" text="Load Campaign" AnchorPane.bottomAnchor="26.0" AnchorPane.rightAnchor="800.0" />
+            <Button fx:id="deleteCampaignBtn" disable="true" layoutY="574.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="200.0" text="Delete Campaign" />
+         </children>
+      </AnchorPane>
+      <AnchorPane id="CampaignInfoPane" layoutX="200.0" layoutY="106.0" prefHeight="600.0" prefWidth="800.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Pane layoutX="30.0" layoutY="138.0" prefHeight="325.0" prefWidth="500.0" style="-fx-background-color: darkGray;">
+               <effect>
+                  <InnerShadow color="#00000059" />
+               </effect>
+            </Pane>
+            <Button fx:id="addPlayerBtn" layoutX="37.0" layoutY="479.0" mnemonicParsing="false" text="Add Player" />
+            <Button fx:id="addPlayerBtn1" layoutX="111.0" layoutY="479.0" mnemonicParsing="false" text="Remove Player" />
+            <Button fx:id="addPlayerBtn11" layoutX="206.0" layoutY="479.0" mnemonicParsing="false" text="Notes" />
+            <Text fx:id="chosenCampaign" layoutX="417.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Campaign Name" textAlignment="RIGHT" wrappingWidth="368.13671875">
+               <font>
+                  <Font name="System Bold" size="29.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
 	</children>
 </AnchorPane>
