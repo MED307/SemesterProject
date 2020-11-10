@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-public class Controller {
+public abstract class Controller {
 	
 	private Campaign CurrentCampaign;
 
