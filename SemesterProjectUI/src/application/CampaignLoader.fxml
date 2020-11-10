@@ -25,29 +25,38 @@
       </Pane>
       <AnchorPane id="CampaignInfoPane" layoutX="200.0" layoutY="106.0" prefHeight="600.0" prefWidth="800.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Pane layoutX="36.0" layoutY="138.0" prefHeight="325.0" prefWidth="500.0" style="-fx-background-color: darkGray;">
+            <Pane layoutX="36.0" layoutY="110.0" prefHeight="374.0" prefWidth="500.0" style="-fx-background-color: darkGray;">
                <effect>
                   <InnerShadow color="#00000059" />
                </effect>
                <children>
-                  <TextArea id="DescriptionTextArea" fx:id="descriptionTextarea" prefHeight="325.0" prefWidth="500.0" text="As Nahiri climbed, she smiled. The Murasa Skyclave loomed above her, growing closer with each step. Soon, all the hurts of this plane would be healed. With the Lithoform Core, she would erase the Roil and make Zendikar as beautiful and tranquil as it was millennia ago.&#10;&#10;Like she remembered it.&#10;&#10;She noticed the labored breathing of Akiri, Zareth, Orah, and Kaza behind her, but she didn't slow her breakneck pace. Not when she was so close to her goal." wrapText="true" />
+                  <TextArea id="DescriptionTextArea" fx:id="descriptionTextarea" layoutY="23.0" prefHeight="325.0" prefWidth="500.0" text="As Nahiri climbed, she smiled. The Murasa Skyclave loomed above her, growing closer with each step. Soon, all the hurts of this plane would be healed. With the Lithoform Core, she would erase the Roil and make Zendikar as beautiful and tranquil as it was millennia ago.&#10;&#10;Like she remembered it.&#10;&#10;She noticed the labored breathing of Akiri, Zareth, Orah, and Kaza behind her, but she didn't slow her breakneck pace. Not when she was so close to her goal." wrapText="true" />
+                  <Button fx:id="editBtn" layoutY="347.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="500.0" text="Edit" />
+                  <Text layoutX="2.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Campaign Description" textAlignment="CENTER" wrappingWidth="500.0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Text>
                </children>
             </Pane>
-            <Text fx:id="chosenCampaign" layoutX="366.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Campaign Name" textAlignment="RIGHT" wrappingWidth="368.13671875">
+            <Text fx:id="chosenCampaign" fill="WHITE" layoutX="386.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Campaign Name" textAlignment="RIGHT" wrappingWidth="368.13671875">
                <font>
                   <Font name="System Bold" size="29.0" />
                </font>
             </Text>
-            <Pane id="PlayerPane" layoutX="536.0" layoutY="114.0" prefHeight="372.0" prefWidth="200.0">
+            <Pane id="PlayerPane" layoutX="554.0" layoutY="109.0" prefHeight="374.0" prefWidth="200.0" style="-fx-background-color: darkgray;">
                <children>
-                  <ListView id="PlayerListView" layoutY="24.0" prefHeight="325.0" prefWidth="200.0" />
-                  <Button fx:id="removePlayerBtn" layoutX="100.0" layoutY="347.0" minWidth="100.0" mnemonicParsing="false" text="Remove Player" />
+                  <ListView id="PlayerListView" layoutY="24.0" prefHeight="325.0" prefWidth="200.0" style="-fx-background-color: darkgray;" />
+                  <Button fx:id="removePlayerBtn" disable="true" layoutX="100.0" layoutY="347.0" minWidth="100.0" mnemonicParsing="false" text="Remove Player" />
                   <Button fx:id="addPlayerBtn" layoutY="347.0" minWidth="100.0" mnemonicParsing="false" text="Add Player" />
-                  <Text layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Players" textAlignment="CENTER" wrappingWidth="200.0" />
+                  <Text layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Players" textAlignment="CENTER" wrappingWidth="200.0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Text>
                </children>
             </Pane>
             <Pane layoutX="73.0" layoutY="-72.0" prefHeight="200.0" prefWidth="200.0" />
-            <Button fx:id="editBtn" layoutX="286.0" layoutY="463.0" mnemonicParsing="false" text="Edit" />
          </children>
       </AnchorPane>
 	</children>
