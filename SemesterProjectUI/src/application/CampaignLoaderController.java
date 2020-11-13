@@ -13,6 +13,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 
 public class CampaignLoaderController extends Controller implements Initializable{
@@ -32,7 +33,7 @@ public class CampaignLoaderController extends Controller implements Initializabl
 	private ListView<Campaign> campaignList;
 	
 	@FXML
-	private Label chosenCampaign;
+	private Text chosenCampaign;
 
 	
 	public void createCampaign()

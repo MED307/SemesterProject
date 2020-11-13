@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
@@ -10,33 +11,52 @@
 
 <AnchorPane id="Body" minHeight="300.0" minWidth="500.0" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.CampaignLoaderController">
 	<children>
-      <AnchorPane id="CampaginPane" prefHeight="600.0" prefWidth="1000.0">
+      <Pane prefHeight="600.0" prefWidth="200.0">
          <children>
-      		<ListView fx:id="campaignList" onMouseClicked="#displayCampaign" prefHeight="525.0" prefWidth="200.0" style="-fx-background-color: darkgray;" AnchorPane.bottomAnchor="75.0" AnchorPane.rightAnchor="800.0" AnchorPane.topAnchor="0.0">
+      		<ListView fx:id="campaignList" onMouseClicked="#displayCampaign" prefHeight="525.0" prefWidth="200.0" style="-fx-background-color: darkgray;">
                <effect>
                   <InnerShadow color="#0000005a" />
                </effect>
             </ListView>
-      		<Button fx:id="newCampaignBtn" mnemonicParsing="false" onAction="#createCampaign" prefHeight="25.0" prefWidth="200.0" text="Create New Campaign" AnchorPane.rightAnchor="800.0" AnchorPane.topAnchor="524.0" />
-      		<Button fx:id="loadCampaignBtn" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="200.0" text="Load Campaign" AnchorPane.bottomAnchor="26.0" AnchorPane.rightAnchor="800.0" />
+      		<Button fx:id="newCampaignBtn" layoutY="525.0" mnemonicParsing="false" onAction="#createCampaign" prefHeight="25.0" prefWidth="200.0" text="Create New Campaign" />
+      		<Button fx:id="loadCampaignBtn" disable="true" layoutY="549.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="200.0" text="Load Campaign" />
             <Button fx:id="deleteCampaignBtn" disable="true" layoutY="574.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="200.0" text="Delete Campaign" />
          </children>
-      </AnchorPane>
+      </Pane>
       <AnchorPane id="CampaignInfoPane" layoutX="200.0" layoutY="106.0" prefHeight="600.0" prefWidth="800.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Pane layoutX="30.0" layoutY="138.0" prefHeight="325.0" prefWidth="500.0" style="-fx-background-color: darkGray;">
+            <Pane layoutX="36.0" layoutY="110.0" prefHeight="374.0" prefWidth="500.0" style="-fx-background-color: darkGray;">
                <effect>
                   <InnerShadow color="#00000059" />
                </effect>
+               <children>
+                  <TextArea id="DescriptionTextArea" fx:id="descriptionTextarea" layoutY="23.0" prefHeight="325.0" prefWidth="500.0" text="As Nahiri climbed, she smiled. The Murasa Skyclave loomed above her, growing closer with each step. Soon, all the hurts of this plane would be healed. With the Lithoform Core, she would erase the Roil and make Zendikar as beautiful and tranquil as it was millennia ago.&#10;&#10;Like she remembered it.&#10;&#10;She noticed the labored breathing of Akiri, Zareth, Orah, and Kaza behind her, but she didn't slow her breakneck pace. Not when she was so close to her goal." wrapText="true" />
+                  <Button fx:id="editBtn" layoutY="347.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="500.0" text="Edit" />
+                  <Text layoutX="2.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Campaign Description" textAlignment="CENTER" wrappingWidth="500.0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Text>
+               </children>
             </Pane>
-            <Button fx:id="addPlayerBtn" layoutX="37.0" layoutY="479.0" mnemonicParsing="false" text="Add Player" />
-            <Button fx:id="addPlayerBtn1" layoutX="111.0" layoutY="479.0" mnemonicParsing="false" text="Remove Player" />
-            <Button fx:id="addPlayerBtn11" layoutX="206.0" layoutY="479.0" mnemonicParsing="false" text="Notes" />
-            <Text fx:id="chosenCampaign" layoutX="417.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Campaign Name" textAlignment="RIGHT" wrappingWidth="368.13671875">
+            <Text fx:id="chosenCampaign" fill="WHITE" layoutX="386.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Campaign Name" textAlignment="RIGHT" wrappingWidth="368.13671875">
                <font>
                   <Font name="System Bold" size="29.0" />
                </font>
             </Text>
+            <Pane id="PlayerPane" layoutX="554.0" layoutY="109.0" prefHeight="374.0" prefWidth="200.0" style="-fx-background-color: darkgray;">
+               <children>
+                  <ListView id="PlayerListView" layoutY="24.0" prefHeight="325.0" prefWidth="200.0" style="-fx-background-color: darkgray;" />
+                  <Button fx:id="removePlayerBtn" disable="true" layoutX="100.0" layoutY="347.0" minWidth="100.0" mnemonicParsing="false" text="Remove Player" />
+                  <Button fx:id="addPlayerBtn" layoutY="347.0" minWidth="100.0" mnemonicParsing="false" text="Add Player" />
+                  <Text layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Players" textAlignment="CENTER" wrappingWidth="200.0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Pane>
+            <Pane layoutX="73.0" layoutY="-72.0" prefHeight="200.0" prefWidth="200.0" />
          </children>
       </AnchorPane>
 	</children>
