@@ -1,5 +1,6 @@
 package application;
 
+
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -10,7 +11,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
@@ -26,7 +29,13 @@ public class CampaignLoaderController extends Controller implements Initializabl
 	private Button loadCampaignBtn;
 	
 	@FXML
+	private Button deleteCampaignBtn;
+	
+	@FXML
 	private Button addPlayerBtn;
+	
+	@FXML
+	private Button editDescriptionBtn;
 	
 	@FXML
 	private ListView<Campaign> campaignList;
@@ -36,13 +45,17 @@ public class CampaignLoaderController extends Controller implements Initializabl
 	
 	@FXML
 	private Text chosenCampaign;
-
+	
+	@FXML
+	private TextArea descriptionTextarea;
+	
+	@FXML
+	private ImageView menuShadowImg;
+	
 	
 	public void createCampaign()
 	{
-		TextInputDialog userName;
-
-		userName = new TextInputDialog("campaign " + campaignList.getItems().size());
+		TextInputDialog userName = new TextInputDialog("campaign 0");
 		userName.setTitle("Create Campaign");
 		userName.setHeaderText("Choose a Campaign name");
 		userName.setContentText("Campaign name: ");
@@ -61,7 +74,7 @@ public class CampaignLoaderController extends Controller implements Initializabl
 	public void displayCampaign(MouseEvent arg0)
 	{
 		currentCampaign = campaignList.getSelectionModel().getSelectedItem();
-		if (currentCampaign != null) chosenCampaign.setText(currentCampaign.getName());
+		chosenCampaign.setText(currentCampaign.getName());
 		
 		
 	}
@@ -69,9 +82,22 @@ public class CampaignLoaderController extends Controller implements Initializabl
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
-		campaignList.setCellFactory((campaignList -> new CampaignListCellController()));
-		//playerList.setCellFactory((playerList -> new PlayerListCellController()));
-		
+
+		campaignList.setCellFactory(new Callback<ListView<Campaign>, ListCell<Campaign>>() {
+		    @Override
+		    public ListCell<Campaign> call(ListView<Campaign> lv) {
+		        return new ListCell<Campaign>() {
+		            @Override
+		            public void updateItem(Campaign item, boolean empty) {
+		                super.updateItem(item, empty);
+		                if (empty || item == null) {
+		                    setText(null);
+		                } else {
+		                    setText(item.getName());
+		                }		             
+		            }
+		        };
+		    }
+		});
 	}
 }
