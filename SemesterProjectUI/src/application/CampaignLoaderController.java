@@ -1,6 +1,5 @@
 package application;
 
-
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -33,12 +32,17 @@ public class CampaignLoaderController extends Controller implements Initializabl
 	private ListView<Campaign> campaignList;
 	
 	@FXML
+	private ListView<Player> playerList;
+	
+	@FXML
 	private Text chosenCampaign;
 
 	
 	public void createCampaign()
 	{
-		TextInputDialog userName = new TextInputDialog("campaign 0");
+		TextInputDialog userName;
+
+		userName = new TextInputDialog("campaign " + campaignList.getItems().size());
 		userName.setTitle("Create Campaign");
 		userName.setHeaderText("Choose a Campaign name");
 		userName.setContentText("Campaign name: ");
@@ -57,7 +61,7 @@ public class CampaignLoaderController extends Controller implements Initializabl
 	public void displayCampaign(MouseEvent arg0)
 	{
 		currentCampaign = campaignList.getSelectionModel().getSelectedItem();
-		chosenCampaign.setText(currentCampaign.getName());
+		if (currentCampaign != null) chosenCampaign.setText(currentCampaign.getName());
 		
 		
 	}
@@ -66,22 +70,8 @@ public class CampaignLoaderController extends Controller implements Initializabl
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
-		campaignList.setCellFactory(new Callback<ListView<Campaign>, ListCell<Campaign>>() {
-		    @Override
-		    public ListCell<Campaign> call(ListView<Campaign> lv) {
-		        return new ListCell<Campaign>() {
-		            @Override
-		            public void updateItem(Campaign item, boolean empty) {
-		                super.updateItem(item, empty);
-		                if (empty || item == null) {
-		                    setText(null);
-		                } else {
-		                    setText(item.getName());
-		                }
-		            }
-		        };
-		    }
-		});
+		campaignList.setCellFactory((campaignList -> new CampaignListCellController()));
+		//playerList.setCellFactory((playerList -> new PlayerListCellController()));
 		
 	}
 }
