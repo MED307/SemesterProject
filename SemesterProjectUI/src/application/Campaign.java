@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Campaign {
 	
-	private String name;
+	private String campaignName;
 	
 	private ArrayList<Player> players;
 	
@@ -13,18 +13,15 @@ public class Campaign {
 	{
 
 	}
-	
-	void addPlayers(Player value) {
-		players.add(value);
-	}
+
 	
 	public void setName(String _name)
 	{
-		this.name = _name;
+		this.campaignName = _name;
 	}
 	public String getName()
 	{
-		return name;
+		return campaignName;
 	}
 
 	public ArrayList<Player> getPlayers() {
