@@ -18,10 +18,6 @@ public class Campaign {
 		players.add(value);
 	}
 	
-	ArrayList<Player> getPlayers() {
-		return players;
-	}
-	
 	public void setName(String _name)
 	{
 		this.name = _name;
