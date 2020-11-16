@@ -11,7 +11,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
@@ -27,14 +29,29 @@ public class CampaignLoaderController extends Controller implements Initializabl
 	private Button loadCampaignBtn;
 	
 	@FXML
+	private Button deleteCampaignBtn;
+	
+	@FXML
 	private Button addPlayerBtn;
+	
+	@FXML
+	private Button editDescriptionBtn;
 	
 	@FXML
 	private ListView<Campaign> campaignList;
 	
 	@FXML
+	private ListView<Player> playerList;
+	
+	@FXML
 	private Text chosenCampaign;
-
+	
+	@FXML
+	private TextArea descriptionTextarea;
+	
+	@FXML
+	private ImageView menuShadowImg;
+	
 	
 	public void createCampaign()
 	{
@@ -65,7 +82,7 @@ public class CampaignLoaderController extends Controller implements Initializabl
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
+
 		campaignList.setCellFactory(new Callback<ListView<Campaign>, ListCell<Campaign>>() {
 		    @Override
 		    public ListCell<Campaign> call(ListView<Campaign> lv) {
@@ -77,11 +94,10 @@ public class CampaignLoaderController extends Controller implements Initializabl
 		                    setText(null);
 		                } else {
 		                    setText(item.getName());
-		                }
+		                }		             
 		            }
 		        };
 		    }
 		});
-		
 	}
 }
