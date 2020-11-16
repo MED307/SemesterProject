@@ -1,19 +1,20 @@
 package application;
 
-public class Player {
+public class Player extends Character{
 	
-	private String name;
-	
-	private int strength;
-	private int dexterity;
-	private int constitution;
-	private int intelligence;
-	private int wisdom;
-	private int charisma;
+	private String classes;
 	
 	Player() 
 	{
 	
 	}
 
+	public String getClasses() {
+		return classes;
+	}
+
+	public void setClasses(String classes) {
+		this.classes = classes;
+	}
+	
 }
