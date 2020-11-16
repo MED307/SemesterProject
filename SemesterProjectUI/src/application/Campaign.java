@@ -30,4 +30,12 @@ public class Campaign {
 	{
 		return name;
 	}
+
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
+
+	public void setPlayers(ArrayList<Player> players) {
+		this.players = players;
+	}
 }

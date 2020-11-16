@@ -1,14 +1,49 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+@font-face {
+    src: url('../../assets/Fonts/Mrs-Eaves/MRSEA~12.ttf'); 
+}
+
+
+.MenuBtn {
+	-fx-font-size: 17.0;
+	-fx-font-family: 'MrsEavesSmartLig-Bold';
+	-fx-background-color: none;
+	-fx-text-fill: white;
+}
+
+#CampaignLoaderWrapper {
+	-fx-background-image:url(../../assets/CampaignLoader/background.png);
+}
+
+#MenuPanel {
+	-fx-background-image:url(../../assets/CampaignLoader/menuwithdropshadow.png);
+	-fx-background-repeat: no-repeat;
+}
+
+#DescriptionTextArea {
+  -fx-background-image: none;
+  -fx-background-color: none;
+  -fx-background-repeat: no-repeat;
+  -fx-background: transparent;
+
+
+}
+
+.text-area .content {
+    -fx-background-color: none;
+}
+
 .root 
 { 
 	-fx-focus-color: transparent;
 	-fx-faint-focus-color: transparent;
 }
-.button:focused {
+/*.button:focused {
     -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; 
     -fx-background-insets: 0, 1, 2;
     -fx-background-radius: 5, 4, 3;
-}
+} */
 
 .list-cell:filled:selected:focused, .list-cell:filled:selected {
     -fx-background-color: white;
@@ -27,4 +62,38 @@
 
 .list-view {
 	-fx-selection-bar:green ;
+}
+
+#PlayerListView {
+	-fx-background-color: none;
+}
+
+#TitleText {
+	-fx-font-size: 25;
+	-fx-font-family: 'MrsEavesRoman';
+	-fx-text-fill: #981d1d;
+}
+
+#CampaignDescriptionPane {
+	-fx-background: transparent;
+	-fx-background-color: none;
+	-fx-background-insets: 0;
+}
+
+#TitleTest{
+	-fx-font-size: 25.0;
+	-fx-font-family: 'MrsEavesRoman';
+	-fx-text-fill: #981d1d;
+}
+
+#TitleTest2{
+	-fx-font-size: 25.0;
+	-fx-font-family: 'MrsEavesSmartLig-Bold';
+	-fx-text-fill: #981d1d;
+}
+
+#TitleTest3{
+	-fx-font-size: 25.0;
+	-fx-font-family: 'MrsEavesSmartLigRoman';
+	-fx-text-fill: #981d1d;
 }

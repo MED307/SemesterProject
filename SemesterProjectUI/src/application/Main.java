@@ -12,7 +12,13 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("CampaignLoader.fxml"));
+			FXMLLoader loader = new FXMLLoader();
+			
+			//Sets the location of where the FXML file is
+			loader.setLocation(getClass().getResource("CampaignLoader.fxml"));
+			
+			//loads the fXML file
+			AnchorPane root = (AnchorPane)loader.load();
 			Scene scene = new Scene(root,1000,600);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
