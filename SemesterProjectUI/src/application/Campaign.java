@@ -6,7 +6,7 @@ public class Campaign {
 	
 	private String name;
 	
-	private ArrayList<Player> players;
+	private ArrayList<Player> players = new ArrayList<>();
 	
 	
 	Campaign() 
