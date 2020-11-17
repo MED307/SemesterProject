@@ -10,25 +10,26 @@ import javafx.stage.Stage;
 
 
 
-public class PopUp {
+public class NewCampaignPopUp {
 	
 	private Campaign currentCampaign;
 
 	public ArrayList<String> displayCampaign(String title, String FXML) throws IOException
 	{
 		
-		//creates a list to store campaign information
-		ArrayList<String> campaignInformation = new ArrayList<>();
-		
 		//creates a new stage
 		Stage window = new Stage();
+		
+		//creates a list to store campaign information
+		ArrayList<String> campaignInformation = new ArrayList<>();
 		
 		//loads new FXMLLoader for the stage
 		FXMLLoader loader = new FXMLLoader();
 		
+		loader.setLocation(getClass().getResource(FXML));
+		
 		//
 		AnchorPane root = (AnchorPane)loader.load();
-		
 		
 		//create new scene
 		Scene popUp = new Scene(root);

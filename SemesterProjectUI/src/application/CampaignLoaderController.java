@@ -1,10 +1,12 @@
 package application;
 
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -53,7 +55,13 @@ public class CampaignLoaderController extends Controller implements Initializabl
 	private ImageView menuShadowImg;
 	
 	
-	public void createCampaign()
+	public void createCampaign(ActionEvent event) throws IOException {
+		NewCampaignPopUp pop = new NewCampaignPopUp();
+		pop.displayCampaign("New Campaign", "PopUp.fxml");
+		
+	}
+	
+/*	public void createCampaign()
 	{
 		TextInputDialog userName = new TextInputDialog("campaign 0");
 		userName.setTitle("Create Campaign");
@@ -70,7 +78,7 @@ public class CampaignLoaderController extends Controller implements Initializabl
         }
 
 	}
-	
+*/	
 	public void displayCampaign(MouseEvent arg0)
 	{
 		currentCampaign = campaignList.getSelectionModel().getSelectedItem();

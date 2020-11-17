@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.TextField?>
+
+<AnchorPane id="PopUpAnchor" minHeight="200.0" minWidth="250.0" prefHeight="200.0" prefWidth="250.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.PopUpController">
+	<children>
+		<TextField id="CampaignNameTextField" layoutX="100" layoutY="100" prefHeight="2.0" prefWidth="100.0" fx:id="campaignNameTextField" />		
+		<Button id="CreateCampaignBtn" layoutX="100" layoutY="60" text="Create Campaign" fx:id="createCampaignBtn" >
+		  <font>
+               <Font name="System Bold" size="19.0" />
+          </font>
+		
+		</Button>
+	
+	</children>
+
+
+</AnchorPane>
