@@ -82,13 +82,20 @@ public class PlayerListCellController extends ListCell<Player>{
 		
 	}
 	
-	public void Stats()
+	public void stats()
 	{
 		
 	}
 	
 	public void remove()
 	{
+		for(Campaign e : Main.campaigns) 
+		{
+			if(this.getItem() != null && e.getCampaignName().compareTo(this.getItem().getCampaignName()) == 0)
+			{
+				e.getPlayers().remove(this.getListView().getSelectionModel().getSelectedIndex());
+			}
+		}
 		this.getListView().getItems().remove(this.getListView().getSelectionModel().getSelectedIndex());
 	}
 }

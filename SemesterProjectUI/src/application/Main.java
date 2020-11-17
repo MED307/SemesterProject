@@ -12,7 +12,7 @@ import javafx.fxml.FXMLLoader;
 
 public class Main extends Application {
 	
-	public static ArrayList<Campaign> campaigns;
+	public static ArrayList<Campaign> campaigns =  new ArrayList<>();
 	@Override	
 	public void start(Stage primaryStage) {
 		try {

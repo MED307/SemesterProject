@@ -66,6 +66,7 @@ public class CampaignLoaderController extends Controller implements Initializabl
         	campaign.getPlayers().add(new Player("Leg", "Fighter 6 - Warlock 8", campaign)); // Test
         	campaign.getPlayers().add(new Player("Brian", "Wizard 1 - Cleric 1", campaign)); // Test
         	campaignList.getItems().add(campaign);
+        	Main.campaigns.add(campaign);
         }
 
 	}

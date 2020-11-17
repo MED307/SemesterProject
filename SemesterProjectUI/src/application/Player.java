@@ -9,7 +9,7 @@ public class Player extends Character{
 	{
 		this.setName(name);
 		this.setClasses(classes);
-		this.setCampaignName(campaign.getName());
+		this.setCampaignName(campaign.getCampaignName());
 	}
 
 	public String getClasses() {
