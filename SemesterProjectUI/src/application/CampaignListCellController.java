@@ -25,7 +25,7 @@ public class CampaignListCellController extends ListCell<Campaign>{
         else 
         {
         	//remove everything after the first digit in the ID so only the name is displayed
-        	setText(campaign.getName());
+        	setText(campaign.getCampaignName());
         }
 	}
 }
