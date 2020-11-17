@@ -15,11 +15,11 @@ public class Campaign {
 	}
 
 	
-	public void setName(String _name)
+	public void setCampaignName(String _name)
 	{
 		this.campaignName = _name;
 	}
-	public String getName()
+	public String getCampaignName()
 	{
 		return campaignName;
 	}

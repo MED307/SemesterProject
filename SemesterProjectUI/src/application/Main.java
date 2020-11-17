@@ -1,5 +1,7 @@
 package application;
 	
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -9,7 +11,9 @@ import javafx.fxml.FXMLLoader;
 
 
 public class Main extends Application {
-	@Override
+	
+	public static ArrayList<Campaign> campaigns;
+	@Override	
 	public void start(Stage primaryStage) {
 		try {
 			FXMLLoader loader = new FXMLLoader();

@@ -24,10 +24,10 @@ public class CampaignSelectorController {
 		this.cplayers.getItems().add(players);
 	}
 	
-	void removePlayers(String name) {
+	void removePlayers(String name, Campaign campaign) {
 		for(int i = 0 ; i <cpn.getPlayers().size() ; i++) {
-			if(cpn.getPlayers().get(i).getName().compareTo(players) == 0) {
-				players.remove();
+			if(cpn.getPlayers().get(i).getName().compareTo(name) == 0) {
+				campaign.getPlayers().remove(name);
 			}
 		}
 	}
@@ -36,12 +36,9 @@ public class CampaignSelectorController {
 		
 	}
 
-	void removeCampaign(String name) {
-		for(Campaign i:) {	
-			if() {
-				listView.remove(i);
-			}
-		}
+	void removeCampaign(String cname) {
+			
+		Main.campaigns.remove(cname);
 	}
 	
 	

@@ -12,7 +12,6 @@ import javafx.stage.Stage;
 
 public abstract class Controller {
 	
-	public static ArrayList<Campaign> campaigns;
 	private Campaign CurrentCampaign;
 
 	public void changeScene(ActionEvent event, String FXML) throws IOException 

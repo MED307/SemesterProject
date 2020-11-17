@@ -65,7 +65,7 @@ public class CampaignLoaderController extends Controller implements Initializabl
         if (result.isPresent()) 
         {
         	Campaign campaign = new Campaign();
-        	campaign.setName(result.get());
+        	campaign.setCampaignName(result.get());
         	campaignList.getItems().add(campaign);
         }
 
@@ -74,7 +74,7 @@ public class CampaignLoaderController extends Controller implements Initializabl
 	public void displayCampaign(MouseEvent arg0)
 	{
 		currentCampaign = campaignList.getSelectionModel().getSelectedItem();
-		chosenCampaign.setText(currentCampaign.getName());
+		chosenCampaign.setText(currentCampaign.getCampaignName());
 		
 		
 	}
@@ -93,7 +93,7 @@ public class CampaignLoaderController extends Controller implements Initializabl
 		                if (empty || item == null) {
 		                    setText(null);
 		                } else {
-		                    setText(item.getName());
+		                    setText(item.getCampaignName());
 		                }		             
 		            }
 		        };
