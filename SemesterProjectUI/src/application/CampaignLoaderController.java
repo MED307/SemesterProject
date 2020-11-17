@@ -8,15 +8,12 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
-import javafx.util.Callback;
 
 public class CampaignLoaderController extends Controller implements Initializable{
 	
@@ -66,6 +63,8 @@ public class CampaignLoaderController extends Controller implements Initializabl
         {
         	Campaign campaign = new Campaign();
         	campaign.setCampaignName(result.get());
+        	campaign.getPlayers().add(new Player("Leg", "Fighter 6 - Warlock 8", campaign)); // Test
+        	campaign.getPlayers().add(new Player("Brian", "Wizard 1 - Cleric 1", campaign)); // Test
         	campaignList.getItems().add(campaign);
         }
 
@@ -73,8 +72,17 @@ public class CampaignLoaderController extends Controller implements Initializabl
 	
 	public void displayCampaign(MouseEvent arg0)
 	{
+		playerList.getItems().clear();
 		currentCampaign = campaignList.getSelectionModel().getSelectedItem();
-		chosenCampaign.setText(currentCampaign.getCampaignName());
+		if (currentCampaign != null)
+		{
+			chosenCampaign.setText(currentCampaign.getCampaignName());
+			for(Player e: currentCampaign.getPlayers())
+			{
+				playerList.getItems().add(e);
+			}
+		}
+
 		
 		
 	}
@@ -82,22 +90,8 @@ public class CampaignLoaderController extends Controller implements Initializabl
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
-		campaignList.setCellFactory(new Callback<ListView<Campaign>, ListCell<Campaign>>() {
-		    @Override
-		    public ListCell<Campaign> call(ListView<Campaign> lv) {
-		        return new ListCell<Campaign>() {
-		            @Override
-		            public void updateItem(Campaign item, boolean empty) {
-		                super.updateItem(item, empty);
-		                if (empty || item == null) {
-		                    setText(null);
-		                } else {
-		                    setText(item.getCampaignName());
-		                }		             
-		            }
-		        };
-		    }
-		});
+		
+		playerList.setCellFactory(chatRoomListView -> new PlayerListCellController());
+		campaignList.setCellFactory(chatRoomListView -> new CampaignListCellController());
 	}
 }

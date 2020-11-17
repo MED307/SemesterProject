@@ -2,6 +2,7 @@ package application;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 public class CampaignListCellController extends ListCell<Campaign>{
@@ -9,6 +10,8 @@ public class CampaignListCellController extends ListCell<Campaign>{
 	@FXML
 	Text name;
 	
+	@FXML
+	AnchorPane pane;
 	@Override
     protected void updateItem(Campaign campaign, boolean empty) 
 	{
@@ -26,6 +29,7 @@ public class CampaignListCellController extends ListCell<Campaign>{
         {
         	//remove everything after the first digit in the ID so only the name is displayed
         	setText(campaign.getCampaignName());
+        	setGraphic(pane);
         }
 	}
 }
