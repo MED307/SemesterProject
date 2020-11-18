@@ -1,15 +1,27 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 
 @font-face {
-    src: url('../../assets/Fonts/Mrs-Eaves/MRSEA~12.ttf'); 
+    src: url('../../assets/Fonts/Mrs-Eaves/MrsEaves-Bold.TTF'); 
+}
+
+@font-face {
+    src: url('../../assets/Fonts/Mrs-Eaves/MrsEavesPetiteCaps.TTF'); 
+}
+
+@font-face {
+    src: url('../../assets/Fonts/Bookmania/Bookmania_Regular.otf'); 
 }
 
 
 .MenuBtn {
 	-fx-font-size: 17.0;
-	-fx-font-family: 'MrsEavesSmartLig-Bold';
+	-fx-font-family: 'MrsEaves-Bold';
 	-fx-background-color: none;
 	-fx-text-fill: white;
+}
+
+.MenuBtn:hover {
+	-fx-text-fill: #d6d6d6;
 }
 
 #CampaignLoaderWrapper {
@@ -26,8 +38,6 @@
   -fx-background-color: none;
   -fx-background-repeat: no-repeat;
   -fx-background: transparent;
-
-
 }
 
 .text-area .content {
@@ -64,14 +74,22 @@
 	-fx-selection-bar:green ;
 }
 
+.SubHeadline {
+	-fx-font-size: 20;
+	-fx-font-family:MrsEavesPetiteCaps;
+}
+
+.MenuButton {
+	-fx-font-family: 'MrsEaves-Bold';
+}
+
 #PlayerListView {
 	-fx-background-color: none;
 }
 
-#TitleText {
-	-fx-font-size: 25;
-	-fx-font-family: 'MrsEavesRoman';
-	-fx-text-fill: #981d1d;
+#CampaignTitleText {
+	-fx-font-size: 35;
+	-fx-font-family: 'MrsEaves-Bold';
 }
 
 #CampaignDescriptionPane {
@@ -80,20 +98,14 @@
 	-fx-background-insets: 0;
 }
 
-#TitleTest{
-	-fx-font-size: 25.0;
-	-fx-font-family: 'MrsEavesRoman';
-	-fx-text-fill: #981d1d;
+#LoadCampaignBtn {
+	-fx-background:none;
 }
 
-#TitleTest2{
-	-fx-font-size: 25.0;
-	-fx-font-family: 'MrsEavesSmartLig-Bold';
-	-fx-text-fill: #981d1d;
+#EditDescriptionBtn:hover {
+	-fx-opacity: 0.5;
 }
 
-#TitleTest3{
-	-fx-font-size: 25.0;
-	-fx-font-family: 'MrsEavesSmartLigRoman';
-	-fx-text-fill: #981d1d;
+#DescriptionTextArea {
+	-fx-font-family: 'Bookmania_Regular';
 }
