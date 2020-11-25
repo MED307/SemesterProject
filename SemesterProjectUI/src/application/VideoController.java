@@ -51,93 +51,34 @@ public class VideoController
 	@FXML
 	private Button button;
 	
-	//the FXML grayscale checkbox
-	@FXML
-	private CheckBox grayscale;
+//	@FXML
+	//private CheckBox grayscale;
 	
-	//the FXML YUV colorspace checkbox
-	@FXML
-	private CheckBox yuv;
 	
-	//the FXML HSV colorspace checkbox
-	@FXML
-	private CheckBox hsv;
-	
-	//the FXML checkbox for vertical sobel edge detection
-	@FXML
-	private CheckBox vertSobel;
-	
-	//the FXML checkbox for horizonal sobel edge detection
-	@FXML
-	private CheckBox horiSobel;
-	
-	//the FXML checkbox for diagonal sobel edge detection
-	@FXML
-	private CheckBox diagSobel;
-	
-	//the FXML checkbox for the Hough Transform algorithm
-	@FXML
-	private CheckBox houghTrans;
-	
-	//the FMXL checkbox for simple tresholding
-	@FXML
-	private CheckBox thresh;
-	
-	//the FMXL checkbox for color thresholding
-	@FXML
-	private CheckBox colorThresh;
-	
-	//the FXML checkbox for applying a blur
-	@FXML
-	private CheckBox blur;
-	
-	//the FXML checkbox for apllying opening
-	@FXML
+ 	@FXML
 	private CheckBox open;
-	
-	//the FXML checkbox for applying closing
-	@FXML
+ 	
+ 	@FXML
 	private CheckBox close;
 	
-	//the FXML checkbox for applying BLOB detection
-	@FXML
-	private CheckBox blob;
 	
-	//the FXML slider used to set the value of simple thresholding
-	@FXML
-	private Slider threshVal;
-	
-	//the FXML slider used to set the minimum value of the hue for HSV color thresholding
 	@FXML
 	private Slider hueStart;
 	
-	//the FXML slider used to set the maximum value of the hue for HSV color thresholding
 	@FXML
 	private Slider hueStop;
 	
-	//the FXML slider used to set the minimum value of the saturation for HSV color thresholding
 	@FXML
 	private Slider saturationStart;
 	
-	//the FXML slider used to set the maximum value of the saturation for HSV color thresholding
 	@FXML
 	private Slider saturationStop;
 	
-	//the FXML slider used to set the minimum value of the value for HSV color thresholding
 	@FXML
 	private Slider valueStart;
 	
-	//the FXML slider used to set the maximum value of the value for HSV color thresholding
 	@FXML
 	private Slider valueStop;
-
-	// the FXML logo checkbox
-	//@FXML
-	//private CheckBox logoCheckBox;
-	// the FXML grayscale checkbox
-	//@FXML
-	//private ImageView histogram;
-	// the FXML area for showing the current frame
 	
 	@FXML
 	private ImageView currentFrame;
@@ -239,10 +180,103 @@ public class VideoController
 				if (!frame.empty())
 				{
 					
+					
+					
+                    Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
+					
+					//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV colorspace treshold
+					Scalar minValues = new Scalar(this.hueStart.getValue(), this.saturationStart.getValue(),
+							this.valueStart.getValue());
+					Scalar maxValues = new Scalar(this.hueStop.getValue(), this.saturationStop.getValue(),
+							this.valueStop.getValue());
+
+					//a static method for thresholding called inRange() from the Core class from the OpenCV library is used
+					Core.inRange(frame, minValues, maxValues, frame);
+					
+					
+			/*	//converts the video feed to HSV color space using the static method cvtColor() from the Imgproc class
+					Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2HSV);
+					
+					//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV colorspace treshold
+					Scalar minValues = new Scalar(this.hueStart.getValue(), this.saturationStart.getValue(),
+							this.valueStart.getValue());
+					Scalar maxValues = new Scalar(this.hueStop.getValue(), this.saturationStop.getValue(),
+							this.valueStop.getValue());
+
+					//a static method for thresholding called inRange() from the Core class from the OpenCV library is used
+					Core.inRange(frame, minValues, maxValues, frame);
+					*/
+					
+					
+					
+					// Create the CV_8U version of the distance image
+                    // It is needed for findContours()
+                 /*   Mat dist_8u = new Mat();
+                    
+                    frame.convertTo(dist_8u, CvType.CV_8U);
+                    
+                    // Find total markers
+                    List<MatOfPoint> contours = new ArrayList<>();
+                    Mat hierarchy = new Mat();
+                    Imgproc.findContours(dist_8u, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+                    
+                    // Create the marker image for the watershed algorithm
+                    Mat markers = Mat.zeros(frame.size(), CvType.CV_32S);
+                    
+                    // Draw the foreground markers
+                    for (int i = 0; i < contours.size(); i++) {
+                        Imgproc.drawContours(markers, contours, i, new Scalar(i + 1), -1);
+                    }
+                    
+                    // Draw the background marker
+                    Mat markersScaled = new Mat();
+                    markers.convertTo(markersScaled, CvType.CV_32F);
+                    Core.normalize(markersScaled, markersScaled, 0.0, 255.0, Core.NORM_MINMAX);
+                    Imgproc.circle(markersScaled, new Point(5, 5), 3, new Scalar(255, 255, 255), -1);
+                    Mat markersDisplay = new Mat();
+                    markersScaled.convertTo(markersDisplay, CvType.CV_8U);
+                    Imgproc.circle(markers, new Point(5, 5), 3, new Scalar(255, 255, 255), -1);
+				    frame = markersDisplay;
+					*/
+					
+					if(open.isSelected()) {
+				  		
+				  		//two matrices of type Mat from the OpevCV library is created to be used for dilation and erosion respectively
+				  		Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
+						Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
+						
+						//a new matrix of type Mat from the OpevCV library is created for the output image after erosion has been applied
+						Mat erodeOutput = new Mat();
+						
+						//the erode() and dilate() methods are used respectively in order to apply a opening to the video feed
+						Imgproc.erode(frame, erodeOutput, erodeElement);
+						Imgproc.dilate(erodeOutput, frame, dilateElement);
+				  		
+				  	}
+				  	
+				  	if(close.isSelected()) {
+				
+				     	//two matrices of type Mat from the OpevCV library is created to be used for erosion and dilation respectively
+				  		Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
+						Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
+						
+						//a new matrix of type Mat from the OpevCV library is created for the output image after dilation has been applied
+						Mat dilateOutput = new Mat();
+						
+						//the dilate() and erode() methods are used respectively in order to apply a opening to the video feed
+						Imgproc.dilate(frame, dilateOutput, dilateElement);
+						Imgproc.erode(dilateOutput, frame, erodeElement);
+						
+				  	}
+
+
+					
+					
+					
 					//below are if-statements that check whether the different checkboxes are checked
 					//and if that is the case the effect listed beside the checkbox will be applied
 					
-					if (grayscale.isSelected())
+				/*if (grayscale.isSelected())
 					{
 						
 						//Convert to grayscale using the static cvtColor() method from the Imgproc class
@@ -424,6 +458,7 @@ public class VideoController
 	                        Imgproc.circle(markers, new Point(5, 5), 3, new Scalar(255, 255, 255), -1);
 						    frame = markersDisplay;
 					  	}
+	                    */
 				}
 				
 			}

@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="CampaignLoaderWrapper" minHeight="300.0" minWidth="500.0" prefHeight="600.0" prefWidth="1000.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.CampaignLoaderController">
+<AnchorPane id="CampaignLoaderWrapper" minHeight="300.0" minWidth="500.0" prefHeight="600.0" prefWidth="1000.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.VideoController">
    <children>
-      <ImageView fx:id="battlemapImageView" fitHeight="465.0" fitWidth="851.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="currentFrame" fitHeight="465.0" fitWidth="851.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/battlemap/grid.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="cameraImageView" fitHeight="83.0" fitWidth="111.0" layoutX="14.0" layoutY="503.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+      <ImageView fx:id="currentFrame1" fitHeight="83.0" fitWidth="111.0" layoutX="14.0" layoutY="503.0" pickOnBounds="true" preserveRatio="true" visible="false" />
       <TabPane layoutX="831.0" layoutY="29.0" prefHeight="558.0" prefWidth="169.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Advemturers">
@@ -35,9 +31,24 @@
                      <children>
                         <VBox layoutY="14.0" prefHeight="200.0" prefWidth="169.0">
                            <children>
-                              <Button fx:id="saveCampaignBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="176.0" text="Save Campaign" />
+                              <Button fx:id="saveCampaignBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="176.0" text="Save Campaign"   />
                               <Button fx:id="quitCampaignBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="173.0" text="Quit Campaign" />
                               <Button fx:id="exitProgramBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="Exit Program" />
+                              <Button fx:id="button" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="Start Camera" onAction="#startCamera" />
+                              <Slider fx:id="hueStart" min="0" max="255" value="90" blockIncrement="1" />
+			                        <Label text="Adjust hue start" />
+		                      <Slider fx:id="hueStop" min="0" max="255" value="90" blockIncrement="1" />
+	 	                        	<Label text="Adjust hue stop" />
+	                          <Slider fx:id="saturationStart" min="0" max="255" value="127" blockIncrement="1" />
+		                         	<Label text="Adjust saturation start" />
+		                      <Slider fx:id="saturationStop" min="0" max="255" value="127" blockIncrement="1" />
+			                        <Label text="Adjust saturation stop" />
+	                          <Slider fx:id="valueStart" min="0" max="255" value="127" blockIncrement="1" />
+			                        <Label text="Adjust value start" />
+	                          <Slider fx:id="valueStop" min="0" max="255" value="127" blockIncrement="1" />
+		                           	<Label text="Adjust value stop" />
+                              <CheckBox fx:id="open" text="Perform opening" />
+                              <CheckBox fx:id="close" text="Perform closing" />
                            </children>
                         </VBox>
                      </children>
