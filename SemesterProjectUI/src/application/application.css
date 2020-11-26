@@ -12,6 +12,8 @@
 	-fx-text-fill: white;
 }
 
+/* ------------ Campaign Loader ID ------------ */
+
 #CampaignLoaderWrapper {
 	-fx-background-image:url(../../assets/CampaignLoader/background.png);
 }
@@ -96,4 +98,10 @@
 	-fx-font-size: 25.0;
 	-fx-font-family: 'MrsEavesSmartLigRoman';
 	-fx-text-fill: #981d1d;
+}
+
+/* ------------ Battle Map ID ------------ */
+
+#MenuPane{
+	-fx-background-image:url(../../assets/battlemap/menupanel.png);
 }
