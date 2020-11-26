@@ -3,6 +3,9 @@
 @font-face {
     src: url('../../assets/Fonts/Mrs-Eaves/MRSEA~12.ttf'); 
 }
+@font-face {
+    src: url('../../assets/Fonts/Mrs-Eaves/MrsEaves-Bold.ttf'); 
+}
 
 
 .MenuBtn {
@@ -104,4 +107,9 @@
 
 #MenuPane{
 	-fx-background-image:url(../../assets/battlemap/menupanel.png);
+}
+
+.MenuLabel {
+	-fx-text-fill: white;
+	
 }

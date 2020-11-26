@@ -24,7 +24,7 @@
       <ImageView fx:id="currentFrame1" fitHeight="83.0" fitWidth="111.0" layoutX="14.0" layoutY="503.0" pickOnBounds="true" preserveRatio="true" visible="false" />
       <Pane id="MenuPane" layoutX="831.0" prefHeight="600.0" prefWidth="169.0">
          <children>
-            <TabPane layoutY="28.0" prefHeight="558.0" prefWidth="169.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane prefHeight="558.0" prefWidth="169.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="Adventurers">
                   <content>
@@ -40,7 +40,7 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <VBox layoutY="14.0" prefHeight="200.0" prefWidth="169.0">
+                              <VBox layoutY="14.0" prefHeight="200.0" prefWidth="169.0" style="-fx-background-color: white;">
                                  <children>
                                     <Button fx:id="saveCampaignBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="176.0" text="Save Campaign" />
                                     <Button fx:id="quitCampaignBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="173.0" text="Quit Campaign" />
@@ -68,7 +68,6 @@
                 </Tab>
               </tabs>
             </TabPane>
-            <Label fx:id="campaignNameLabel" alignment="CENTER" layoutY="-3.0" prefHeight="35.0" prefWidth="169.0" text="Campaign Name" />
          </children>
       </Pane>
       <HBox layoutY="558.0" prefHeight="42.0" prefWidth="831.0">
