@@ -111,14 +111,14 @@ public class VideoController
 	protected void startCamera()
 	{
 		// set a fixed width for the frame
-		this.currentFrame.setFitWidth(900);
+		//this.currentFrame.setFitWidth(900);
 		// preserve image ratio
-		this.currentFrame.setPreserveRatio(true);
+		//this.currentFrame.setPreserveRatio(true);
 		
 		if (!this.cameraActive)
 		{
 			// start the video capture
-			this.capture.open(0);
+			this.capture.open(1);
 			
 			// is the video stream available?
 			if (this.capture.isOpened())
@@ -209,37 +209,8 @@ public class VideoController
 					
 					
 					
-					// Create the CV_8U version of the distance image
-                    // It is needed for findContours()
-                 /*   Mat dist_8u = new Mat();
-                    
-                    frame.convertTo(dist_8u, CvType.CV_8U);
-                    
-                    // Find total markers
-                    List<MatOfPoint> contours = new ArrayList<>();
-                    Mat hierarchy = new Mat();
-                    Imgproc.findContours(dist_8u, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-                    
-                    // Create the marker image for the watershed algorithm
-                    Mat markers = Mat.zeros(frame.size(), CvType.CV_32S);
-                    
-                    // Draw the foreground markers
-                    for (int i = 0; i < contours.size(); i++) {
-                        Imgproc.drawContours(markers, contours, i, new Scalar(i + 1), -1);
-                    }
-                    
-                    // Draw the background marker
-                    Mat markersScaled = new Mat();
-                    markers.convertTo(markersScaled, CvType.CV_32F);
-                    Core.normalize(markersScaled, markersScaled, 0.0, 255.0, Core.NORM_MINMAX);
-                    Imgproc.circle(markersScaled, new Point(5, 5), 3, new Scalar(255, 255, 255), -1);
-                    Mat markersDisplay = new Mat();
-                    markersScaled.convertTo(markersDisplay, CvType.CV_8U);
-                    Imgproc.circle(markers, new Point(5, 5), 3, new Scalar(255, 255, 255), -1);
-				    frame = markersDisplay;
-					*/
 					
-					if(open.isSelected()) {
+		if(open.isSelected()) {
 				  		
 				  		//two matrices of type Mat from the OpevCV library is created to be used for dilation and erosion respectively
 				  		Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
@@ -269,9 +240,124 @@ public class VideoController
 						
 				  	}
 
+					
+				  	
+				  	
 
+/*Mat grassImg = new Mat();
+
+double label = 0;
+
+for(int y = 0; y < frame.height(); y++){
+  for(int x = 0; x < frame.width(); x++){
+  if(frame.get(y,x)[0] == 255){
+grassFire(y,x,label,frame);
+label += 1;
+} 
+}
+}*/
+		
+	
 					
+					// Create the CV_8U version of the distance image
+                    // It is needed for findContours()
+                    Mat dist_8u = new Mat();
+                    
+                    frame.convertTo(dist_8u, CvType.CV_8U);
+                    
+                    // Find total markers
+                    List<MatOfPoint> contours = new ArrayList<>();
+                    Mat hierarchy = new Mat();
+                    Imgproc.findContours(dist_8u, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+                    
+                    // Create the marker image for the watershed algorithm
+                    Mat markers = Mat.zeros(frame.size(), CvType.CV_32S);
+                    
+
+// Draw the foreground markers
+   for (int i = 0; i < contours.size(); i++) {
+       Imgproc.drawContours(markers, contours, i, new Scalar(i + 1), -1);
+      
+   } 
+   
+    // Draw the background marker
+                    Mat markersScaled = new Mat();
+                    markers.convertTo(markersScaled, CvType.CV_32F);
+                    Core.normalize(markersScaled, markersScaled, 0.0, 255.0, Core.NORM_MINMAX);
+                    Imgproc.circle(markersScaled, new Point(5, 5), 3, new Scalar(255, 255, 255), -1);
+                    Mat markersDisplay = new Mat();
+                    markersScaled.convertTo(markersDisplay, CvType.CV_8U);
+                    Imgproc.circle(markers, new Point(5, 5), 3, new Scalar(255, 255, 255), -1);
+                    
+                    
+                    
+				    frame = markersDisplay;
+   
+                    
+                    
+				    frame = deskew(frame,3);
+                    
+                    
+                    
+                    
+                    
+                    
+                    int coloumns = 5;
+                    int rows = 5;
+                    
+                    
+                  //  rows = contours.size() / coloumns;
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                     
+                    List<List<String>> blobs = new ArrayList<>();
+                    
+      
+                    char[] letters = {'A','B','C','D','E'};
+                   
+                    
+                    
+                  //  for (int i = 0; i < 50; ++i) System.out.println();   
+                    
+                    
+                    for (int y = 0; y < coloumns; y++) {
+                    	blobs.add(new ArrayList<>());
+                    	
+                    	for (int x = 0; x < rows; x++) {
+                        String name = "" + letters[x] + (y+1);
+                    	blobs.get(y).add(name);
+                    	
+                     //   System.out.print("  ");
+	                   // System.out.print(contours.get(j).size().height);
+                    }
+                    }
+                    
+                    for(int i = 0; i < blobs.size(); i++) {
+                   // System.out.println(blobs.get(i));;
+				}
+                    
+				
+                    
+                 
+                
+                    
+                    
+                    
+                    
+                    
+                   
 					
+				  
+	               
+	            	
+
 					
 					//below are if-statements that check whether the different checkboxes are checked
 					//and if that is the case the effect listed beside the checkbox will be applied
@@ -517,4 +603,60 @@ public class VideoController
 		this.stopAcquisition();
 	}
 	
+	
+/*	public void grassFire(int y, int x, double label, Mat image){
+
+		image.get(y,x)[0] = label;
+		ArrayList<Integer> listY = new ArrayList<>();
+		ArrayList<Integer> listX = new ArrayList<>();
+		listY.add(y);
+		listX.add(x);
+
+
+		while(listY.size() > 0 &&  listX.size() > 0 ){
+		  int fstY = listY.get(0);
+		  listY.remove(0);
+
+		  int fstX = listX.get(0);
+		  listX.remove(0);
+
+		  image.get(fstY,fstX)[0] = label;
+
+		  if(fstY > 0 && image.get(fstY-1,fstX)[0] == 255){
+		    image.get(fstY-1,fstX)[0] = 1;
+		    listY.add(fstY-1);
+		    listX.add(fstX);
+		}
+
+		 if(fstY < image.height() -1 && image.get(fstY+1,fstX)[0] == 255){
+		    image.get(fstY+1,fstX)[0] = 1;
+		    listY.add(fstY+1);
+		    listX.add(fstX);
+		}
+
+		  if(fstX > 0 && image.get(fstY,fstX-1)[0] == 255){
+		    image.get(fstY,fstX-1)[0] = 1;
+		    listY.add(fstY);
+		    listX.add(fstX-1);
+		}
+
+		 if(fstX < image.width() - 1 && image.get(fstY,fstX+1)[0] == 255){
+		    image.get(fstY,fstX+1)[0] = 1;
+		    listY.add(fstY);
+		    listX.add(fstX+1);
+		}
+
+		}
+		}*/
+
+	
+	 private static Mat deskew(Mat src, double angle) {
+		    Point center = new Point(src.width() / 2, src.height() / 2);
+		    Mat rotImage = Imgproc.getRotationMatrix2D(center, angle, 1.0);
+		        Size size = new Size(src.width(), src.height());
+
+		        Imgproc.warpAffine(src, src, rotImage, size, Imgproc.INTER_LINEAR
+		                + Imgproc.CV_WARP_FILL_OUTLIERS);
+		        return src;
+		    }
 }
