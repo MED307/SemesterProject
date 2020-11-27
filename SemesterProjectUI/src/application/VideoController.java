@@ -102,6 +102,16 @@ public class VideoController
 	{
 		this.capture = new VideoCapture();
 		this.cameraActive = false;
+		Grid grid = new Grid(10,10);
+		grid.setSquare(2, 2);
+		grid.setSquare(2, 5);
+		grid.setSquare(7, 5);
+		grid.setSquare(7, 2);
+		grid.setSquare(3, 6);
+		grid.setSquare(4, 6);
+		grid.setSquare(5, 6);
+		grid.setSquare(6, 6);
+		currentFrame.setImage(grid.Display());
 	}
 	
 	/**
