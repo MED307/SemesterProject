@@ -127,16 +127,6 @@ public class VideoController
 	{
 		this.capture = new VideoCapture();
 		this.cameraActive = false;
-		/*Grid grid = new Grid(10,10);
-		grid.setSquare(2, 2, "tree");
-		grid.setSquare(2, 5, "tree");
-		grid.setSquare(7, 5, "tree");
-		grid.setSquare(7, 2, "tree");
-		grid.setSquare(3, 6, "tree");
-		grid.setSquare(4, 6, "tree");
-		grid.setSquare(5, 6, "tree");
-		grid.setSquare(6, 6, "tree");
-		currentFrame.setImage(grid.Display());*/
 	}
 	
 	/**
@@ -197,21 +187,14 @@ public class VideoController
 			this.stopAcquisition();
 		}
 	}
-	
-	
-	
+
 	
 	@FXML
 	protected void gridOnClick()
 	{
-		
 		getGrid(thisFrame,mineFarver);
-		
-		
 	}
 	
-	
-
 	@FXML
 	protected void gridFoundOnClick()
 	{
@@ -222,22 +205,15 @@ public class VideoController
 		else {
 			gridFound = false;
 		}
-		
 	}
-	
 	
 	@FXML
 	protected void getBlobOnClick()
 	{
 		
 		getBlob(thisFrame,mineFarver);
-		
-		
+
 	}
-	
-	
-	
-	
 
 	private Mat grabFrame()
 	{
@@ -270,15 +246,8 @@ public class VideoController
 						//Mat thresholdOutput = new Mat();
 						Core.inRange(hsvOutput, minValues, maxValues, frame);
 
-						//Mat hsvToBGROutput = new Mat();
-						//Imgproc.cvtColor(thresholdOutput, hsvToBGROutput, Imgproc.COLOR_HSV2BGR);
-						//Imgproc.cvtColor(hsvToBGROutput, frame, Imgproc.COLOR_BGR2GRAY);
-						
-			
 					}
-					
-					
-					
+
 					if(!gridFound) {
                     Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
 					
@@ -372,99 +341,9 @@ public class VideoController
 						Imgproc.erode(dilateOutput, frame, erodeElement);
 						
 				  	}
-
-
-                    
-				    
-                   //finding the grid size
-                 /*   int[] point = new int[2];
-                    
-                    for (int y = 0; y < frame.height(); y++){
-  				      for(int x = 0; x < frame.width(); x++){
-  				      if(frame.get(y,x)[0] != 0){
-  				    		  point[0] = y;
-  				    	      point[1] = x;
-  				    		 break;
-  				    		  }
-  				    }
-  				    } 
-                    
-                    
-                 // then move to mid point and then move down
-   				 //  int midpoint = (contours.get(1).width())/2;
-                    
-                    ArrayList<Double> list = new ArrayList<>();
-                    
-                    
-                    for (int y = point[0] ; y > 0 ; y--){
-                    	
-                    	if (frame.get(point[0]-y,point[1])[0] != 0) {
-                    		list.add(frame.get(point[0]-y,point[1])[0]);
-                    	}
-                    	
-                    }
-                    	
-                    	Set<Double> uniqueColoumns = new HashSet<Double>(list);
-    				    
-    				    ArrayList<Double> uColoumns = new ArrayList<>(uniqueColoumns);
-                    	
-         
-    				    int coloumns = uColoumns.size();
-    	                
-                        int rows = farver.size() / coloumns;*/
- 
-				   
-				 //   for (int i = 0; i < 50; ++i) System.out.println();
-				    
-				  //  System.out.print("søjler: " + coloumns + "   rækker: " + rows + "   felter: " + farver.size() );
-                  
-                  //  System.out.print("y = " + point[0] + "    x = " + point[1]);
-				    
-				   // System.out.print(uColoumns.size());
-                  
-                     
-				    
-				    //Print the grid to console
-                   /* List<List<String>> blobs = new ArrayList<>();
-                    char[] letters = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P'};
-
-                  //  for (int i = 0; i < 50; ++i) System.out.println();   
-                    
-                    
-                    
-                 
-                    for (int y = 0; y < coloumns; y++) {
-                    	blobs.add(new ArrayList<>());
-                    	
-                    	for (int x = 0; x < rows; x++) {
-                        String name = "" + letters[x] + (y+1);
-                    	blobs.get(y).add(name);
-
-                     //   System.out.print("  ");
-	                   // System.out.print(contours.get(j).size().height);
-                    }
-                    }
-                  
-                   
-                    for(int i = 0; i < blobs.size(); i++) {
-                   System.out.println(blobs.get(i));
-				}*/
-                    
-
-                    
-					
-				  
-                //    frame = deskew(frame,2);
 	            	
 thisFrame = frame;
 					
-	
-					
-
-					       
-
-
-					  	
 
 				}
 				
@@ -550,10 +429,7 @@ thisFrame = frame;
 		    		  }
 		    }
 		    } 
-         
-         
-      // then move to mid point and then move down
-		 //  int midpoint = (contours.get(1).width())/2;
+
          
          ArrayList<Double> list = new ArrayList<>();
          
@@ -597,7 +473,6 @@ thisFrame = frame;
          System.out.println("blob color: "+ blobs[i].getColor() + "   blob x: " + blobs[i].getLocationX() + "   blob y: " + blobs[i].getLocationY());
         
 	 }
-    
 	 }
 	 
 	 public void getBlob (Mat frame, ArrayList<Double> farver) {
@@ -613,11 +488,10 @@ thisFrame = frame;
 	    }
 	    }
     
-     double squareColor = savedGrid.get(point[0],point[1])[0];
+  double squareColor = savedGrid.get(point[0],point[1])[0];
     		 
   System.out.print(squareColor);
 
-  
   int x = 0;
   int y = 0;
   
@@ -629,14 +503,11 @@ thisFrame = frame;
 		 break;
 		}
   }
-
      
      grid.set();
      grid.setSquare(x, y, "tree");
      currentFrame1.setImage(grid.Display());
 
-     
-    
 	 }    
 	 
 }
