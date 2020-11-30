@@ -1,7 +1,10 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Scanner;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -118,7 +121,7 @@ public class VideoController
 		if (!this.cameraActive)
 		{
 			// start the video capture
-			this.capture.open(1);
+			this.capture.open(0);
 			
 			// is the video stream available?
 			if (this.capture.isOpened())
@@ -295,67 +298,111 @@ label += 1;
    
                     
                     
-				    frame = deskew(frame,3);
+				  
+				    
+				    ArrayList<Double> colors = new ArrayList<>();
+
+				    for (int y = 0; y < frame.height(); y++){
+				      for(int x = 0; x < frame.width(); x++){
+				      if(/*frame.get(y,x)[0] != 255 &&*/ frame.get(y,x)[0] != 0){
+				    		  colors.add(frame.get(y,x)[0]);
+				    		  }
+				    }
+				    } 
+				    
+				    Set<Double> uniqueColors = new HashSet<Double>(colors);
+				    
+				    ArrayList<Double> farver = new ArrayList<>(uniqueColors);
+				    
+				  //  System.out.print("antal felter: " + farver.size()+ "    " + "Det første felt: " + farver.get(39));
                     
                     
+  
+                    
+				    
+                   
+                    int[] point = new int[2];
+                    
+                    for (int y = 0; y < frame.height(); y++){
+  				      for(int x = 0; x < frame.width(); x++){
+  				      if(frame.get(y,x)[0] != 0){
+  				    		  point[0] = y;
+  				    	      point[1] = x;
+  				    		 break;
+  				    		  }
+  				    }
+  				    } 
                     
                     
+                 // then move to mid point and then move down
+   				 //  int midpoint = (contours.get(1).width())/2;
+                    
+                    ArrayList<Double> list = new ArrayList<>();
                     
                     
-                    int coloumns = 5;
-                    int rows = 5;
-                    
-                    
-                  //  rows = contours.size() / coloumns;
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
+                    for (int y = point[0] ; y > 0 ; y--){
+                    	
+                    	if (frame.get(point[0]-y,point[1])[0] != 0) {
+                    		list.add(frame.get(point[0]-y,point[1])[0]);
+                    	}
+                    	
+                    }
+                    	
+                    	Set<Double> uniqueColoumns = new HashSet<Double>(list);
+    				    
+    				    ArrayList<Double> uColoumns = new ArrayList<>(uniqueColoumns);
+                    	
+         
+    				    int coloumns = uColoumns.size();
+    	                
+                        int rows = farver.size() / coloumns;
+ 
+				   
+				    for (int i = 0; i < 50; ++i) System.out.println();
+				    
+				  //  System.out.print("søjler: " + coloumns + "   rækker: " + rows + "   felter: " + farver.size() );
+                  
+                  //  System.out.print("y = " + point[0] + "    x = " + point[1]);
+				    
+				   // System.out.print(uColoumns.size());
+                  
                      
                     List<List<String>> blobs = new ArrayList<>();
-                    
-      
-                    char[] letters = {'A','B','C','D','E'};
-                   
-                    
-                    
+                    char[] letters = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P'};
+
                   //  for (int i = 0; i < 50; ++i) System.out.println();   
                     
                     
+                    
+                 
                     for (int y = 0; y < coloumns; y++) {
                     	blobs.add(new ArrayList<>());
                     	
                     	for (int x = 0; x < rows; x++) {
                         String name = "" + letters[x] + (y+1);
                     	blobs.get(y).add(name);
-                    	
+
                      //   System.out.print("  ");
 	                   // System.out.print(contours.get(j).size().height);
                     }
                     }
-                    
+                  
+                   
                     for(int i = 0; i < blobs.size(); i++) {
-                   // System.out.println(blobs.get(i));;
+                   System.out.println(blobs.get(i));
 				}
                     
-				
                     
-                 
-                
                     
+                  
                     
                     
                     
-                    
+  
                    
 					
 				  
-	               
+                    frame = deskew(frame,2);
 	            	
 
 					
