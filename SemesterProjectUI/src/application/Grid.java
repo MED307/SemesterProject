@@ -60,8 +60,10 @@ public class Grid {
 	
 	public void set()
 	{
-		for (int x = 0; x < grid.getWidth(); x++) {
-            for (int y = 0; y < grid.getHeight(); y++) {
+		for (int x = 0; x < grid.getWidth(); x++) 
+		{
+            for (int y = 0; y < grid.getHeight(); y++) 
+            {
             	
             	int rgb = new Color(255,255,255).getRGB();
                 grid.setRGB(x, y, rgb);

@@ -55,42 +55,42 @@ public class VideoController
 	//the FXML button for opening the camera
 	@FXML
 	private Button button;
-	
-//	@FXML
+
+	//	@FXML
 	//private CheckBox grayscale;
-	
-	
- 	@FXML
+
+
+	@FXML
 	private CheckBox open;
- 	
- 	@FXML
+
+	@FXML
 	private CheckBox close;
-	
-	
+
+
 	@FXML
 	private Slider hueStart;
-	
+
 	@FXML
 	private Slider hueStop;
-	
+
 	@FXML
 	private Slider saturationStart;
-	
+
 	@FXML
 	private Slider saturationStop;
-	
+
 	@FXML
 	private Slider valueStart;
-	
+
 	@FXML
 	private Slider valueStop;
-	
+
 	@FXML
 	private ImageView currentFrame;
-	
+
 	@FXML
 	private ImageView currentFrame1;
-	
+
 	// a timer for acquiring the video stream
 	private ScheduledExecutorService timer;
 	// the OpenCV object that realizes the video capture
@@ -98,43 +98,36 @@ public class VideoController
 	// a flag to change the button behavior
 	private boolean cameraActive;
 	// the logo to be loaded
-	
-	    private static int MAX_BINARY_VALUE = 255;
-	    private int thresholdValue = 127;
-	    private int thresholdType = 3;
-	    
-	    
-	    Mat thisFrame;
-	    
-	    ArrayList<Double> mineFarver= new ArrayList<>();
-	    
-	    boolean gridFound = false;
-	    
-	    
-	    Mat savedGrid = new Mat();
-	    
-	   Grid grid; 
-	   
-	   
-	   Blob[] blobs;
-	   
-	   Scalar minValues;
-	   Scalar maxValues;
-	  
-	
-	    
-	/**
-	 * Initialize method, automatically called by @{link FXMLLoader}
-	 */
+
+	private static int MAX_BINARY_VALUE = 255;
+	private int thresholdValue = 127;
+	private int thresholdType = 3;
+
+
+	Mat thisFrame;
+
+	ArrayList<Double> mineFarver= new ArrayList<>();
+
+	boolean gridFound = false;
+
+
+	Mat savedGrid = new Mat();
+
+	Grid grid; 
+
+
+	Blob[] blobs;
+
+	Scalar minValues;
+	Scalar maxValues;
+
+
 	public void initialize()
 	{
 		this.capture = new VideoCapture();
 		this.cameraActive = false;
 	}
-	
-	/**
-	 * The action triggered by pushing the button on the GUI
-	 */
+
 	@FXML
 	protected void startCamera()
 	{
@@ -142,20 +135,20 @@ public class VideoController
 		//this.currentFrame.setFitWidth(900);
 		// preserve image ratio
 		//this.currentFrame.setPreserveRatio(true);
-		
+
 		if (!this.cameraActive)
 		{
 			// start the video capture
 			this.capture.open(0);
-			
+
 			// is the video stream available?
 			if (this.capture.isOpened())
 			{
 				this.cameraActive = true;
-				
+
 				// grab a frame every 33 ms (30 frames/sec)
 				Runnable frameGrabber = new Runnable() {
-					
+
 					@Override
 					public void run()
 					{
@@ -166,10 +159,10 @@ public class VideoController
 						updateImageView(currentFrame, imageToShow);
 					}
 				};
-				
+
 				this.timer = Executors.newSingleThreadScheduledExecutor();
 				this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
-				
+
 				// update the button content
 				this.button.setText("Stop Camera");
 			}
@@ -185,35 +178,35 @@ public class VideoController
 			this.cameraActive = false;
 			// update again the button content
 			this.button.setText("Start Camera");
-			
+
 			// stop the timer
 			this.stopAcquisition();
 		}
 	}
 
-	
+
 	@FXML
 	protected void gridOnClick()
 	{
 		getGrid(thisFrame,mineFarver);
 	}
-	
+
 	@FXML
 	protected void gridFoundOnClick()
 	{
-		
+
 		if(!gridFound) {
-		gridFound= true;
+			gridFound= true;
 		}
 		else {
 			gridFound = false;
 		}
 	}
-	
+
 	@FXML
 	protected void getBlobOnClick()
 	{
-		
+
 		getBlob(thisFrame,mineFarver);
 
 	}
@@ -221,7 +214,7 @@ public class VideoController
 	private Mat grabFrame()
 	{
 		Mat frame = new Mat();
-		
+
 		// check if the capture is open
 		if (this.capture.isOpened())
 		{
@@ -229,131 +222,120 @@ public class VideoController
 			{
 				// read the current frame
 				this.capture.read(frame);
-				
+
 				// if the frame is not empty, process it
 				if (!frame.empty())
 				{
-					
+
 					if(gridFound) {
-						
-				     Mat hsvOutput = new Mat();
-						
-					 Imgproc.cvtColor(frame, hsvOutput, Imgproc.COLOR_BGR2HSV);
-	
-					//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV colorspace treshold
-						minValues = new Scalar(this.hueStart.getValue(), this.saturationStart.getValue(),
-								this.valueStart.getValue());
-						 maxValues = new Scalar(this.hueStop.getValue(), this.saturationStop.getValue(),
-								this.valueStop.getValue());
-						
-						
-						
-						
-					
+
+						Mat hsvOutput = new Mat();
+
+						Imgproc.cvtColor(frame, hsvOutput, Imgproc.COLOR_BGR2HSV);
+
+						//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV colorspace treshold
+						minValues = new Scalar(this.hueStart.getValue(), this.saturationStart.getValue(), this.valueStart.getValue());
+						maxValues = new Scalar(this.hueStop.getValue(), this.saturationStop.getValue(), this.valueStop.getValue());
+
 						//Mat thresholdOutput = new Mat();
 						Core.inRange(hsvOutput, minValues, maxValues, frame);
 
 					}
 
 					if(!gridFound) {
-                    Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
-					
-					//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV colorspace treshold
-					minValues = new Scalar(this.hueStart.getValue(), this.saturationStart.getValue(),
-							this.valueStart.getValue());
-					maxValues = new Scalar(this.hueStop.getValue(), this.saturationStop.getValue(),
-							this.valueStop.getValue());
+						Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
 
-					//a static method for thresholding called inRange() from the Core class from the OpenCV library is used
-					Core.inRange(frame, minValues, maxValues, frame);
-					
-					
-					// Create the CV_8U version of the distance image
-                    // It is needed for findContours()
-                    Mat dist_8u = new Mat();
-                    
-                    frame.convertTo(dist_8u, CvType.CV_8U);
-                    
-                    // Find total markers
-                    List<MatOfPoint> contours = new ArrayList<>();
-                    Mat hierarchy = new Mat();
-                    Imgproc.findContours(dist_8u, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-                    
-                    // Create the marker image for the watershed algorithm
-                    Mat markers = Mat.zeros(frame.size(), CvType.CV_32S);
-                    
+						//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV colorspace treshold
+						minValues = new Scalar(this.hueStart.getValue(), this.saturationStart.getValue(),
+								this.valueStart.getValue());
+						maxValues = new Scalar(this.hueStop.getValue(), this.saturationStop.getValue(),
+								this.valueStop.getValue());
 
-// Draw the foreground markers
-   for (int i = 0; i < contours.size(); i++) {
-       Imgproc.drawContours(markers, contours, i, new Scalar(i + 1), -1);
-      
-   } 
-   
-    // Draw the background marker
-                    Mat markersScaled = new Mat();
-                    markers.convertTo(markersScaled, CvType.CV_32F);
-                    Core.normalize(markersScaled, markersScaled, 0.0, 255.0, Core.NORM_MINMAX);
-                    Imgproc.circle(markersScaled, new Point(5, 5), 3, new Scalar(255, 255, 255), -1);
-                    Mat markersDisplay = new Mat();
-                    markersScaled.convertTo(markersDisplay, CvType.CV_8U);
-                    Imgproc.circle(markers, new Point(5, 5), 3, new Scalar(255, 255, 255), -1);
-                       
-				    frame = markersDisplay;
+						//a static method for thresholding called inRange() from the Core class from the OpenCV library is used
+						Core.inRange(frame, minValues, maxValues, frame);
 
-				    ArrayList<Double> colors = new ArrayList<>();
+						// Create the CV_8U version of the distance image
+						// It is needed for findContours()
+						Mat dist_8u = new Mat();
 
-				    for (int y = 0; y < frame.height(); y++){
-				      for(int x = 0; x < frame.width(); x++){
-				      if(/*frame.get(y,x)[0] != 255 &&*/ frame.get(y,x)[0] != 0){
-				    		  colors.add(frame.get(y,x)[0]);
-				    		  }
-				    }
-				    } 
-				    
-				    Set<Double> uniqueColors = new HashSet<Double>(colors);
-				    
-				    ArrayList<Double> farver = new ArrayList<>(uniqueColors);
-				    
-				    
-				    mineFarver = farver;
+						frame.convertTo(dist_8u, CvType.CV_8U);
+
+						// Find total markers
+						List<MatOfPoint> contours = new ArrayList<>();
+						Mat hierarchy = new Mat();
+						Imgproc.findContours(dist_8u, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+
+						// Create the marker image for the watershed algorithm
+						Mat markers = Mat.zeros(frame.size(), CvType.CV_32S);
+
+						// Draw the foreground markers
+						for (int i = 0; i < contours.size(); i++) {
+							Imgproc.drawContours(markers, contours, i, new Scalar(i + 1), -1);
+
+						} 
+
+						// Draw the background marker
+						Mat markersScaled = new Mat();
+						markers.convertTo(markersScaled, CvType.CV_32F);
+						Core.normalize(markersScaled, markersScaled, 0.0, 255.0, Core.NORM_MINMAX);
+						Imgproc.circle(markersScaled, new Point(5, 5), 3, new Scalar(255, 255, 255), -1);
+						Mat markersDisplay = new Mat();
+						markersScaled.convertTo(markersDisplay, CvType.CV_8U);
+						Imgproc.circle(markers, new Point(5, 5), 3, new Scalar(255, 255, 255), -1);
+
+						frame = markersDisplay;
+
+						ArrayList<Double> colors = new ArrayList<>();
+
+						for (int y = 0; y < frame.height(); y++){
+							for(int x = 0; x < frame.width(); x++){
+								if(/*frame.get(y,x)[0] != 255 &&*/ frame.get(y,x)[0] != 0){
+									colors.add(frame.get(y,x)[0]);
+								}
+							}
+						} 
+
+						Set<Double> uniqueColors = new HashSet<Double>(colors);
+						ArrayList<Double> farver = new ArrayList<>(uniqueColors);
+						mineFarver = farver;
 					}
 
-			
-		if(open.isSelected()) {
-				  		
-				  		//two matrices of type Mat from the OpevCV library is created to be used for dilation and erosion respectively
-				  		Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
+
+					if(open.isSelected()) {
+
+						//two matrices of type Mat from the OpevCV library is created to be used for dilation and erosion respectively
+						Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
 						Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
-						
+
 						//a new matrix of type Mat from the OpevCV library is created for the output image after erosion has been applied
 						Mat erodeOutput = new Mat();
-						
+
 						//the erode() and dilate() methods are used respectively in order to apply a opening to the video feed
 						Imgproc.erode(frame, erodeOutput, erodeElement);
 						Imgproc.dilate(erodeOutput, frame, dilateElement);
-				  		
-				  	}
-				  	
-				  	if(close.isSelected()) {
-				
-				     	//two matrices of type Mat from the OpevCV library is created to be used for erosion and dilation respectively
-				  		Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
+
+					}
+
+					if(close.isSelected()) {
+
+						//two matrices of type Mat from the OpevCV library is created to be used for erosion and dilation respectively
+						Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
 						Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
-						
+
 						//a new matrix of type Mat from the OpevCV library is created for the output image after dilation has been applied
 						Mat dilateOutput = new Mat();
-						
+
 						//the dilate() and erode() methods are used respectively in order to apply a opening to the video feed
 						Imgproc.dilate(frame, dilateOutput, dilateElement);
 						Imgproc.erode(dilateOutput, frame, erodeElement);
-						
-				  	}
-	            	
-thisFrame = frame;
-					
+
+					}
+
+					thisFrame = frame;
+
 
 				}
-				
+
 			}
 			catch (Exception e)
 			{
@@ -361,10 +343,10 @@ thisFrame = frame;
 				System.err.println("Exception during the frame elaboration: " + e);
 			}
 		}
-		
+
 		return frame;
 	}
-	
+
 	private void stopAcquisition()
 	{
 		if (this.timer != null && !this.timer.isShutdown())
@@ -381,14 +363,14 @@ thisFrame = frame;
 				System.err.println("Exception in stopping the frame capture, trying to release the camera now... " + e);
 			}
 		}
-		
+
 		if (this.capture.isOpened())
 		{
 			// release the camera
 			this.capture.release();
 		}
 	}
-	
+
 	/**
 	 * Update the {@link ImageView} in the JavaFX main thread
 	 * 
@@ -401,7 +383,7 @@ thisFrame = frame;
 	{
 		Utils.onFXThread(view.imageProperty(), image);
 	}
-	
+
 	/**
 	 * On application close, stop the acquisition from the camera
 	 */
@@ -409,116 +391,117 @@ thisFrame = frame;
 	{
 		this.stopAcquisition();
 	}
-	
 
-	
-	 private static Mat deskew(Mat src, double angle) {
-		    Point center = new Point(src.width() / 2, src.height() / 2);
-		    Mat rotImage = Imgproc.getRotationMatrix2D(center, angle, 1.0);
-		        Size size = new Size(src.width(), src.height());
 
-		        Imgproc.warpAffine(src, src, rotImage, size, Imgproc.INTER_LINEAR
-		                + Imgproc.CV_WARP_FILL_OUTLIERS);
-		        return src;
-		    }
-	 
-	 
-	 public void getGrid (Mat frame, ArrayList<Double> farver) {
-		 
-         int[] point = new int[2];
-         
-         for (int y = 0; y < frame.height(); y++){
-		      for(int x = 0; x < frame.width(); x++){
-		      if(frame.get(y,x)[0] != 0){
-		    		  point[0] = y;
-		    	      point[1] = x;
-		    		 break;
-		    		  }
-		    }
-		    } 
 
-         
-         ArrayList<Double> list = new ArrayList<>();
-         
-         
-         for (int y = point[0] ; y > 0 ; y--){
-         	
-         	if (frame.get(point[0]-y,point[1])[0] != 0) {
-         		list.add(frame.get(point[0]-y,point[1])[0]);
-         	}
-         	
-         }
-         	
-         	Set<Double> uniqueColoumns = new HashSet<Double>(list);
-			    
-			    ArrayList<Double> uColoumns = new ArrayList<>(uniqueColoumns);
-         	
+	private static Mat deskew(Mat src, double angle) 
+	{
+		Point center = new Point(src.width() / 2, src.height() / 2);
+		Mat rotImage = Imgproc.getRotationMatrix2D(center, angle, 1.0);
+		Size size = new Size(src.width(), src.height());
 
-			    int coloumns = uColoumns.size();
-             
-             int rows = farver.size() / coloumns;
-             
-             
-             
-             grid = new Grid(rows,coloumns);
-             currentFrame1.setImage(grid.Display());
-             savedGrid = frame;
-             
-             
-             Collections.sort(farver, Collections.reverseOrder());
-             
-          blobs = new Blob[farver.size()];
-  
-          for(int i = 0; i < farver.size(); i++) {
-        	    blobs[i] = new Blob();
-           		blobs[i].setColor(farver.get(i));
-                blobs[i].setLocationX(i % rows);
-                blobs[i].setLocationY(i / rows);
-           }
+		Imgproc.warpAffine(src, src, rotImage, size, Imgproc.INTER_LINEAR
+				+ Imgproc.CV_WARP_FILL_OUTLIERS);
+		return src;
+	}
 
-       //   for(int i = 0; i < farver.size(); i++){ System.out.println("blob color: "+ blobs[i].getColor() + "   blob x: " + blobs[i].getLocationX() + "   blob y: " + blobs[i].getLocationY()); }
-	 }
-	 
-	 public void getBlob (Mat frame, ArrayList<Double> farver) {
-	 int[] point = new int[2];
-     
-     for (int y = 0; y < frame.height(); y++){
-	      for(int x = 0; x < frame.width(); x++){
-	      if(frame.get(y,x)[0] != 0){
-	    		  point[0] = y;
-	    	      point[1] = x;
-	    		 break;
-	    		  }
-	    }
-	    }
-    
-  double squareColor = savedGrid.get(point[0],point[1])[0];
-    		 
- // System.out.print(squareColor);
 
-  int x = 0;
-  int y = 0;
-  
-  for(int i = 0; i < farver.size(); i++) {
-	if(blobs[i].getColor() == squareColor)
+	public void getGrid (Mat frame, ArrayList<Double> farver) 
+	{
+		int[] point = new int[2];
+
+		for (int y = 0; y < frame.height(); y++)
 		{
-		 x = blobs[i].getLocationX();
-		 y = blobs[i].getLocationY(); 	
-		 break;
-		}
-  }
-     
-     grid.set();
-     
-   if( minValues.val[0] > 100) {
-	   grid.setSquare(x, y, "stone");
-   }
-   if( minValues.val[0] > 200 ) {
-	   grid.setSquare(x, y, "tree");
-   }
-     
-     currentFrame1.setImage(grid.Display());
+			for(int x = 0; x < frame.width(); x++)
+			{
+				if(frame.get(y,x)[0] != 0)
+				{
+					point[0] = y;
+					point[1] = x;
+					break;
+				}
+			}
+		} 
 
-	 }    
-	 
+		ArrayList<Double> list = new ArrayList<>();
+
+		for (int y = point[0] ; y > 0 ; y--)
+		{
+			if (frame.get(point[0]-y,point[1])[0] != 0) 
+			{
+				list.add(frame.get(point[0]-y,point[1])[0]);
+			}
+		}
+
+		Set<Double> uniqueColoumns = new HashSet<Double>(list);
+
+		ArrayList<Double> uColoumns = new ArrayList<>(uniqueColoumns);
+
+		int coloumns = uColoumns.size();
+
+		int rows = farver.size() / coloumns;
+
+		grid = new Grid(rows,coloumns);
+		currentFrame1.setImage(grid.Display());
+		savedGrid = frame;
+
+		Collections.sort(farver, Collections.reverseOrder());
+
+		blobs = new Blob[farver.size()];
+
+		for(int i = 0; i < farver.size(); i++) 
+		{
+			blobs[i] = new Blob();
+			blobs[i].setColor(farver.get(i));
+			blobs[i].setLocationX(i % rows);
+			blobs[i].setLocationY(i / rows);
+		}
+	}
+
+	public void getBlob (Mat frame, ArrayList<Double> farver) 
+	{
+		int[] point = new int[2];
+		
+		int gridX = 0;
+		int gridY = 0;
+		
+		for (int y = 0; y < frame.height(); y++)
+		{
+			for(int x = 0; x < frame.width(); x++)
+			{
+				if(frame.get(y,x)[0] != 0){
+					point[0] = y;
+					point[1] = x;
+					break;
+				}
+			}
+		}
+
+		double squareColor = savedGrid.get(point[0],point[1])[0];
+
+		for(int i = 0; i < farver.size(); i++) 
+		{
+			if(blobs[i].getColor() == squareColor)
+			{
+				gridX = blobs[i].getLocationX();
+				gridY = blobs[i].getLocationY(); 	
+				break;
+			}
+		}
+
+		grid.set();
+
+		if( minValues.val[0] > 100) 
+		{
+			grid.setSquare(gridX, gridY, "stone");
+		}
+		if( minValues.val[0] > 200 ) 
+		{
+			grid.setSquare(gridX, gridY, "tree");
+		}
+
+		currentFrame1.setImage(grid.Display());
+
+	}    
+
 }
