@@ -117,6 +117,9 @@ public class VideoController
 	   
 	   
 	   Blob[] blobs;
+	   
+	   Scalar minValues;
+	   Scalar maxValues;
 	  
 	
 	    
@@ -238,10 +241,14 @@ public class VideoController
 					 Imgproc.cvtColor(frame, hsvOutput, Imgproc.COLOR_BGR2HSV);
 	
 					//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV colorspace treshold
-						Scalar minValues = new Scalar(this.hueStart.getValue(), this.saturationStart.getValue(),
+						minValues = new Scalar(this.hueStart.getValue(), this.saturationStart.getValue(),
 								this.valueStart.getValue());
-						Scalar maxValues = new Scalar(this.hueStop.getValue(), this.saturationStop.getValue(),
+						 maxValues = new Scalar(this.hueStop.getValue(), this.saturationStop.getValue(),
 								this.valueStop.getValue());
+						
+						
+						
+						
 					
 						//Mat thresholdOutput = new Mat();
 						Core.inRange(hsvOutput, minValues, maxValues, frame);
@@ -252,9 +259,9 @@ public class VideoController
                     Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
 					
 					//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV colorspace treshold
-					Scalar minValues = new Scalar(this.hueStart.getValue(), this.saturationStart.getValue(),
+					minValues = new Scalar(this.hueStart.getValue(), this.saturationStart.getValue(),
 							this.valueStart.getValue());
-					Scalar maxValues = new Scalar(this.hueStop.getValue(), this.saturationStop.getValue(),
+					maxValues = new Scalar(this.hueStop.getValue(), this.saturationStop.getValue(),
 							this.valueStop.getValue());
 
 					//a static method for thresholding called inRange() from the Core class from the OpenCV library is used
@@ -469,10 +476,7 @@ thisFrame = frame;
                 blobs[i].setLocationY(i / rows);
            }
 
-          for(int i = 0; i < farver.size(); i++){
-         System.out.println("blob color: "+ blobs[i].getColor() + "   blob x: " + blobs[i].getLocationX() + "   blob y: " + blobs[i].getLocationY());
-        
-	 }
+       //   for(int i = 0; i < farver.size(); i++){ System.out.println("blob color: "+ blobs[i].getColor() + "   blob x: " + blobs[i].getLocationX() + "   blob y: " + blobs[i].getLocationY()); }
 	 }
 	 
 	 public void getBlob (Mat frame, ArrayList<Double> farver) {
@@ -490,7 +494,7 @@ thisFrame = frame;
     
   double squareColor = savedGrid.get(point[0],point[1])[0];
     		 
-  System.out.print(squareColor);
+ // System.out.print(squareColor);
 
   int x = 0;
   int y = 0;
@@ -505,7 +509,14 @@ thisFrame = frame;
   }
      
      grid.set();
-     grid.setSquare(x, y, "tree");
+     
+   if( minValues.val[0] > 100) {
+	   grid.setSquare(x, y, "stone");
+   }
+   if( minValues.val[0] > 200 ) {
+	   grid.setSquare(x, y, "tree");
+   }
+     
      currentFrame1.setImage(grid.Display());
 
 	 }    
