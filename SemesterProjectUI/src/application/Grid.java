@@ -58,7 +58,7 @@ public class Grid {
 	}
 	
 	
-	private void set()
+	public void set()
 	{
 		for (int x = 0; x < grid.getWidth(); x++) {
             for (int y = 0; y < grid.getHeight(); y++) {
@@ -117,6 +117,8 @@ public class Grid {
 			}
 		}
 	}
+	
+	
 	
 	
 	public Image Display()

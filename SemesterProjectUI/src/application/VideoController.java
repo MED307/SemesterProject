@@ -1,6 +1,8 @@
 package application;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
@@ -86,6 +88,9 @@ public class VideoController
 	@FXML
 	private ImageView currentFrame;
 	
+	@FXML
+	private ImageView currentFrame1;
+	
 	// a timer for acquiring the video stream
 	private ScheduledExecutorService timer;
 	// the OpenCV object that realizes the video capture
@@ -97,7 +102,24 @@ public class VideoController
 	    private static int MAX_BINARY_VALUE = 255;
 	    private int thresholdValue = 127;
 	    private int thresholdType = 3;
-
+	    
+	    
+	    Mat thisFrame;
+	    
+	    ArrayList<Double> mineFarver= new ArrayList<>();
+	    
+	    boolean gridFound = false;
+	    
+	    
+	    Mat savedGrid = new Mat();
+	    
+	   Grid grid; 
+	   
+	   
+	   Blob[] blobs;
+	  
+	
+	    
 	/**
 	 * Initialize method, automatically called by @{link FXMLLoader}
 	 */
@@ -105,7 +127,7 @@ public class VideoController
 	{
 		this.capture = new VideoCapture();
 		this.cameraActive = false;
-		Grid grid = new Grid(10,10);
+		/*Grid grid = new Grid(10,10);
 		grid.setSquare(2, 2, "tree");
 		grid.setSquare(2, 5, "tree");
 		grid.setSquare(7, 5, "tree");
@@ -114,7 +136,7 @@ public class VideoController
 		grid.setSquare(4, 6, "tree");
 		grid.setSquare(5, 6, "tree");
 		grid.setSquare(6, 6, "tree");
-		currentFrame.setImage(grid.Display());
+		currentFrame.setImage(grid.Display());*/
 	}
 	
 	/**
@@ -176,6 +198,46 @@ public class VideoController
 		}
 	}
 	
+	
+	
+	
+	@FXML
+	protected void gridOnClick()
+	{
+		
+		getGrid(thisFrame,mineFarver);
+		
+		
+	}
+	
+	
+
+	@FXML
+	protected void gridFoundOnClick()
+	{
+		
+		if(!gridFound) {
+		gridFound= true;
+		}
+		else {
+			gridFound = false;
+		}
+		
+	}
+	
+	
+	@FXML
+	protected void getBlobOnClick()
+	{
+		
+		getBlob(thisFrame,mineFarver);
+		
+		
+	}
+	
+	
+	
+	
 
 	private Mat grabFrame()
 	{
@@ -193,8 +255,31 @@ public class VideoController
 				if (!frame.empty())
 				{
 					
+					if(gridFound) {
+						
+				     Mat hsvOutput = new Mat();
+						
+					 Imgproc.cvtColor(frame, hsvOutput, Imgproc.COLOR_BGR2HSV);
+	
+					//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV colorspace treshold
+						Scalar minValues = new Scalar(this.hueStart.getValue(), this.saturationStart.getValue(),
+								this.valueStart.getValue());
+						Scalar maxValues = new Scalar(this.hueStop.getValue(), this.saturationStop.getValue(),
+								this.valueStop.getValue());
+					
+						//Mat thresholdOutput = new Mat();
+						Core.inRange(hsvOutput, minValues, maxValues, frame);
+
+						//Mat hsvToBGROutput = new Mat();
+						//Imgproc.cvtColor(thresholdOutput, hsvToBGROutput, Imgproc.COLOR_HSV2BGR);
+						//Imgproc.cvtColor(hsvToBGROutput, frame, Imgproc.COLOR_BGR2GRAY);
+						
+			
+					}
 					
 					
+					
+					if(!gridFound) {
                     Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
 					
 					//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV colorspace treshold
@@ -206,71 +291,6 @@ public class VideoController
 					//a static method for thresholding called inRange() from the Core class from the OpenCV library is used
 					Core.inRange(frame, minValues, maxValues, frame);
 					
-					
-			/*	//converts the video feed to HSV color space using the static method cvtColor() from the Imgproc class
-					Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2HSV);
-					
-					//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV colorspace treshold
-					Scalar minValues = new Scalar(this.hueStart.getValue(), this.saturationStart.getValue(),
-							this.valueStart.getValue());
-					Scalar maxValues = new Scalar(this.hueStop.getValue(), this.saturationStop.getValue(),
-							this.valueStop.getValue());
-
-					//a static method for thresholding called inRange() from the Core class from the OpenCV library is used
-					Core.inRange(frame, minValues, maxValues, frame);
-					*/
-					
-					
-					
-					
-		if(open.isSelected()) {
-				  		
-				  		//two matrices of type Mat from the OpevCV library is created to be used for dilation and erosion respectively
-				  		Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
-						Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
-						
-						//a new matrix of type Mat from the OpevCV library is created for the output image after erosion has been applied
-						Mat erodeOutput = new Mat();
-						
-						//the erode() and dilate() methods are used respectively in order to apply a opening to the video feed
-						Imgproc.erode(frame, erodeOutput, erodeElement);
-						Imgproc.dilate(erodeOutput, frame, dilateElement);
-				  		
-				  	}
-				  	
-				  	if(close.isSelected()) {
-				
-				     	//two matrices of type Mat from the OpevCV library is created to be used for erosion and dilation respectively
-				  		Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
-						Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
-						
-						//a new matrix of type Mat from the OpevCV library is created for the output image after dilation has been applied
-						Mat dilateOutput = new Mat();
-						
-						//the dilate() and erode() methods are used respectively in order to apply a opening to the video feed
-						Imgproc.dilate(frame, dilateOutput, dilateElement);
-						Imgproc.erode(dilateOutput, frame, erodeElement);
-						
-				  	}
-
-					
-				  	
-				  	
-
-/*Mat grassImg = new Mat();
-
-double label = 0;
-
-for(int y = 0; y < frame.height(); y++){
-  for(int x = 0; x < frame.width(); x++){
-  if(frame.get(y,x)[0] == 255){
-grassFire(y,x,label,frame);
-label += 1;
-} 
-}
-}*/
-		
-	
 					
 					// Create the CV_8U version of the distance image
                     // It is needed for findContours()
@@ -301,15 +321,9 @@ label += 1;
                     Mat markersDisplay = new Mat();
                     markersScaled.convertTo(markersDisplay, CvType.CV_8U);
                     Imgproc.circle(markers, new Point(5, 5), 3, new Scalar(255, 255, 255), -1);
-                    
-                    
-                    
+                       
 				    frame = markersDisplay;
-   
-                    
-                    
-				  
-				    
+
 				    ArrayList<Double> colors = new ArrayList<>();
 
 				    for (int y = 0; y < frame.height(); y++){
@@ -324,14 +338,46 @@ label += 1;
 				    
 				    ArrayList<Double> farver = new ArrayList<>(uniqueColors);
 				    
-				  //  System.out.print("antal felter: " + farver.size()+ "    " + "Det første felt: " + farver.get(39));
-                    
-                    
-  
+				    
+				    mineFarver = farver;
+					}
+
+			
+		if(open.isSelected()) {
+				  		
+				  		//two matrices of type Mat from the OpevCV library is created to be used for dilation and erosion respectively
+				  		Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
+						Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
+						
+						//a new matrix of type Mat from the OpevCV library is created for the output image after erosion has been applied
+						Mat erodeOutput = new Mat();
+						
+						//the erode() and dilate() methods are used respectively in order to apply a opening to the video feed
+						Imgproc.erode(frame, erodeOutput, erodeElement);
+						Imgproc.dilate(erodeOutput, frame, dilateElement);
+				  		
+				  	}
+				  	
+				  	if(close.isSelected()) {
+				
+				     	//two matrices of type Mat from the OpevCV library is created to be used for erosion and dilation respectively
+				  		Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
+						Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
+						
+						//a new matrix of type Mat from the OpevCV library is created for the output image after dilation has been applied
+						Mat dilateOutput = new Mat();
+						
+						//the dilate() and erode() methods are used respectively in order to apply a opening to the video feed
+						Imgproc.dilate(frame, dilateOutput, dilateElement);
+						Imgproc.erode(dilateOutput, frame, erodeElement);
+						
+				  	}
+
+
                     
 				    
-                   
-                    int[] point = new int[2];
+                   //finding the grid size
+                 /*   int[] point = new int[2];
                     
                     for (int y = 0; y < frame.height(); y++){
   				      for(int x = 0; x < frame.width(); x++){
@@ -365,10 +411,10 @@ label += 1;
          
     				    int coloumns = uColoumns.size();
     	                
-                        int rows = farver.size() / coloumns;
+                        int rows = farver.size() / coloumns;*/
  
 				   
-				    for (int i = 0; i < 50; ++i) System.out.println();
+				 //   for (int i = 0; i < 50; ++i) System.out.println();
 				    
 				  //  System.out.print("søjler: " + coloumns + "   rækker: " + rows + "   felter: " + farver.size() );
                   
@@ -377,7 +423,9 @@ label += 1;
 				   // System.out.print(uColoumns.size());
                   
                      
-                    List<List<String>> blobs = new ArrayList<>();
+				    
+				    //Print the grid to console
+                   /* List<List<String>> blobs = new ArrayList<>();
                     char[] letters = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P'};
 
                   //  for (int i = 0; i < 50; ++i) System.out.println();   
@@ -400,208 +448,24 @@ label += 1;
                    
                     for(int i = 0; i < blobs.size(); i++) {
                    System.out.println(blobs.get(i));
-				}
+				}*/
                     
+
                     
-                    
-                  
-                    
-                    
-                    
-  
-                   
 					
 				  
-                    frame = deskew(frame,2);
+                //    frame = deskew(frame,2);
 	            	
+thisFrame = frame;
+					
+	
+					
 
-					
-					//below are if-statements that check whether the different checkboxes are checked
-					//and if that is the case the effect listed beside the checkbox will be applied
-					
-				/*if (grayscale.isSelected())
-					{
-						
-						//Convert to grayscale using the static cvtColor() method from the Imgproc class
-						Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
-						
-					}
-					
-					
-					if(yuv.isSelected()) {
-						
-						//Convert to YUV color space using the static cvtColor() method from the Imgproc class
-						Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2YUV);
-						
-					}
-					
-					
-                    if(hsv.isSelected()) {
-						
-						//Convert to HSV color space using the static cvtColor() method from the Imgproc class
-						Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2HSV);
-						
-					}
-					
-				
-					if(horiSobel.isSelected()) {
-						
-						//Horizontal sobel edge detection using the static Sobel() method from the Imgproc class
-						Imgproc.Sobel(frame, frame, -1, 0, 1);
-						
-					}
-						
-					if(vertSobel.isSelected()) {
-						
-						//Vertical sobel edge detection using the static Sobel() method from the Imgproc class
-						Imgproc.Sobel(frame, frame, -1, 1, 0);
-						 
-					}
-						 
-				    if(diagSobel.isSelected()) {
-					    //Diagonal sobel edge detection using the static Sobel() method from the Imgproc class
-						Imgproc.Sobel(frame, frame, -1, 1, 1);
-						
-					}
-					
-			     	if(houghTrans.isSelected()) {
-					
-						  //Implement a Hough Transform
-					
-						  //Converting the image to Gray
-					      Mat gray = new Mat();
-					      Imgproc.cvtColor(frame, gray, Imgproc.COLOR_RGBA2GRAY);
-					      
-					      //Detecting the edges
-					      Mat edges = new Mat();
-					      Imgproc.Canny(gray, edges, 60, 60*3, 3, false);
-					      
-					      // Changing the color of the canny
-					      Mat cannyColor = new Mat();
-					      Imgproc.cvtColor(edges, cannyColor, Imgproc.COLOR_GRAY2BGR);
-					      
-					      //Detecting the hough lines from (canny)
-					      Mat lines = new Mat();
-					      Imgproc.HoughLines(edges, lines, 1, Math.PI/180, 150);
-					      for (int i = 0; i < lines.rows(); i++) {
-					         double[] data = lines.get(i, 0);
-					         double rho = data[0];
-					         double theta = data[1];
-					         double a = Math.cos(theta);
-					         double b = Math.sin(theta);
-					         double x0 = a*rho;
-					         double y0 = b*rho;
-					         
-					         //Drawing lines on the image
-					         Point pt1 = new Point();
-					         Point pt2 = new Point();
-					         pt1.x = Math.round(x0 + 1000*(-b));
-					         pt1.y = Math.round(y0 + 1000*(a));
-					         pt2.x = Math.round(x0 - 1000*(-b));
-					         pt2.y = Math.round(y0 - 1000 *(a));
-					         Imgproc.line(frame, pt1, pt2, new Scalar(0, 0, 255), 3);
-					      }
-					      
-				}
 					       
-					  	if(thresh.isSelected()) {
-					  		
-					  		//sets the thresholdValue variable to the current value of the threshVal slider
-					  		thresholdValue = (int) threshVal.getValue();
-					  		
-                            //using the static OpenCV function threshold() from the Imgproc class to perform thresholding on the video feed
-					  		Imgproc.threshold(frame, frame, thresholdValue, MAX_BINARY_VALUE, thresholdType);
-					  		
-					  	}
-					  	
-					  	
-                        if(colorThresh.isSelected()) {
-					  		
-                        	//converts the video feed to HSV color space using the static method cvtColor() from the Imgproc class
-    						Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2HSV);
-    						
-    						//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV colorspace treshold
-    						Scalar minValues = new Scalar(this.hueStart.getValue(), this.saturationStart.getValue(),
-    								this.valueStart.getValue());
-    						Scalar maxValues = new Scalar(this.hueStop.getValue(), this.saturationStop.getValue(),
-    								this.valueStop.getValue());
 
-    						//a static method for thresholding called inRange() from the Core class from the OpenCV library is used
-    						Core.inRange(frame, minValues, maxValues, frame);
-					  		
-					  	}
-					  	
-					  	
-					  	if(blur.isSelected()) {
 
-					  		//the static blur() method from the Imgproc class form OpenCV is used to apply a blur of kernel size 5x5 to the video feed
-							Imgproc.blur(frame, frame, new Size(5, 5));
-							
-					  	}
 					  	
-					  	if(open.isSelected()) {
-					  		
-					  		//two matrices of type Mat from the OpevCV library is created to be used for dilation and erosion respectively
-					  		Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(9, 9));
-							Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(9, 9));
-							
-							//a new matrix of type Mat from the OpevCV library is created for the output image after erosion has been applied
-							Mat erodeOutput = new Mat();
-							
-							//the erode() and dilate() methods are used respectively in order to apply a opening to the video feed
-							Imgproc.erode(frame, erodeOutput, erodeElement);
-							Imgproc.dilate(erodeOutput, frame, dilateElement);
-					  		
-					  	}
-					  	
-					  	if(close.isSelected()) {
-					
-					     	//two matrices of type Mat from the OpevCV library is created to be used for erosion and dilation respectively
-					  		Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(9, 9));
-							Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(9, 9));
-							
-							//a new matrix of type Mat from the OpevCV library is created for the output image after dilation has been applied
-							Mat dilateOutput = new Mat();
-							
-							//the dilate() and erode() methods are used respectively in order to apply a opening to the video feed
-							Imgproc.dilate(frame, dilateOutput, dilateElement);
-							Imgproc.erode(dilateOutput, frame, erodeElement);
-							
-					  	}
-  
-					  	
-	                    if(blob.isSelected()) {
-	                    	
-	                    	// Create the CV_8U version of the distance image
-	                        // It is needed for findContours()
-	                        Mat dist_8u = new Mat();
-	                        
-	                        frame.convertTo(dist_8u, CvType.CV_8U);
-	                        
-	                        // Find total markers
-	                        List<MatOfPoint> contours = new ArrayList<>();
-	                        Mat hierarchy = new Mat();
-	                        Imgproc.findContours(dist_8u, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-	                        
-	                        // Create the marker image for the watershed algorithm
-	                        Mat markers = Mat.zeros(frame.size(), CvType.CV_32S);
-	                        
-	                        // Draw the foreground markers
-	                        for (int i = 0; i < contours.size(); i++) {
-	                            Imgproc.drawContours(markers, contours, i, new Scalar(i + 1), -1);
-	                        }
-	                        
-	                        // Draw the background marker
-	                        Mat markersScaled = new Mat();
-	                        markers.convertTo(markersScaled, CvType.CV_32F);
-	                        Core.normalize(markersScaled, markersScaled, 0.0, 255.0, Core.NORM_MINMAX);
-	                        Imgproc.circle(markersScaled, new Point(5, 5), 3, new Scalar(255, 255, 255), -1);
-	                        Mat markersDisplay = new Mat();
-	                        markersScaled.convertTo(markersDisplay, CvType.CV_8U);
-	                        Imgproc.circle(markers, new Point(5, 5), 3, new Scalar(255, 255, 255), -1);
-						    frame = markersDisplay;
-					  	}
-	                    */
+
 				}
 				
 			}
@@ -660,51 +524,6 @@ label += 1;
 		this.stopAcquisition();
 	}
 	
-	
-/*	public void grassFire(int y, int x, double label, Mat image){
-
-		image.get(y,x)[0] = label;
-		ArrayList<Integer> listY = new ArrayList<>();
-		ArrayList<Integer> listX = new ArrayList<>();
-		listY.add(y);
-		listX.add(x);
-
-
-		while(listY.size() > 0 &&  listX.size() > 0 ){
-		  int fstY = listY.get(0);
-		  listY.remove(0);
-
-		  int fstX = listX.get(0);
-		  listX.remove(0);
-
-		  image.get(fstY,fstX)[0] = label;
-
-		  if(fstY > 0 && image.get(fstY-1,fstX)[0] == 255){
-		    image.get(fstY-1,fstX)[0] = 1;
-		    listY.add(fstY-1);
-		    listX.add(fstX);
-		}
-
-		 if(fstY < image.height() -1 && image.get(fstY+1,fstX)[0] == 255){
-		    image.get(fstY+1,fstX)[0] = 1;
-		    listY.add(fstY+1);
-		    listX.add(fstX);
-		}
-
-		  if(fstX > 0 && image.get(fstY,fstX-1)[0] == 255){
-		    image.get(fstY,fstX-1)[0] = 1;
-		    listY.add(fstY);
-		    listX.add(fstX-1);
-		}
-
-		 if(fstX < image.width() - 1 && image.get(fstY,fstX+1)[0] == 255){
-		    image.get(fstY,fstX+1)[0] = 1;
-		    listY.add(fstY);
-		    listX.add(fstX+1);
-		}
-
-		}
-		}*/
 
 	
 	 private static Mat deskew(Mat src, double angle) {
@@ -716,4 +535,108 @@ label += 1;
 		                + Imgproc.CV_WARP_FILL_OUTLIERS);
 		        return src;
 		    }
+	 
+	 
+	 public void getGrid (Mat frame, ArrayList<Double> farver) {
+		 
+         int[] point = new int[2];
+         
+         for (int y = 0; y < frame.height(); y++){
+		      for(int x = 0; x < frame.width(); x++){
+		      if(frame.get(y,x)[0] != 0){
+		    		  point[0] = y;
+		    	      point[1] = x;
+		    		 break;
+		    		  }
+		    }
+		    } 
+         
+         
+      // then move to mid point and then move down
+		 //  int midpoint = (contours.get(1).width())/2;
+         
+         ArrayList<Double> list = new ArrayList<>();
+         
+         
+         for (int y = point[0] ; y > 0 ; y--){
+         	
+         	if (frame.get(point[0]-y,point[1])[0] != 0) {
+         		list.add(frame.get(point[0]-y,point[1])[0]);
+         	}
+         	
+         }
+         	
+         	Set<Double> uniqueColoumns = new HashSet<Double>(list);
+			    
+			    ArrayList<Double> uColoumns = new ArrayList<>(uniqueColoumns);
+         	
+
+			    int coloumns = uColoumns.size();
+             
+             int rows = farver.size() / coloumns;
+             
+             
+             
+             grid = new Grid(rows,coloumns);
+             currentFrame1.setImage(grid.Display());
+             savedGrid = frame;
+             
+             
+             Collections.sort(farver, Collections.reverseOrder());
+             
+          blobs = new Blob[farver.size()];
+  
+          for(int i = 0; i < farver.size(); i++) {
+        	    blobs[i] = new Blob();
+           		blobs[i].setColor(farver.get(i));
+                blobs[i].setLocationX(i % rows);
+                blobs[i].setLocationY(i / rows);
+           }
+
+          for(int i = 0; i < farver.size(); i++){
+         System.out.println("blob color: "+ blobs[i].getColor() + "   blob x: " + blobs[i].getLocationX() + "   blob y: " + blobs[i].getLocationY());
+        
+	 }
+    
+	 }
+	 
+	 public void getBlob (Mat frame, ArrayList<Double> farver) {
+	 int[] point = new int[2];
+     
+     for (int y = 0; y < frame.height(); y++){
+	      for(int x = 0; x < frame.width(); x++){
+	      if(frame.get(y,x)[0] != 0){
+	    		  point[0] = y;
+	    	      point[1] = x;
+	    		 break;
+	    		  }
+	    }
+	    }
+    
+     double squareColor = savedGrid.get(point[0],point[1])[0];
+    		 
+  System.out.print(squareColor);
+
+  
+  int x = 0;
+  int y = 0;
+  
+  for(int i = 0; i < farver.size(); i++) {
+	if(blobs[i].getColor() == squareColor)
+		{
+		 x = blobs[i].getLocationX();
+		 y = blobs[i].getLocationY(); 	
+		 break;
+		}
+  }
+
+     
+     grid.set();
+     grid.setSquare(x, y, "tree");
+     currentFrame1.setImage(grid.Display());
+
+     
+    
+	 }    
+	 
 }

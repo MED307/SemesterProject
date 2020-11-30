@@ -22,7 +22,7 @@
             <Image url="@../../assets/battlemap/grid43.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="currentFrame1" fitHeight="83.0" fitWidth="111.0" layoutX="14.0" layoutY="503.0" pickOnBounds="true" preserveRatio="true" visible="false" />
+      <ImageView fx:id="currentFrame1" fitHeight="83.0" fitWidth="111.0" layoutX="50.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" visible="true" />
       <Pane id="MenuPane" layoutX="831.0" prefHeight="600.0" prefWidth="169.0">
          <children>
             <TabPane prefHeight="558.0" prefWidth="169.0" tabClosingPolicy="UNAVAILABLE">
@@ -46,6 +46,9 @@
                                     <Button fx:id="saveCampaignBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="176.0" text="Save Campaign" />
                                     <Button fx:id="quitCampaignBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="173.0" text="Quit Campaign" />
                                     <Button fx:id="exitProgramBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="Exit Program" />
+                                    <Button fx:id="getGrid" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="Get the Grid" onAction="#gridOnClick" />
+                                    <Button fx:id="gridFound" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="I found the grid" onAction="#gridFoundOnClick" />
+                                    <Button fx:id="blobFound" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="I found the blob" onAction="#getBlobOnClick" />
                                  </children>
                               </VBox>
                            </children>
