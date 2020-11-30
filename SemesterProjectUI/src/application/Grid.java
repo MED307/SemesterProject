@@ -17,6 +17,10 @@ public class Grid {
 	
 	BufferedImage tree;
 	
+	BufferedImage stone;
+	
+	BufferedImage water;
+	
 	ArrayList<ArrayList<Integer>> gridList = new ArrayList<>();
 	
 	private int sizeX;
@@ -28,7 +32,9 @@ public class Grid {
 	{
 		try 
 		{
-			tree = ImageIO.read(new File("C:/Users/Rune/Documents/GitHub/SemesterProject/SemesterProjectUI/src/application/tree.png"));
+			tree = ImageIO.read(getClass().getResource("/tree.png"));
+			stone = ImageIO.read(getClass().getResource("/tree.png"));
+			water = ImageIO.read(getClass().getResource("/tree.png"));
 		}
 		catch(IOException e)
 		{
@@ -82,14 +88,28 @@ public class Grid {
 	}
 	
 	
-	public void setSquare(int x, int y)
+	public void setSquare(int x, int y, String type)
 	{
+		
 		System.out.println((((squareWidth)*(x+1)) - strokeWidth) - (gridList.get(y).get(x) + strokeWidth));
 		for(int j = (y*(squareWidth)) + strokeWidth; j < ((squareWidth)*(y+1)) - strokeWidth; j++) 
 		{
 			for(int i = gridList.get(y).get(x) + strokeWidth; i < ((squareWidth)*(x+1)) - strokeWidth; i++) 
 			{
-				int rgb = tree.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+				int rgb = new Color(255,255,255).getRGB();
+				if (type.compareTo("tree") == 0)
+				{
+					rgb = tree.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+				}
+				else if (type.compareTo("stone") == 0)
+				{
+					rgb = stone.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+				}
+				else if (type.compareTo("water") == 0)
+				{
+					rgb = water.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+				}
+				
 				if(new Color(rgb).getBlue() != 255)
 				{
 		            grid.setRGB(i, j, rgb);
