@@ -99,11 +99,6 @@ public class VideoController
 	private boolean cameraActive;
 	// the logo to be loaded
 
-	private static int MAX_BINARY_VALUE = 255;
-	private int thresholdValue = 127;
-	private int thresholdType = 3;
-
-
 	Mat thisFrame;
 
 	ArrayList<Double> mineFarver= new ArrayList<>();
@@ -139,7 +134,7 @@ public class VideoController
 		if (!this.cameraActive)
 		{
 			// start the video capture
-			this.capture.open(0);
+			this.capture.open(1);
 
 			// is the video stream available?
 			if (this.capture.isOpened())
@@ -210,6 +205,18 @@ public class VideoController
 		getBlob(thisFrame,mineFarver);
 
 	}
+	
+	
+	@FXML
+	protected void setValuesOnClick()
+	{
+        //Values for specific blob
+		minValues = new Scalar(0, 0, 150);
+		maxValues = new Scalar(180, 250, 255);
+
+
+	}
+
 
 	private Mat grabFrame()
 	{
@@ -298,6 +305,12 @@ public class VideoController
 						Set<Double> uniqueColors = new HashSet<Double>(colors);
 						ArrayList<Double> farver = new ArrayList<>(uniqueColors);
 						mineFarver = farver;
+						
+						
+					
+						
+						
+								
 					}
 
 
@@ -392,20 +405,6 @@ public class VideoController
 		this.stopAcquisition();
 	}
 
-
-
-	private static Mat deskew(Mat src, double angle) 
-	{
-		Point center = new Point(src.width() / 2, src.height() / 2);
-		Mat rotImage = Imgproc.getRotationMatrix2D(center, angle, 1.0);
-		Size size = new Size(src.width(), src.height());
-
-		Imgproc.warpAffine(src, src, rotImage, size, Imgproc.INTER_LINEAR
-				+ Imgproc.CV_WARP_FILL_OUTLIERS);
-		return src;
-	}
-
-
 	public void getGrid (Mat frame, ArrayList<Double> farver) 
 	{
 		int[] point = new int[2];
@@ -460,47 +459,161 @@ public class VideoController
 
 	public void getBlob (Mat frame, ArrayList<Double> farver) 
 	{
-		int[] point = new int[2];
 		
-		int gridX = 0;
-		int gridY = 0;
 		
-		for (int y = 0; y < frame.height(); y++)
-		{
-			for(int x = 0; x < frame.width(); x++)
-			{
+		Mat dist_8u = new Mat();
+		frame.convertTo(dist_8u, CvType.CV_8U);
+		// Find total markers
+		List<MatOfPoint> contours = new ArrayList<>();
+		Mat hierarchy = new Mat();
+		Imgproc.findContours(dist_8u, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+		
+		
+		// Create the marker image for the watershed algorithm
+		Mat markers = Mat.zeros(frame.size(), CvType.CV_32S);
+
+		// Draw the foreground markers
+		for (int i = 0; i < contours.size(); i++) {
+			Imgproc.drawContours(markers, contours, i, new Scalar(i + 1), -1);
+
+		} 
+
+		// Draw the background marker
+		Mat markersScaled = new Mat();
+		markers.convertTo(markersScaled, CvType.CV_32F);
+		Core.normalize(markersScaled, markersScaled, 0.0, 255.0, Core.NORM_MINMAX);
+		Imgproc.circle(markersScaled, new Point(5, 5), 3, new Scalar(255, 255, 255), -1);
+		Mat markersDisplay = new Mat();
+		markersScaled.convertTo(markersDisplay, CvType.CV_8U);
+		Imgproc.circle(markers, new Point(5, 5), 3, new Scalar(255, 255, 255), -1);
+
+		frame = markersDisplay;
+		
+		
+		ArrayList<Double> terrainColors = new ArrayList<>();
+		
+		for (int y = 0; y < frame.height(); y++){
+			for(int x = 0; x < frame.width(); x++){
 				if(frame.get(y,x)[0] != 0){
-					point[0] = y;
-					point[1] = x;
-					break;
+					terrainColors.add(frame.get(y,x)[0]);
+				}
+			}
+		} 
+
+		Set<Double> setTerrainColors = new HashSet<Double>(terrainColors);
+		ArrayList<Double> uniqueTerrainColors = new ArrayList<>(setTerrainColors);
+
+		//System.out.println(uniqueTerrainColors);
+		//System.out.println(uniqueTerrainColors.size());
+		
+		ArrayList<Blob> terrainBlobs = new ArrayList<>();
+		
+		int area = 0;
+		
+		
+		for (int c = 0; c < uniqueTerrainColors.size(); c++ ) {
+					
+					Blob blob = new Blob();
+					terrainBlobs.add(blob);
+				
+				for (int y = 0; y < frame.height(); y++)
+				{
+					for(int x = 0; x < frame.width(); x++)
+					{
+						if(frame.get(y,x)[0] == uniqueTerrainColors.get(c)){
+							area +=1 ;
+							terrainBlobs.get(c).setArea(area);
+							
+						}
+					}
+				}
+				
+				
+				System.out.println("Area number " + c + ": " + terrainBlobs.get(c).getArea());
+			}
+
+		int xPos = 0;
+		int yPos = 0;
+			
+		for (int c = 0; c < uniqueTerrainColors.size(); c++ ) {
+			
+			for (int y = 0; y < frame.height(); y++)
+			{
+				for(int x = 0; x < frame.width(); x++)
+				{
+					if(frame.get(y,x)[0] == uniqueTerrainColors.get(c)){
+						
+						xPos += x;
+						yPos += y;
+						
+						terrainBlobs.get(c).setxPositions(xPos);
+						terrainBlobs.get(c).setyPositions(yPos);
+
+					}
+				}
+			}
+
+			
+			int xMid;
+			int yMid;
+
+			xMid = terrainBlobs.get(c).getxPositions() / terrainBlobs.get(c).getArea();
+			yMid = terrainBlobs.get(c).getyPositions() / terrainBlobs.get(c).getArea();		
+			
+			terrainBlobs.get(c).setLocationX(xMid); 
+			terrainBlobs.get(c).setLocationY(yMid);
+
+			
+		}
+		
+
+		
+		
+		
+		
+		double[] squareColors = new double[uniqueTerrainColors.size()];
+		
+		System.out.println(" ");
+		System.out.println(terrainBlobs.get(0).getLocationX());
+		System.out.println(terrainBlobs.get(0).getLocationY());
+		System.out.println(" ");
+		System.out.println(terrainBlobs.get(1).getLocationX());
+		System.out.println(terrainBlobs.get(1).getLocationY());
+		System.out.println(" ");
+		//System.out.println(terrainBlobs.get(2).getLocationX());
+		//System.out.println(terrainBlobs.get(2).getLocationY());
+		
+		
+
+		
+			
+		for(int i = 0; i < uniqueTerrainColors.size(); i++ ) {
+			
+			squareColors[i] = savedGrid.get(terrainBlobs.get(i).getLocationY(),terrainBlobs.get(i).getLocationX())[0];
+				
+		}
+		
+		grid.set();
+
+		for (int i = 0; i < blobs.length;i++) {
+
+			for(int j = 0; j < uniqueTerrainColors.size()-1; j++) 
+				{
+				
+				if(blobs[i].getColor() == squareColors[j]  ){
+
+					int gridX = blobs[i].getLocationX();
+					int gridY = blobs[i].getLocationY();
+					grid.setSquare(gridX, gridY, "tree");
+					currentFrame1.setImage(grid.Display());
+
 				}
 			}
 		}
+		
+	
 
-		double squareColor = savedGrid.get(point[0],point[1])[0];
-
-		for(int i = 0; i < farver.size(); i++) 
-		{
-			if(blobs[i].getColor() == squareColor)
-			{
-				gridX = blobs[i].getLocationX();
-				gridY = blobs[i].getLocationY(); 	
-				break;
-			}
-		}
-
-		grid.set();
-
-		if( minValues.val[0] > 100) 
-		{
-			grid.setSquare(gridX, gridY, "stone");
-		}
-		if( minValues.val[0] > 200 ) 
-		{
-			grid.setSquare(gridX, gridY, "tree");
-		}
-
-		currentFrame1.setImage(grid.Display());
+		//currentFrame1.setImage(grid.Display());
 
 	}    
 

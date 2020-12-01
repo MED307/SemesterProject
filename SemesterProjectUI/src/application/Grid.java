@@ -127,4 +127,14 @@ public class Grid {
 	{
 		return SwingFXUtils.toFXImage(grid, null);
 	}
+	
+	
+	public int getColoumns() {
+		return sizeX;
+	}
+	
+	public int getRows() {
+		return sizeY;
+	}
+	
 }

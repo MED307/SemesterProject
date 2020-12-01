@@ -48,6 +48,7 @@
                                     <Button fx:id="exitProgramBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="Exit Program" />
                                     <Button fx:id="getGrid" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="Get the Grid" onAction="#gridOnClick" />
                                     <Button fx:id="gridFound" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="I found the grid" onAction="#gridFoundOnClick" />
+                                     <Button fx:id="setValues" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="Set values for blob" onAction="#setValuesOnClick" />
                                     <Button fx:id="blobFound" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="I found the blob" onAction="#getBlobOnClick" />
                                  </children>
                               </VBox>
@@ -76,8 +77,8 @@
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-            	 	                        	<Label text="Hue stop:" />
-            		                      <Slider fx:id="hueStop" blockIncrement="1" max="255" min="0" value="90">
+            	 	                        	<Label text="Hue stop:"  />
+            		                      <Slider fx:id="hueStop" blockIncrement="1" max="255" min="0" value="255" >
                            <HBox.margin>
                               <Insets top="2.0" />
                            </HBox.margin>
@@ -92,7 +93,7 @@
                   <Insets left="10.0" />
                </HBox.margin>
             </VBox>
-            <VBox prefHeight="42.0" prefWidth="233.0">
+            <VBox prefHeight="42.0" prefWidth="233.0" >
                <children>
                   <HBox prefHeight="20.0" prefWidth="232.0">
                      <children>
@@ -122,7 +123,7 @@
                   <Insets top="2.0" />
                </padding>
             </VBox>
-            <VBox prefHeight="42.0" prefWidth="204.0">
+            <VBox prefHeight="42.0" prefWidth="204.0" >
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>

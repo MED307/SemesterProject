@@ -12,7 +12,23 @@ public class Blob {
 	private int[] locationXY = new int[2];
 	
 	private double color;
+	
+	
+	int xPositions;
+	int yPositions;
+	
 
+	int area;
+	
+	
+	
+	public int getArea() {
+		return area;
+	}
+
+	public void setArea(int area) {
+		this.area = area;
+	}
 	
 	public String getName() {
 		return name;
@@ -20,6 +36,22 @@ public class Blob {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public int getxPositions() {
+		return xPositions;
+	}
+
+	public void setxPositions(int xPositions) {
+		this.xPositions = xPositions;
+	}
+
+	public int getyPositions() {
+		return yPositions;
+	}
+
+	public void setyPositions(int yPositions) {
+		this.yPositions = yPositions;
 	}
 
 	public String getType() {
