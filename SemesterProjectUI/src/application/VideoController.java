@@ -101,17 +101,17 @@ public class VideoController
 
 	Mat thisFrame;
 
-	ArrayList<Double> mineFarver= new ArrayList<>();
+	ArrayList<Double>gridColour;
 
 	boolean gridFound = false;
 
 
-	Mat savedGrid = new Mat();
+	Mat gridImage = new Mat();
 
 	Grid grid; 
 
 
-	Blob[] blobs;
+	Blob[] gridSquares;
 
 	Scalar minValues;
 	Scalar maxValues;
@@ -183,7 +183,7 @@ public class VideoController
 	@FXML
 	protected void gridOnClick()
 	{
-		getGrid(thisFrame,mineFarver);
+		getGrid(thisFrame,gridColour);
 	}
 
 	@FXML
@@ -202,7 +202,7 @@ public class VideoController
 	protected void getBlobOnClick()
 	{
 
-		getBlob(thisFrame,mineFarver);
+		getBlob(thisFrame,gridColour);
 
 	}
 	
@@ -303,8 +303,8 @@ public class VideoController
 						} 
 
 						Set<Double> uniqueColors = new HashSet<Double>(colors);
-						ArrayList<Double> farver = new ArrayList<>(uniqueColors);
-						mineFarver = farver;
+						gridColour = new ArrayList<>(uniqueColors);
+
 		
 					}
 
@@ -399,9 +399,11 @@ public class VideoController
 		this.stopAcquisition();
 	}
 
-	public void getGrid (Mat frame, ArrayList<Double> farver) 
+	public void getGrid (Mat frame, ArrayList<Double>gridColour) 
 	{
 		int[] point = new int[2];
+		
+		ArrayList<Double> list = new ArrayList<>();
 
 		for (int y = 0; y < frame.height(); y++)
 		{
@@ -416,7 +418,7 @@ public class VideoController
 			}
 		} 
 
-		ArrayList<Double> list = new ArrayList<>();
+		
 
 		for (int y = point[0] ; y > 0 ; y--)
 		{
@@ -432,26 +434,26 @@ public class VideoController
 
 		int coloumns = uColoumns.size();
 
-		int rows = farver.size() / coloumns;
+		int rows =gridColour.size() / coloumns;
 
 		grid = new Grid(rows,coloumns);
 		currentFrame1.setImage(grid.Display());
-		savedGrid = frame;
+		gridImage = frame;
 
-		Collections.sort(farver, Collections.reverseOrder());
+		Collections.sort(gridColour, Collections.reverseOrder());
 
-		blobs = new Blob[farver.size()];
+		gridSquares = new Blob[gridColour.size()];
 
-		for(int i = 0; i < farver.size(); i++) 
+		for(int i = 0; i < gridColour.size(); i++) 
 		{
-			blobs[i] = new Blob();
-			blobs[i].setColor(farver.get(i));
-			blobs[i].setLocationX(i % rows);
-			blobs[i].setLocationY(i / rows);
+			gridSquares[i] = new Blob();
+			gridSquares[i].setColor(gridColour.get(i));
+			gridSquares[i].setLocationX(i % rows);
+			gridSquares[i].setLocationY(i / rows);
 		}
 	}
 
-	public void getBlob (Mat frame, ArrayList<Double> farver) 
+	public void getBlob (Mat frame, ArrayList<Double>gridColour) 
 	{
 		
 		
@@ -502,13 +504,14 @@ public class VideoController
 		
 		ArrayList<Blob> terrainBlobs = new ArrayList<>();
 		
-		int area = 0;
+		
 		
 		
 		for (int c = 0; c < uniqueTerrainColors.size(); c++ ) {
 					
-					Blob blob = new Blob();
-					terrainBlobs.add(blob);
+				int area = 0;
+				Blob blob = new Blob();
+				terrainBlobs.add(blob);
 				
 				for (int y = 0; y < frame.height(); y++)
 				{
@@ -526,10 +529,10 @@ public class VideoController
 				System.out.println("Area number " + c + ": " + terrainBlobs.get(c).getArea());
 			}
 
-		int xPos = 0;
-		int yPos = 0;
 			
 		for (int c = 0; c < uniqueTerrainColors.size(); c++ ) {
+			int xPos = 0;
+			int yPos = 0;
 			
 			for (int y = 0; y < frame.height(); y++)
 			{
@@ -551,57 +554,44 @@ public class VideoController
 			int yMid;
 
 			xMid = terrainBlobs.get(c).getxPositions() / terrainBlobs.get(c).getArea();
-			yMid = terrainBlobs.get(c).getyPositions() / terrainBlobs.get(c).getArea();		
-			
+			yMid = terrainBlobs.get(c).getyPositions() / terrainBlobs.get(c).getArea();
+			System.out.println(c);
+			System.out.println("x:" + terrainBlobs.get(c).getxPositions() + "     " + terrainBlobs.get(c).getArea());
+			System.out.println("y:" + terrainBlobs.get(c).getyPositions() + "     " + terrainBlobs.get(c).getArea());
+			System.out.println(" ");
 			terrainBlobs.get(c).setLocationX(xMid); 
 			terrainBlobs.get(c).setLocationY(yMid);
-
 			
 		}
 
 		double[] squareColors = new double[uniqueTerrainColors.size()];
 		
-		System.out.println(" ");
-		System.out.println(terrainBlobs.get(0).getLocationX());
-		System.out.println(terrainBlobs.get(0).getLocationY());
-		System.out.println(" ");
-		System.out.println(terrainBlobs.get(1).getLocationX());
-		System.out.println(terrainBlobs.get(1).getLocationY());
-		System.out.println(" ");
-		//System.out.println(terrainBlobs.get(2).getLocationX());
-		//System.out.println(terrainBlobs.get(2).getLocationY());
+		
 
-		for(int i = 0; i < uniqueTerrainColors.size(); i++ ) {
-			
-			squareColors[i] = savedGrid.get(terrainBlobs.get(i).getLocationY(),terrainBlobs.get(i).getLocationX())[0];
-				
+		for(int i = 0; i < uniqueTerrainColors.size(); i++ ) 
+		{		
+			squareColors[i] = gridImage.get(terrainBlobs.get(i).getLocationY(),terrainBlobs.get(i).getLocationX())[0];
 		}
 		
-		grid.set();
+		grid.set();	
 
-		
-		for (int i = 0; i < blobs.length;i++) {
-			
-			for(int j = 0; j < uniqueTerrainColors.size(); j++) 
-				
-				
-				{
-				
-				if((blobs[i].getColor() - squareColors[j]) < 0.2 && (blobs[i].getColor() - squareColors[j]) > -0.2 ){
+		for (int i = 0; i < gridSquares.length;i++) 
+		{	
+			for(int j = 0; j < squareColors.length; j++) 
+			{
+				//System.out.println((gridSquares[i].getColor() - squareColors[j]));
+				if((gridSquares[i].getColor() - squareColors[j]) < 0.5 && (gridSquares[i].getColor() - squareColors[j]) > -0.5 ){
 
-					int gridX = blobs[i].getLocationX();
-					int gridY = blobs[i].getLocationY();
+					int gridX = gridSquares[i].getLocationX();
+					int gridY = gridSquares[i].getLocationY();
 					
-					System.out.println("");
-					System.out.println("blob " + j + " x position: " + gridX);
-					System.out.println("blob " + j + " y position: " + gridY);
+					System.out.println("blob " + j + " x position: " + gridX + "x pixelPos: " + terrainBlobs.get(j).getLocationX());
+					System.out.println("blob " + j + " y position: " + gridY + "y pixelPos: " + terrainBlobs.get(j).getLocationY());
 					System.out.println("");
 					grid.setSquare(gridX, gridY, "tree");
 					currentFrame1.setImage(grid.Display());
-
 				}
 			}
 		}
 	}    
-
 }

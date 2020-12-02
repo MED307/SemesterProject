@@ -92,8 +92,6 @@ public class Grid {
 	
 	public void setSquare(int x, int y, String type)
 	{
-		
-		System.out.println((((squareWidth)*(x+1)) - strokeWidth) - (gridList.get(y).get(x) + strokeWidth));
 		for(int j = (y*(squareWidth)) + strokeWidth; j < ((squareWidth)*(y+1)) - strokeWidth; j++) 
 		{
 			for(int i = gridList.get(y).get(x) + strokeWidth; i < ((squareWidth)*(x+1)) - strokeWidth; i++) 
