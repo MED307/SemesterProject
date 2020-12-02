@@ -134,7 +134,7 @@ public class VideoController
 		if (!this.cameraActive)
 		{
 			// start the video capture
-			this.capture.open(1);
+			this.capture.open(0);
 
 			// is the video stream available?
 			if (this.capture.isOpened())
@@ -305,14 +305,8 @@ public class VideoController
 						Set<Double> uniqueColors = new HashSet<Double>(colors);
 						ArrayList<Double> farver = new ArrayList<>(uniqueColors);
 						mineFarver = farver;
-						
-						
-					
-						
-						
-								
+		
 					}
-
 
 					if(open.isSelected()) {
 
@@ -326,7 +320,7 @@ public class VideoController
 						//the erode() and dilate() methods are used respectively in order to apply a opening to the video feed
 						Imgproc.erode(frame, erodeOutput, erodeElement);
 						Imgproc.dilate(erodeOutput, frame, dilateElement);
-
+			
 					}
 
 					if(close.isSelected()) {
@@ -552,7 +546,6 @@ public class VideoController
 					}
 				}
 			}
-
 			
 			int xMid;
 			int yMid;
@@ -565,12 +558,7 @@ public class VideoController
 
 			
 		}
-		
 
-		
-		
-		
-		
 		double[] squareColors = new double[uniqueTerrainColors.size()];
 		
 		System.out.println(" ");
@@ -582,11 +570,7 @@ public class VideoController
 		System.out.println(" ");
 		//System.out.println(terrainBlobs.get(2).getLocationX());
 		//System.out.println(terrainBlobs.get(2).getLocationY());
-		
-		
 
-		
-			
 		for(int i = 0; i < uniqueTerrainColors.size(); i++ ) {
 			
 			squareColors[i] = savedGrid.get(terrainBlobs.get(i).getLocationY(),terrainBlobs.get(i).getLocationX())[0];
@@ -595,26 +579,29 @@ public class VideoController
 		
 		grid.set();
 
+		
 		for (int i = 0; i < blobs.length;i++) {
-
-			for(int j = 0; j < uniqueTerrainColors.size()-1; j++) 
+			
+			for(int j = 0; j < uniqueTerrainColors.size(); j++) 
+				
+				
 				{
 				
-				if(blobs[i].getColor() == squareColors[j]  ){
+				if((blobs[i].getColor() - squareColors[j]) < 0.2 && (blobs[i].getColor() - squareColors[j]) > -0.2 ){
 
 					int gridX = blobs[i].getLocationX();
 					int gridY = blobs[i].getLocationY();
+					
+					System.out.println("");
+					System.out.println("blob " + j + " x position: " + gridX);
+					System.out.println("blob " + j + " y position: " + gridY);
+					System.out.println("");
 					grid.setSquare(gridX, gridY, "tree");
 					currentFrame1.setImage(grid.Display());
 
 				}
 			}
 		}
-		
-	
-
-		//currentFrame1.setImage(grid.Display());
-
 	}    
 
 }
