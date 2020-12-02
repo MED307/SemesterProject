@@ -61,10 +61,10 @@ public class VideoController
 
 
 	@FXML
-	private CheckBox open;
+	private Boolean open = false;
 
 	@FXML
-	private CheckBox close;
+	private Boolean close = false;
 
 
 	@FXML
@@ -74,16 +74,16 @@ public class VideoController
 	private Slider hueStop;
 
 	@FXML
-	private Slider saturationStart;
+	private int saturationStart = 127;
 
 	@FXML
-	private Slider saturationStop;
+	private int saturationStop = 127;
 
 	@FXML
-	private Slider valueStart;
+	private int valueStart = 127;
 
 	@FXML
-	private Slider valueStop;
+	private int valueStop = 127;
 
 	@FXML
 	private ImageView currentFrame;
@@ -192,6 +192,12 @@ public class VideoController
 
 		if(!gridFound) {
 			gridFound= true;
+			saturationStart = 75;
+			saturationStop = 200;
+			valueStart = 0;
+			valueStop = 255;
+			open = true;
+			close = true;
 		}
 		else {
 			gridFound = false;
@@ -241,8 +247,8 @@ public class VideoController
 						Imgproc.cvtColor(frame, hsvOutput, Imgproc.COLOR_BGR2HSV);
 
 						//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV colorspace treshold
-						minValues = new Scalar(this.hueStart.getValue(), this.saturationStart.getValue(), this.valueStart.getValue());
-						maxValues = new Scalar(this.hueStop.getValue(), this.saturationStop.getValue(), this.valueStop.getValue());
+						minValues = new Scalar(this.hueStart.getValue(), this.saturationStart, this.valueStart);
+						maxValues = new Scalar(this.hueStop.getValue(), this.saturationStop, this.valueStop);
 
 						//Mat thresholdOutput = new Mat();
 						Core.inRange(hsvOutput, minValues, maxValues, frame);
@@ -253,10 +259,10 @@ public class VideoController
 						Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
 
 						//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV colorspace treshold
-						minValues = new Scalar(this.hueStart.getValue(), this.saturationStart.getValue(),
-								this.valueStart.getValue());
-						maxValues = new Scalar(this.hueStop.getValue(), this.saturationStop.getValue(),
-								this.valueStop.getValue());
+						minValues = new Scalar(this.hueStart.getValue(), this.saturationStart,
+								this.valueStart);
+						maxValues = new Scalar(this.hueStop.getValue(), this.saturationStop,
+								this.valueStop);
 
 						//a static method for thresholding called inRange() from the Core class from the OpenCV library is used
 						Core.inRange(frame, minValues, maxValues, frame);
@@ -308,7 +314,7 @@ public class VideoController
 		
 					}
 
-					if(open.isSelected()) {
+					if(open) {
 
 						//two matrices of type Mat from the OpevCV library is created to be used for dilation and erosion respectively
 						Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
@@ -323,7 +329,7 @@ public class VideoController
 			
 					}
 
-					if(close.isSelected()) {
+					if(close) {
 
 						//two matrices of type Mat from the OpevCV library is created to be used for erosion and dilation respectively
 						Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
@@ -579,7 +585,6 @@ public class VideoController
 		{	
 			for(int j = 0; j < squareColors.length; j++) 
 			{
-				//System.out.println((gridSquares[i].getColor() - squareColors[j]));
 				if((gridSquares[i].getColor() - squareColors[j]) < 0.5 && (gridSquares[i].getColor() - squareColors[j]) > -0.5 ){
 
 					int gridX = gridSquares[i].getLocationX();
