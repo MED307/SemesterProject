@@ -105,8 +105,34 @@
 
 /* ------------ Battle Map ID ------------ */
 
+
+
+#CameraPane {
+	-fx-background-color: #3b0707;
+}
+
 #MenuPane{
-	-fx-background-image:url(../../assets/battlemap/menupanel.png);
+	-fx-background-image:url(../../assets/battlemap/ui/rightPane.png);
+}
+
+#CameraBtn {
+	-fx-background-image:url(../../assets/battlemap/ui/camera.png)
+}
+
+#UpdateBtn {
+	-fx-background-image:url(../../assets/battlemap/ui/updatemap.png)
+}
+
+#UpdateBtn:hover {
+	-fx-background-image:url(../../assets/battlemap/ui/updatemaph.png)
+}
+
+#CameraBtn:hover {
+	-fx-background-image:url(../../assets/battlemap/ui/camerah.png)
+}
+
+.TabPane {
+	-fx-background-color:none;
 }
 
 .MenuLabel {

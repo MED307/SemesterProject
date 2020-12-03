@@ -38,6 +38,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 
 /**
  * The controller associated with the only view of our application. The
@@ -54,7 +55,7 @@ public class VideoController
 {
 	//the FXML button for opening the camera
 	@FXML
-	private Button button;
+	private Button cameraControlBtn;
 
 	//	@FXML
 	//private CheckBox grayscale;
@@ -92,6 +93,9 @@ public class VideoController
 
 	@FXML
 	private ImageView currentFrame1;
+	
+	@FXML
+	private Pane cameraControlPane;
 
 	// a timer for acquiring the video stream
 	private ScheduledExecutorService timer;
@@ -106,6 +110,8 @@ public class VideoController
 	ArrayList<Double>gridColour;
 
 	boolean gridFound = false;
+	
+	boolean controlsActive = false;
 
 
 	Mat gridImage = new Mat();
@@ -125,6 +131,18 @@ public class VideoController
 		this.cameraActive = false;
 	}
 
+	@FXML
+	protected void showCamera() {
+		if (!controlsActive){
+			cameraControlPane.setVisible(true);
+			controlsActive = true;
+		}
+		else {
+			cameraControlPane.setVisible(false);
+			controlsActive = false;
+		}
+	}
+	
 	@FXML
 	protected void startCamera()
 	{
@@ -161,7 +179,7 @@ public class VideoController
 				this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
 
 				// update the button content
-				this.button.setText("Stop Camera");
+				this.cameraControlBtn.setText("Stop Camera");
 			}
 			else
 			{
@@ -174,7 +192,7 @@ public class VideoController
 			// the camera is not active at this point
 			this.cameraActive = false;
 			// update again the button content
-			this.button.setText("Start Camera");
+			this.cameraControlBtn.setText("Start Camera");
 
 			// stop the timer
 			this.stopAcquisition();
