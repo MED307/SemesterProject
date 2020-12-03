@@ -22,13 +22,6 @@ import javafx.scene.image.Image;
  */
 public final class Utils
 {
-	/**
-	 * Convert a Mat object (OpenCV) in the corresponding Image for JavaFX
-	 *
-	 * @param frame
-	 *            the {@link Mat} representing the current frame
-	 * @return the {@link Image} to show
-	 */
 	public static Image mat2Image(Mat frame)
 	{
 		try
@@ -43,22 +36,6 @@ public final class Utils
 	}
 	
 	/**
-	 * Generic method for putting element running on a non-JavaFX thread on the
-	 * JavaFX thread, to properly update the UI
-	 * 
-	 * @param property
-	 *            a {@link ObjectProperty}
-	 * @param value
-	 *            the value to set for the given {@link ObjectProperty}
-	 */
-	public static <T> void onFXThread(final ObjectProperty<T> property, final T value)
-	{
-		Platform.runLater(() -> {
-			property.set(value);
-		});
-	}
-	
-	/**
 	 * Support for the {@link mat2image()} method
 	 * 
 	 * @param original
@@ -67,7 +44,6 @@ public final class Utils
 	 */
 	public static BufferedImage matToBufferedImage(Mat original)
 	{
-		// init
 		BufferedImage image = null;
 		int width = original.width(), height = original.height(), channels = original.channels();
 		byte[] sourcePixels = new byte[width * height * channels];

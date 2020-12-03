@@ -44,10 +44,7 @@
                                     <Button fx:id="saveCampaignBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="176.0" text="Save Campaign" />
                                     <Button fx:id="quitCampaignBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="173.0" text="Quit Campaign" />
                                     <Button fx:id="exitProgramBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="Exit Program" />
-                                    <Button fx:id="getGrid" mnemonicParsing="false" onAction="#gridOnClick" prefHeight="25.0" prefWidth="186.0" text="Get the Grid" />
-                                    <Button fx:id="gridFound" mnemonicParsing="false" onAction="#gridFoundOnClick" prefHeight="25.0" prefWidth="186.0" text="I found the grid" />
                                      <Button fx:id="setValues" mnemonicParsing="false" onAction="#setValuesOnClick" prefHeight="25.0" prefWidth="186.0" text="Set values for blob" />
-                                    <Button fx:id="blobFound" mnemonicParsing="false" onAction="#getBlobOnClick" prefHeight="25.0" prefWidth="186.0" text="I found the blob" />
                                  </children>
                               </VBox>
                            </children>
@@ -61,16 +58,18 @@
       <HBox layoutY="558.0" prefHeight="42.0" prefWidth="831.0">
          <children>
             <Button id="CameraBtn" fx:id="cameraBtn" mnemonicParsing="false" onAction="#showCamera" prefHeight="42.0" prefWidth="246.0" />
-            <Button id="UpdateBtn" mnemonicParsing="false" prefHeight="42.0" prefWidth="247.0" />
+            <Button id="UpdateBtn" fx:id="blobFound" mnemonicParsing="false" onAction="#getBlobOnClick" prefHeight="42.0" prefWidth="247.0" />
          </children>
       </HBox>
-      <Pane id="CameraPane" fx:id="cameraControlPane" layoutY="323.0" prefHeight="233.0" prefWidth="259.0" visible="false">
+      <Pane id="CameraPane" fx:id="cameraControlPane" layoutY="323.0" prefHeight="233.0" prefWidth="259.0">
          <children>
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
                   <HBox prefHeight="82.0" prefWidth="245.0">
                      <children>
-                        <Button fx:id="cameraControlBtn" mnemonicParsing="false" onAction="#startCamera" text="Button" />
+                        <Button fx:id="cameraControlBtn" mnemonicParsing="false" onAction="#startCamera" text="Start Camra" />
+                        <Button fx:id="getGrid" mnemonicParsing="false" onAction="#gridOnClick" prefHeight="11.0" prefWidth="78.0" text="Get Grid" />
+                        <Button fx:id="gridFound" mnemonicParsing="false" onAction="#gridFoundOnClick" prefHeight="14.0" prefWidth="88.0" text="Found Grid" />
                      </children>
                   </HBox>
                   <ImageView fx:id="currentFrame" fitHeight="184.0" fitWidth="245.0" pickOnBounds="true" preserveRatio="true">

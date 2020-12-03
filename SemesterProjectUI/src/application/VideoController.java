@@ -1,40 +1,27 @@
 package application;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfFloat;
-import org.opencv.core.MatOfInt;
-import org.opencv.core.MatOfKeyPoint;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.features2d.SimpleBlobDetector;
-import org.opencv.highgui.HighGui;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 
-
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -57,36 +44,11 @@ public class VideoController
 	@FXML
 	private Button cameraControlBtn;
 
-	//	@FXML
-	//private CheckBox grayscale;
-
-
-	@FXML
-	private Boolean open = false;
-
-	@FXML
-	private Boolean close = false;
-	
-	private Boolean newFrame = true;
-
-
 	@FXML
 	private Slider hueStart;
 
 	@FXML
 	private Slider hueStop;
-
-	@FXML
-	private int saturationStart = 127;
-
-	@FXML
-	private int saturationStop = 127;
-
-	@FXML
-	private int valueStart = 127;
-
-	@FXML
-	private int valueStop = 127;
 
 	@FXML
 	private ImageView currentFrame;
@@ -97,14 +59,18 @@ public class VideoController
 	@FXML
 	private Pane cameraControlPane;
 
+	
+	
 	// a timer for acquiring the video stream
 	private ScheduledExecutorService timer;
-	// the OpenCV object that realizes the video capture
+	
+	// the OpenCV object that 
 	private VideoCapture capture;
+	
 	// a flag to change the button behavior
 	private boolean cameraActive;
-	// the logo to be loaded
-
+	
+	// the image to be processed
 	Mat thisFrame;
 
 	ArrayList<Double>gridColour;
@@ -112,12 +78,22 @@ public class VideoController
 	boolean gridFound = false;
 	
 	boolean controlsActive = false;
+	
+	private Boolean open = false;
 
+	private Boolean close = false;
+	
+	private int saturationStart = 127;
+
+	private int saturationStop = 127;
+
+	private int valueStart = 127;
+
+	private int valueStop = 127;
 
 	Mat gridImage = new Mat();
 
 	Grid grid; 
-
 
 	Blob[] gridSquares;
 
@@ -146,11 +122,6 @@ public class VideoController
 	@FXML
 	protected void startCamera()
 	{
-		// set a fixed width for the frame
-		//this.currentFrame.setFitWidth(900);
-		// preserve image ratio
-		//this.currentFrame.setPreserveRatio(true);
-
 		if (!this.cameraActive)
 		{
 			// start the video capture
@@ -276,30 +247,29 @@ public class VideoController
 				// if the frame is not empty, process it
 				if (!frame.empty())
 				{
-
-					if(gridFound) {
-
+					//If the grid has already been found run this
+					if(gridFound) 
+					{
 						Mat hsvOutput = new Mat();
-
+						
+						// Converts the frame grabbed from using RGB to HSV
 						Imgproc.cvtColor(frame, hsvOutput, Imgproc.COLOR_BGR2HSV);
 
 						//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV colorspace treshold
 						minValues = new Scalar(this.hueStart.getValue(), this.saturationStart, this.valueStart);
-						maxValues = new Scalar(this.hueStart.getValue() + 20, this.saturationStop, this.valueStop);
+						maxValues = new Scalar(this.hueStart.getValue() + 30, this.saturationStop, this.valueStop);
 
-						//Mat thresholdOutput = new Mat();
+						//Checks if the Image is within those thresholds
 						Core.inRange(hsvOutput, minValues, maxValues, frame);
 
 					}
-
+					// if Grid has not yet been found
 					if(!gridFound) {
 						Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
 
 						//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV colorspace treshold
-						minValues = new Scalar(this.hueStart.getValue(), this.saturationStart,
-								this.valueStart);
-						maxValues = new Scalar(this.hueStop.getValue(), this.saturationStop,
-								this.valueStop);
+						minValues = new Scalar(this.hueStart.getValue(), this.saturationStart, this.valueStart);
+						maxValues = new Scalar(this.hueStart.getValue() + 30, this.saturationStop, this.valueStop);
 
 						//a static method for thresholding called inRange() from the Core class from the OpenCV library is used
 						Core.inRange(frame, minValues, maxValues, frame);
@@ -307,12 +277,17 @@ public class VideoController
 						// Create the CV_8U version of the distance image
 						// It is needed for findContours()
 						Mat dist_8u = new Mat();
-
+						
+						//Converts the mat to using 8 bit unsigned color meaning colors between 0-255
 						frame.convertTo(dist_8u, CvType.CV_8U);
 
-						// Find total markers
+						// Find total grid using the build in blob detection from openCV
 						List<MatOfPoint> contours = new ArrayList<>();
+						
+						//not used, but the openCV requires this for the function to run
 						Mat hierarchy = new Mat();
+						
+						//blob detection
 						Imgproc.findContours(dist_8u, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
 						// Create the marker image for the watershed algorithm
@@ -326,66 +301,65 @@ public class VideoController
 
 						// Draw the background marker
 						Mat markersScaled = new Mat();
+						
+						//Converts the mat to using 32 bit floats color meaning colors between 0.0-1.0
 						markers.convertTo(markersScaled, CvType.CV_32F);
+						
+						//normalizes the values to be between 0 and 255
 						Core.normalize(markersScaled, markersScaled, 0.0, 255.0, Core.NORM_MINMAX);
-						Imgproc.circle(markersScaled, new Point(5, 5), 3, new Scalar(255, 255, 255), -1);
-						Mat markersDisplay = new Mat();
-						markersScaled.convertTo(markersDisplay, CvType.CV_8U);
-						Imgproc.circle(markers, new Point(5, 5), 3, new Scalar(255, 255, 255), -1);
-
-						frame = markersDisplay;
-
+						
+						//converts the image back to 8bit unsigned
+						markersScaled.convertTo(markersScaled, CvType.CV_8U);
+						
+						//sets frame to the image
+						frame = markersScaled;
+						
+						//creates a list of all the contours colors, to be used to determine the amount of blobs found
 						ArrayList<Double> colors = new ArrayList<>();
-
+						
+						//add all colors not black to the list
 						for (int y = 0; y < frame.height(); y++){
 							for(int x = 0; x < frame.width(); x++){
-								if(/*frame.get(y,x)[0] != 255 &&*/ frame.get(y,x)[0] != 0){
+								if( frame.get(y,x)[0] != 0){
 									colors.add(frame.get(y,x)[0]);
 								}
 							}
 						} 
-
+						
+						//A HashSet is a collection where every item is unique, therefore if the same color pops up twice it is only added once.
 						Set<Double> uniqueColors = new HashSet<Double>(colors);
+						
+						//this gives us a list of each unique color used to describe a specific blob in the image, which is added to a global variable
 						gridColour = new ArrayList<>(uniqueColors);
 
 		
 					}
+					
+					//kernel for use to do open and close
+					Mat Element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
 
 					if(open) {
-
-						//two matrices of type Mat from the OpevCV library is created to be used for dilation and erosion respectively
-						Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
-						Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
-
 						//a new matrix of type Mat from the OpevCV library is created for the output image after erosion has been applied
 						Mat erodeOutput = new Mat();
 
 						//the erode() and dilate() methods are used respectively in order to apply a opening to the video feed
-						Imgproc.erode(frame, erodeOutput, erodeElement);
-						Imgproc.dilate(erodeOutput, frame, dilateElement);
+						Imgproc.erode(frame, erodeOutput, Element);
+						Imgproc.dilate(erodeOutput, frame, Element);
 			
 					}
 
 					if(close) {
-
-						//two matrices of type Mat from the OpevCV library is created to be used for erosion and dilation respectively
-						Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
-						Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
-
 						//a new matrix of type Mat from the OpevCV library is created for the output image after dilation has been applied
 						Mat dilateOutput = new Mat();
 
 						//the dilate() and erode() methods are used respectively in order to apply a opening to the video feed
-						Imgproc.dilate(frame, dilateOutput, dilateElement);
-						Imgproc.erode(dilateOutput, frame, erodeElement);
-
+						Imgproc.dilate(frame, dilateOutput, Element);
+						Imgproc.erode(dilateOutput, frame, Element);
 					}
-
+					
+					//adds the frame to the global variable thisFrame
 					thisFrame = frame;
-
-
 				}
-
 			}
 			catch (Exception e)
 			{
@@ -393,7 +367,6 @@ public class VideoController
 				System.err.println("Exception during the frame elaboration: " + e);
 			}
 		}
-		System.out.println(hueStart.getValue());
 		return frame;
 	}
 
@@ -421,17 +394,12 @@ public class VideoController
 		}
 	}
 
-	/**
-	 * Update the {@link ImageView} in the JavaFX main thread
-	 * 
-	 * @param view
-	 *            the {@link ImageView} to update
-	 * @param image
-	 *            the {@link Image} to show
-	 */
+	
 	private void updateImageView(ImageView view, Image image)
 	{
-		Utils.onFXThread(view.imageProperty(), image);
+		Platform.runLater(() -> {
+			view.setImage(image);
+		});
 	}
 
 	/**
@@ -497,9 +465,7 @@ public class VideoController
 	}
 
 	public void getBlob (Mat frame, ArrayList<Double>gridColour, String type) 
-	{
-		
-		
+	{		
 		Mat dist_8u = new Mat();
 		frame.convertTo(dist_8u, CvType.CV_8U);
 		// Find total markers
@@ -541,14 +507,8 @@ public class VideoController
 
 		Set<Double> setTerrainColors = new HashSet<Double>(terrainColors);
 		ArrayList<Double> uniqueTerrainColors = new ArrayList<>(setTerrainColors);
-
-		//System.out.println(uniqueTerrainColors);
-		//System.out.println(uniqueTerrainColors.size());
 		
-		ArrayList<Blob> terrainBlobs = new ArrayList<>();
-		
-		
-		
+		ArrayList<Blob> terrainBlobs = new ArrayList<>();	
 		
 		for (int c = 0; c < uniqueTerrainColors.size(); c++ ) {
 					
@@ -588,7 +548,6 @@ public class VideoController
 						
 						terrainBlobs.get(c).setxPositions(xPos);
 						terrainBlobs.get(c).setyPositions(yPos);
-
 					}
 				}
 			}
