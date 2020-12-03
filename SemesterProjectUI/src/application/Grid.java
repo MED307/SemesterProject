@@ -28,14 +28,14 @@ public class Grid {
 	private int sizeX;
 	private int sizeY;
 	private int squareWidth;
-	private int strokeWidth = 4;
+	private int strokeWidth = 1;
 
 	public Grid(int x, int y)
 	{
 		try 
 		{
-			tree = ImageIO.read(getClass().getResource("/tree.png"));
-			stone = ImageIO.read(getClass().getResource("/stone.png"));
+			tree = ImageIO.read(getClass().getResource("/treegrass.png"));
+			stone = ImageIO.read(getClass().getResource("/stonegrass.png"));
 			water = ImageIO.read(getClass().getResource("/water1.png"));
 			grass = ImageIO.read(getClass().getResource("/grass1.png"));
 		}
@@ -46,7 +46,7 @@ public class Grid {
 		sizeX = x;
 		sizeY = y;
 		grid = new BufferedImage(sizeX * 100, sizeY * 100, BufferedImage.TYPE_3BYTE_BGR);
-		squareWidth = grid.getWidth()/sizeX;
+		squareWidth = grid.getWidth()/sizeY;
 		for (int j = 0; j < sizeY; j++)
 		{
 			gridList.add(new ArrayList<>());
@@ -68,10 +68,10 @@ public class Grid {
             for (int y = 0; y < grid.getHeight(); y++) 
             {
             	
-            	int rgb = new Color(255,255,255).getRGB();
+            	int rgb = new Color(0,120,0).getRGB();
                 grid.setRGB(x, y, rgb);
                 
-            	for (int i = 0; i < sizeX; i ++)
+            	for (int i = 0; i < sizeX+2; i ++)
             	{
                 	if((squareWidth) * i > x - strokeWidth && (squareWidth) * i < x + strokeWidth)
                 	{
@@ -80,7 +80,7 @@ public class Grid {
                 	}
             	}
             	
-            	for (int i = 0; i < sizeY; i ++)
+            	for (int i = 0; i < sizeY+2; i ++)
             	{
 	            	if((squareWidth) * i > y - strokeWidth && (squareWidth) * i < y + strokeWidth)
 	            	{
@@ -95,11 +95,11 @@ public class Grid {
 	
 	public void setSquare(int x, int y, String type)
 	{
-		for(int j = (y*(squareWidth)) + strokeWidth; j < ((squareWidth)*(y+1)) - strokeWidth; j++) 
+		for(int j = (y*(squareWidth) + strokeWidth); j < ((squareWidth)*(y+1)) - strokeWidth + 1; j++) 
 		{
-			for(int i = gridList.get(y).get(x) + strokeWidth; i < ((squareWidth)*(x+1)) - strokeWidth; i++) 
+			for(int i = gridList.get(y).get(x) + strokeWidth ; i < ((squareWidth)*(x+1)) - strokeWidth + 1; i++) 
 			{
-				int rgb = new Color(255,255,255).getRGB();
+				int rgb = new Color(0,255,122).getRGB();
 
 				if (type.compareTo("tree") == 0)
 				{
@@ -117,6 +117,7 @@ public class Grid {
 				{
 					rgb = grass.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
 				}
+				
 				
 				if(rgb == 0)
 				{

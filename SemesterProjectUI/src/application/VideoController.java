@@ -209,12 +209,20 @@ public class VideoController
 	@FXML
 	protected void getBlobOnClick()
 	{
+		for (int i = 0; i < grid.getColoumns(); i ++) 
+		{
+			for (int j = 0; j < grid.getRows(); j++)
+			{
+				grid.setSquare(i, j, "");
+			}
+		}
+			
 		
 		hueStart.setValue(80);
 		grabFrame();
 		getBlob(thisFrame,gridColour, "tree");
 		
-		hueStart.setValue(100);
+		hueStart.setValue(105);
 		grabFrame();
 		getBlob(thisFrame,gridColour, "water");
 		
@@ -367,6 +375,7 @@ public class VideoController
 				System.err.println("Exception during the frame elaboration: " + e);
 			}
 		}
+		System.out.println(hueStart.getValue());
 		return frame;
 	}
 
