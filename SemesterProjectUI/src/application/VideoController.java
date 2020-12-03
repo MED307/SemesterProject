@@ -65,6 +65,8 @@ public class VideoController
 
 	@FXML
 	private Boolean close = false;
+	
+	private Boolean newFrame = true;
 
 
 	@FXML
@@ -192,8 +194,8 @@ public class VideoController
 
 		if(!gridFound) {
 			gridFound= true;
-			saturationStart = 75;
-			saturationStop = 200;
+			saturationStart = 50;
+			saturationStop = 220;
 			valueStart = 0;
 			valueStop = 255;
 			open = true;
@@ -203,13 +205,22 @@ public class VideoController
 			gridFound = false;
 		}
 	}
-
+ 
 	@FXML
 	protected void getBlobOnClick()
 	{
-
-		getBlob(thisFrame,gridColour);
-
+		
+		hueStart.setValue(80);
+		grabFrame();
+		getBlob(thisFrame,gridColour, "tree");
+		
+		hueStart.setValue(100);
+		grabFrame();
+		getBlob(thisFrame,gridColour, "water");
+		
+		hueStart.setValue(160);
+		grabFrame();
+		getBlob(thisFrame,gridColour, "stone");
 	}
 	
 	
@@ -248,7 +259,7 @@ public class VideoController
 
 						//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV colorspace treshold
 						minValues = new Scalar(this.hueStart.getValue(), this.saturationStart, this.valueStart);
-						maxValues = new Scalar(this.hueStop.getValue(), this.saturationStop, this.valueStop);
+						maxValues = new Scalar(this.hueStart.getValue() + 20, this.saturationStop, this.valueStop);
 
 						//Mat thresholdOutput = new Mat();
 						Core.inRange(hsvOutput, minValues, maxValues, frame);
@@ -356,7 +367,6 @@ public class VideoController
 				System.err.println("Exception during the frame elaboration: " + e);
 			}
 		}
-
 		return frame;
 	}
 
@@ -459,7 +469,7 @@ public class VideoController
 		}
 	}
 
-	public void getBlob (Mat frame, ArrayList<Double>gridColour) 
+	public void getBlob (Mat frame, ArrayList<Double>gridColour, String type) 
 	{
 		
 		
@@ -579,7 +589,6 @@ public class VideoController
 			squareColors[i] = gridImage.get(terrainBlobs.get(i).getLocationY(),terrainBlobs.get(i).getLocationX())[0];
 		}
 		
-		grid.set();	
 
 		for (int i = 0; i < gridSquares.length;i++) 
 		{	
@@ -593,7 +602,7 @@ public class VideoController
 					System.out.println("blob " + j + " x position: " + gridX + "x pixelPos: " + terrainBlobs.get(j).getLocationX());
 					System.out.println("blob " + j + " y position: " + gridY + "y pixelPos: " + terrainBlobs.get(j).getLocationY());
 					System.out.println("");
-					grid.setSquare(gridX, gridY, "tree");
+					grid.setSquare(gridX, gridY, type);
 					currentFrame1.setImage(grid.Display());
 				}
 			}
