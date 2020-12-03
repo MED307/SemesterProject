@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
@@ -15,14 +20,14 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="CampaignLoaderWrapper" minHeight="300.0" minWidth="500.0" prefHeight="600.0" prefWidth="1000.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.VideoController">
+<AnchorPane id="CampaignLoaderWrapper" minHeight="300.0" minWidth="500.0" prefHeight="600.0" prefWidth="1000.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.VideoController">
    <children>
       <ImageView fx:id="currentFrame" fitHeight="558.0" fitWidth="744.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/battlemap/grid43.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="currentFrame1" fitHeight="83.0" fitWidth="111.0" layoutX="50.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" visible="true" />
+      <ImageView fx:id="currentFrame1" fitHeight="268.0" fitWidth="322.0" layoutX="50.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" visible="true" />
       <Pane id="MenuPane" layoutX="831.0" prefHeight="600.0" prefWidth="169.0">
          <children>
             <TabPane prefHeight="558.0" prefWidth="169.0" tabClosingPolicy="UNAVAILABLE">
@@ -46,10 +51,10 @@
                                     <Button fx:id="saveCampaignBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="176.0" text="Save Campaign" />
                                     <Button fx:id="quitCampaignBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="173.0" text="Quit Campaign" />
                                     <Button fx:id="exitProgramBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="Exit Program" />
-                                    <Button fx:id="getGrid" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="Get the Grid" onAction="#gridOnClick" />
-                                    <Button fx:id="gridFound" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="I found the grid" onAction="#gridFoundOnClick" />
-                                     <Button fx:id="setValues" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="Set values for blob" onAction="#setValuesOnClick" />
-                                    <Button fx:id="blobFound" mnemonicParsing="false" prefHeight="25.0" prefWidth="186.0" text="I found the blob" onAction="#getBlobOnClick" />
+                                    <Button fx:id="getGrid" mnemonicParsing="false" onAction="#gridOnClick" prefHeight="25.0" prefWidth="186.0" text="Get the Grid" />
+                                    <Button fx:id="gridFound" mnemonicParsing="false" onAction="#gridFoundOnClick" prefHeight="25.0" prefWidth="186.0" text="I found the grid" />
+                                     <Button fx:id="setValues" mnemonicParsing="false" onAction="#setValuesOnClick" prefHeight="25.0" prefWidth="186.0" text="Set values for blob" />
+                                    <Button fx:id="blobFound" mnemonicParsing="false" onAction="#getBlobOnClick" prefHeight="25.0" prefWidth="186.0" text="I found the blob" />
                                  </children>
                               </VBox>
                            </children>
@@ -77,8 +82,8 @@
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-            	 	                        	<Label text="Hue stop:"  />
-            		                      <Slider fx:id="hueStop" blockIncrement="1" max="255" min="0" value="255" >
+            	 	                        	<Label text="Hue stop:" />
+            		                      <Slider fx:id="hueStop" blockIncrement="1" max="255" min="0" value="255">
                            <HBox.margin>
                               <Insets top="2.0" />
                            </HBox.margin>
@@ -93,12 +98,12 @@
                   <Insets left="10.0" />
                </HBox.margin>
             </VBox>
-            <VBox prefHeight="42.0" prefWidth="233.0" >
+            <VBox prefHeight="42.0" prefWidth="233.0">
                <children>
                   <HBox prefHeight="20.0" prefWidth="232.0">
                      <children>
 		                         	<Label text="Saturation start:" />
-	                          <Slider fx:id="saturationStart" blockIncrement="1" max="255" min="0" value="127">
+	                          <Slider blockIncrement="1" max="255" min="0" value="127">
                            <HBox.margin>
                               <Insets top="2.0" />
                            </HBox.margin>
@@ -108,7 +113,7 @@
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
 			                        <Label text="Saturation stop:" />
-		                      <Slider fx:id="saturationStop" blockIncrement="1" max="255" min="0" value="127">
+		                      <Slider blockIncrement="1" max="255" min="0" value="127">
                            <HBox.margin>
                               <Insets top="2.0" />
                            </HBox.margin>
@@ -123,12 +128,12 @@
                   <Insets top="2.0" />
                </padding>
             </VBox>
-            <VBox prefHeight="42.0" prefWidth="204.0" >
+            <VBox prefHeight="42.0" prefWidth="204.0">
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
 			                        <Label text="Value start:" />
-	                          <Slider fx:id="valueStart" blockIncrement="1" max="255" min="0" value="127">
+	                          <Slider blockIncrement="1" max="255" min="0" value="127">
                            <HBox.margin>
                               <Insets top="2.0" />
                            </HBox.margin>
@@ -138,7 +143,7 @@
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
 		                           	<Label text="Value stop:" />
-	                          <Slider fx:id="valueStop" blockIncrement="1" max="255" min="0" value="127">
+	                          <Slider blockIncrement="1" max="255" min="0" value="127">
                            <HBox.margin>
                               <Insets top="2.0" />
                            </HBox.margin>
@@ -149,12 +154,12 @@
             </VBox>
             <VBox prefHeight="42.0" prefWidth="89.0">
                <children>
-                  <CheckBox fx:id="open" text="Opening">
+                  <CheckBox text="Opening">
                      <VBox.margin>
                         <Insets top="2.0" />
                      </VBox.margin>
                   </CheckBox>
-                  <CheckBox fx:id="close" text="Closing">
+                  <CheckBox text="Closing">
                      <VBox.margin>
                         <Insets top="2.0" />
                      </VBox.margin>
