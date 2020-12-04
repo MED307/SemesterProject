@@ -118,8 +118,13 @@
 
 /* ------------ Battle Map ID ------------ */
 
+
 #BattlemapWrapper {
 	-fx-background-color: #303030;
+}
+
+#GridView {
+	-fx-alignment: CENTER;
 }
 
 #CameraPane {
