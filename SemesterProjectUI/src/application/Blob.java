@@ -17,10 +17,7 @@ public class Blob {
 	int xPositions;
 	int yPositions;
 	
-
 	int area;
-	
-	
 	
 	public int getArea() {
 		return area;

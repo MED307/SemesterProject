@@ -145,7 +145,8 @@ public class VideoController
 						updateImageView(currentFrame, imageToShow);
 					}
 				};
-
+				
+				//Adds the frameGrabber to an ExecutorService, that will execute the code on a timer
 				this.timer = Executors.newSingleThreadScheduledExecutor();
 				this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
 
@@ -198,26 +199,29 @@ public class VideoController
 	@FXML
 	protected void getBlobOnClick()
 	{
-		for (int i = 0; i < grid.getColoumns(); i ++) 
+		if(gridFound)
 		{
-			for (int j = 0; j < grid.getRows(); j++)
+			for (int i = 0; i < grid.getColoumns(); i ++) 
 			{
-				grid.setSquare(i, j, "");
+				for (int j = 0; j < grid.getRows(); j++)
+				{
+					grid.setSquare(i, j, "");
+				}
 			}
-		}
+				
 			
-		
-		hueStart.setValue(80);
-		grabFrame();
-		getBlob(thisFrame,gridColour, "tree");
-		
-		hueStart.setValue(105);
-		grabFrame();
-		getBlob(thisFrame,gridColour, "water");
-		
-		hueStart.setValue(160);
-		grabFrame();
-		getBlob(thisFrame,gridColour, "stone");
+			hueStart.setValue(80);
+			grabFrame();
+			getBlob(thisFrame,gridColour, "tree");
+			
+			hueStart.setValue(105);
+			grabFrame();
+			getBlob(thisFrame,gridColour, "water");
+			
+			hueStart.setValue(160);
+			grabFrame();
+			getBlob(thisFrame,gridColour, "stone");
+		}
 	}
 	
 	
@@ -255,7 +259,7 @@ public class VideoController
 						// Converts the frame grabbed from using RGB to HSV
 						Imgproc.cvtColor(frame, hsvOutput, Imgproc.COLOR_BGR2HSV);
 
-						//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV colorspace treshold
+						//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV color space threshold
 						minValues = new Scalar(this.hueStart.getValue(), this.saturationStart, this.valueStart);
 						maxValues = new Scalar(this.hueStart.getValue() + 30, this.saturationStop, this.valueStop);
 
@@ -295,7 +299,7 @@ public class VideoController
 
 						// Draw the foreground markers
 						for (int i = 0; i < contours.size(); i++) {
-							Imgproc.drawContours(markers, contours, i, new Scalar(i + 1), -1);
+							Imgproc.drawContours(markers, contours, i, new Scalar(i + 1), Core.FILLED);
 
 						} 
 
@@ -330,9 +334,7 @@ public class VideoController
 						Set<Double> uniqueColors = new HashSet<Double>(colors);
 						
 						//this gives us a list of each unique color used to describe a specific blob in the image, which is added to a global variable
-						gridColour = new ArrayList<>(uniqueColors);
-
-		
+						gridColour = new ArrayList<>(uniqueColors);		
 					}
 					
 					//kernel for use to do open and close
@@ -363,7 +365,6 @@ public class VideoController
 			}
 			catch (Exception e)
 			{
-				// log the error
 				System.err.println("Exception during the frame elaboration: " + e);
 			}
 		}
@@ -372,6 +373,7 @@ public class VideoController
 
 	private void stopAcquisition()
 	{
+		//checks if the timer exists and if it has already been shut down
 		if (this.timer != null && !this.timer.isShutdown())
 		{
 			try
@@ -394,7 +396,7 @@ public class VideoController
 		}
 	}
 
-	
+	// updates the viewed image through a runnable (runLater)
 	private void updateImageView(ImageView view, Image image)
 	{
 		Platform.runLater(() -> {
@@ -402,9 +404,8 @@ public class VideoController
 		});
 	}
 
-	/**
-	 * On application close, stop the acquisition from the camera
-	 */
+
+	 //On application close, stop the acquisition from the camera
 	protected void setClosed()
 	{
 		this.stopAcquisition();
@@ -412,140 +413,135 @@ public class VideoController
 
 	public void getGrid (Mat frame, ArrayList<Double>gridColour) 
 	{
-		int[] point = new int[2];
 		
 		ArrayList<Double> list = new ArrayList<>();
+		
+		//goes through the image finding how many different colored blobs there are in one x value to determine the grid ratio
+		for (int y = frame.height() ; y > 0 ; y--)
+		{
+			
+			// if the color is not equal to a line
+			if (frame.get(frame.height()-y,5)[0] != 0) 
+			{
+				list.add(frame.get(frame.height()-y,5)[0]);
+			}
+		}
+		
+		//A HashSet is a collection where every item is unique, therefore if the same color pops up twice it is only added once.
+		Set<Double> uniqueRows = new HashSet<Double>(list);
+		
+		//creates an array list of the values
+		ArrayList<Double> uRows = new ArrayList<>(uniqueRows);
+		
+		//calculates the amount of rows and coloums from the colors in one line and the known amount of grid squares (gridColour)
+		int rows = uRows.size();
+		int coloumns =gridColour.size() / rows;
+		
+		//creates a virtual grid with those ratios
+		grid = new Grid(rows,coloumns);
+		
+		//displays the grid
+		currentFrame1.setImage(grid.Display());
+		
+		//saves the image of the grid
+		gridImage = frame;
+		
+		//sort gridColour from highest to lowest, as the first grid square, has the highest color
+		Collections.sort(gridColour, Collections.reverseOrder());
+		
+		//creates an array of the blobs
+		gridSquares = new Blob[gridColour.size()];
+		
+		// for each element in the array, create a new blob and fill out the information on where in the grid the blob is and what color the blob is.
+		for(int i = 0; i < gridColour.size(); i++) 
+		{
+			gridSquares[i] = new Blob();
+			gridSquares[i].setColor(gridColour.get(i));
+			gridSquares[i].setLocationX(i % coloumns);
+			gridSquares[i].setLocationY(i / rows);
+		}
+	}
 
+	public void getBlob (Mat frame, ArrayList<Double>gridColour, String type) 
+	{	
+		//does the same kind of blob detection as when finding the grid
+		Mat dist_8u = new Mat();
+		frame.convertTo(dist_8u, CvType.CV_8U);
+		// Find total markers
+		List<MatOfPoint> contours = new ArrayList<>();
+		
+		//not used, but needed for finding Contours
+		Mat hierarchy = new Mat();
+		Imgproc.findContours(dist_8u, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+		
+		// Create the marker image for the watershed algorithm
+		Mat markers = Mat.zeros(frame.size(), CvType.CV_32S);
+
+		// Draw the contours onto a matrix
+		for (int i = 0; i < contours.size(); i++) {
+			Imgproc.drawContours(markers, contours, i, new Scalar(i + 1), -1);
+		} 
+
+		// convert the matrix into floats with the values from markers
+		Mat markersScaled = new Mat();
+		markers.convertTo(markersScaled, CvType.CV_32F);
+		
+		//normalizes the values to be between 0.0 and 255.0
+		Core.normalize(markersScaled, markersScaled, 0.0, 255.0, Core.NORM_MINMAX);
+		Mat markersDisplay = new Mat();
+		
+		//converts it to use integers between 0 and 255
+		markersScaled.convertTo(markersDisplay, CvType.CV_8U);
+		
+		//sets the value of frame
+		frame = markersDisplay;
+		
+		//finds the colors of the blobs
+		ArrayList<Double> terrainColors = new ArrayList<>();
+		
 		for (int y = 0; y < frame.height(); y++)
 		{
 			for(int x = 0; x < frame.width(); x++)
 			{
 				if(frame.get(y,x)[0] != 0)
 				{
-					point[0] = y;
-					point[1] = x;
-					break;
-				}
-			}
-		} 
-
-		
-
-		for (int y = point[0] ; y > 0 ; y--)
-		{
-			if (frame.get(point[0]-y,point[1])[0] != 0) 
-			{
-				list.add(frame.get(point[0]-y,point[1])[0]);
-			}
-		}
-
-		Set<Double> uniqueColoumns = new HashSet<Double>(list);
-
-		ArrayList<Double> uColoumns = new ArrayList<>(uniqueColoumns);
-
-		int coloumns = uColoumns.size();
-
-		int rows =gridColour.size() / coloumns;
-
-		grid = new Grid(rows,coloumns);
-		currentFrame1.setImage(grid.Display());
-		gridImage = frame;
-
-		Collections.sort(gridColour, Collections.reverseOrder());
-
-		gridSquares = new Blob[gridColour.size()];
-
-		for(int i = 0; i < gridColour.size(); i++) 
-		{
-			gridSquares[i] = new Blob();
-			gridSquares[i].setColor(gridColour.get(i));
-			gridSquares[i].setLocationX(i % rows);
-			gridSquares[i].setLocationY(i / rows);
-		}
-	}
-
-	public void getBlob (Mat frame, ArrayList<Double>gridColour, String type) 
-	{		
-		Mat dist_8u = new Mat();
-		frame.convertTo(dist_8u, CvType.CV_8U);
-		// Find total markers
-		List<MatOfPoint> contours = new ArrayList<>();
-		Mat hierarchy = new Mat();
-		Imgproc.findContours(dist_8u, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-		
-		
-		// Create the marker image for the watershed algorithm
-		Mat markers = Mat.zeros(frame.size(), CvType.CV_32S);
-
-		// Draw the foreground markers
-		for (int i = 0; i < contours.size(); i++) {
-			Imgproc.drawContours(markers, contours, i, new Scalar(i + 1), -1);
-
-		} 
-
-		// Draw the background marker
-		Mat markersScaled = new Mat();
-		markers.convertTo(markersScaled, CvType.CV_32F);
-		Core.normalize(markersScaled, markersScaled, 0.0, 255.0, Core.NORM_MINMAX);
-		Imgproc.circle(markersScaled, new Point(5, 5), 3, new Scalar(255, 255, 255), -1);
-		Mat markersDisplay = new Mat();
-		markersScaled.convertTo(markersDisplay, CvType.CV_8U);
-		Imgproc.circle(markers, new Point(5, 5), 3, new Scalar(255, 255, 255), -1);
-
-		frame = markersDisplay;
-		
-		
-		ArrayList<Double> terrainColors = new ArrayList<>();
-		
-		for (int y = 0; y < frame.height(); y++){
-			for(int x = 0; x < frame.width(); x++){
-				if(frame.get(y,x)[0] != 0){
 					terrainColors.add(frame.get(y,x)[0]);
 				}
 			}
 		} 
-
+		
+		//makes sure each color is only added once
 		Set<Double> setTerrainColors = new HashSet<Double>(terrainColors);
 		ArrayList<Double> uniqueTerrainColors = new ArrayList<>(setTerrainColors);
 		
+		//creates a list of blobs
 		ArrayList<Blob> terrainBlobs = new ArrayList<>();	
 		
-		for (int c = 0; c < uniqueTerrainColors.size(); c++ ) {
-					
-				int area = 0;
-				Blob blob = new Blob();
-				terrainBlobs.add(blob);
-				
-				for (int y = 0; y < frame.height(); y++)
-				{
-					for(int x = 0; x < frame.width(); x++)
-					{
-						if(frame.get(y,x)[0] == uniqueTerrainColors.get(c)){
-							area +=1 ;
-							terrainBlobs.get(c).setArea(area);
-							
-						}
-					}
-				}
-				
-				
-				System.out.println("Area number " + c + ": " + terrainBlobs.get(c).getArea());
-			}
-
-			
-		for (int c = 0; c < uniqueTerrainColors.size(); c++ ) {
+		//gets the area of the blob, by check each pixel and seeing if they are the same color as the blob, if so add it to the blob
+		for (int c = 0; c < uniqueTerrainColors.size(); c++ ) 
+		{	
+			int area = 0;
 			int xPos = 0;
 			int yPos = 0;
 			
+			Blob blob = new Blob();
+			terrainBlobs.add(blob);
+			
+			//double for loop to check through the whole picture
 			for (int y = 0; y < frame.height(); y++)
 			{
 				for(int x = 0; x < frame.width(); x++)
 				{
-					if(frame.get(y,x)[0] == uniqueTerrainColors.get(c)){
+					//check if the pixel and the blob is the same color
+					if(frame.get(y,x)[0] == uniqueTerrainColors.get(c))
+					{
+						//increases the value of the blobs area
+						area +=1;
+						terrainBlobs.get(c).setArea(area);
 						
+						//increases the total x and y location, which is used with the area later to find the Center Of Mass
 						xPos += x;
 						yPos += y;
-						
 						terrainBlobs.get(c).setxPositions(xPos);
 						terrainBlobs.get(c).setyPositions(yPos);
 					}
@@ -554,41 +550,35 @@ public class VideoController
 			
 			int xMid;
 			int yMid;
-
+			
+			// finds the Center Of Mass
 			xMid = terrainBlobs.get(c).getxPositions() / terrainBlobs.get(c).getArea();
 			yMid = terrainBlobs.get(c).getyPositions() / terrainBlobs.get(c).getArea();
-			System.out.println(c);
-			System.out.println("x:" + terrainBlobs.get(c).getxPositions() + "     " + terrainBlobs.get(c).getArea());
-			System.out.println("y:" + terrainBlobs.get(c).getyPositions() + "     " + terrainBlobs.get(c).getArea());
-			System.out.println(" ");
+			
+			//adds the coordinates of it to the blob
 			terrainBlobs.get(c).setLocationX(xMid); 
 			terrainBlobs.get(c).setLocationY(yMid);
-			
 		}
-
+		
+		//list of colors on the grid corresponding with the position of the blob
 		double[] squareColors = new double[uniqueTerrainColors.size()];
 		
-		
-
-		for(int i = 0; i < uniqueTerrainColors.size(); i++ ) 
-		{		
+		for(int i = 0; i < squareColors.length; i++ ) 
+		{
+			//adds the color of the grid using the coordinates of the blobs center of mass
 			squareColors[i] = gridImage.get(terrainBlobs.get(i).getLocationY(),terrainBlobs.get(i).getLocationX())[0];
 		}
 		
-
+		//goes through each square of the grid
 		for (int i = 0; i < gridSquares.length;i++) 
 		{	
+			//goes through each color determined on line 571
 			for(int j = 0; j < squareColors.length; j++) 
 			{
-				if((gridSquares[i].getColor() - squareColors[j]) < 0.5 && (gridSquares[i].getColor() - squareColors[j]) > -0.5 ){
-
-					int gridX = gridSquares[i].getLocationX();
-					int gridY = gridSquares[i].getLocationY();
-					
-					System.out.println("blob " + j + " x position: " + gridX + "x pixelPos: " + terrainBlobs.get(j).getLocationX());
-					System.out.println("blob " + j + " y position: " + gridY + "y pixelPos: " + terrainBlobs.get(j).getLocationY());
-					System.out.println("");
-					grid.setSquare(gridX, gridY, type);
+				// if they differ less than 0.1 from each other, then make that square on the grid a version of the blob currently being detected for (Type)
+				if((gridSquares[i].getColor() - squareColors[j]) < 0.1 && (gridSquares[i].getColor() - squareColors[j]) > -0.1 )
+				{				
+					grid.setSquare(gridSquares[i].getLocationX(), gridSquares[i].getLocationY(), type);
 					currentFrame1.setImage(grid.Display());
 				}
 			}
