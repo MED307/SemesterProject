@@ -183,6 +183,20 @@
 	-fx-background-image:url(../../assets/battlemap/ui/adventurersh.png);	
 }
 
+#SettingsMenu Button {
+	-fx-font-size: 17.0;
+	-fx-text-fill: white;
+	-fx-font-family: 'Bookmania-SemiBold';
+	-fx-background-color:none;
+
+}
+
+#SettingsMenu Button:hover {
+	-fx-text-fill:#e0dbd5;
+	-fx-background-color:#3b0707;
+	-fx-cursor: hand;
+}
+
 #RollResultsLabel {
 	-fx-font-size: 12.0;
 	-fx-text-fill: white;
