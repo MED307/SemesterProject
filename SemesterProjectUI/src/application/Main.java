@@ -32,7 +32,7 @@ public class Main extends Application {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
-			primaryStage.getIcons().add(new Image("icon.png"));
+			primaryStage.getIcons().add(new Image("icon3.png"));
 		    primaryStage.setResizable(false);
 			primaryStage.setMinWidth(primaryStage.getWidth()/2);
 	        primaryStage.setMinHeight(primaryStage.getHeight()/2);
