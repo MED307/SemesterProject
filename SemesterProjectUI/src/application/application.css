@@ -140,6 +140,19 @@
 	-fx-background-image:url(../../assets/battlemap/ui/adventurers.png);	
 }
 
+#AddAdventurerBtn {
+	-fx-font-size: 14.0;
+	-fx-font-family: 'Bookmania-SemiBold';
+	-fx-background-color: none;
+	-fx-text-fill:white;
+}
+
+#AddAdventurerBtn:hover {
+	-fx-font-size: 14.0;
+	-fx-font-family: 'Bookmania-SemiBold';
+	-fx-background-color: none;
+	-fx-text-fill:#e0dbd5;
+}
 
 #AdventurersTab:hover {
 	-fx-background-color: none;
