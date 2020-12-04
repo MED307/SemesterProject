@@ -1,10 +1,23 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 
 @font-face {
-    src: url('../../assets/Fonts/Mrs-Eaves/MRSEA~12.ttf'); 
+    src: url('../fonts/Mrs-Eaves/MRSEA~12.ttf'); 
 }
+
 @font-face {
-    src: url('../../assets/Fonts/Mrs-Eaves/MrsEaves-Bold.ttf'); 
+	src: url('../fonts/Mrs-Eaves/MrsEavesRoman.ttf');
+}
+
+@font-face {
+    src: url('../fonts/Mrs-Eaves/MrsEavesItalic.ttf'); 
+}
+
+@font-face {
+    src: url('../fonts/Mrs-Eaves/MrsEaves-Bold.ttf'); 
+}
+
+@font-face {
+    src: url('../fonts/Bookmania/Bookmania_SemiBold.otf'); 
 }
 
 
@@ -105,7 +118,9 @@
 
 /* ------------ Battle Map ID ------------ */
 
-
+#BattlemapWrapper {
+	-fx-background-color: #303030;
+}
 
 #CameraPane {
 	-fx-background-color: #3b0707;
@@ -113,6 +128,53 @@
 
 #MenuPane{
 	-fx-background-image:url(../../assets/battlemap/ui/rightPane.png);
+}
+
+#AdventurersTab {
+	-fx-background-color: none;
+	-fx-background-image:url(../../assets/battlemap/ui/adventurers.png);	
+}
+
+
+#AdventurersTab:hover {
+	-fx-background-color: none;
+	-fx-background-image:url(../../assets/battlemap/ui/adventurersh.png);	
+}
+
+#AdventurersTab:selected {
+	-fx-background-image:url(../../assets/battlemap/ui/adventurersh.png), url(../../assets/battlemap/ui/tabSelected2.png) ;
+	-fx-background-color: none;	
+}
+
+#SettingsTab {
+	-fx-background-color: none;
+	-fx-background-image:url(../../assets/battlemap/ui/settings2.png);	
+}
+
+#SettingsTab:hover {
+	-fx-background-color: none;
+	-fx-background-image:url(../../assets/battlemap/ui/settings2h.png);
+}
+
+#SettingsTab:selected {
+	-fx-background-image:url(../../assets/battlemap/ui/settings2h.png), url(../../assets/battlemap/ui/tabSelected2.png) ;
+	-fx-background-color: none;	
+}
+
+#SettingsTab pane {
+	-fx-background-image:url(../../assets/battlemap/ui/adventurersh.png);	
+}
+
+#RollResultsLabel {
+	-fx-font-size: 12.0;
+	-fx-text-fill: white;
+	-fx-font-family: 'Bookmania-SemiBold';
+}
+
+#RollResultValueLabel {
+	-fx-font-size: 13.0;
+	-fx-text-fill: white;
+	-fx-font-family: 'Bookmania-SemiBold';
 }
 
 #CameraBtn {
@@ -131,11 +193,96 @@
 	-fx-background-image:url(../../assets/battlemap/ui/camerah.png)
 }
 
-.TabPane {
+#HelpBtn {
+	-fx-background-image:url(../../assets/battlemap/ui/helpbtn.png)
+}
+
+#HelpBtn:hover {
+	-fx-background-image:url(../../assets/battlemap/ui/helpbtnh.png)
+}
+
+#d4Btn {
+	-fx-background-image:url(../../assets/battlemap/ui/d4.png)	
+}
+
+#d4Btn:hover {
+	-fx-background-image:url(../../assets/battlemap/ui/d4h.png)	
+}
+
+#d6Btn {
+	-fx-background-image:url(../../assets/battlemap/ui/d6.png)	
+}
+
+#d6Btn:hover {
+	-fx-background-image:url(../../assets/battlemap/ui/d6h.png)	
+}
+
+#d8Btn {
+	-fx-background-image:url(../../assets/battlemap/ui/d8.png)	
+}
+
+#d8Btn:hover {
+	-fx-background-image:url(../../assets/battlemap/ui/d8h.png)	
+}
+
+#d10Btn {
+	-fx-background-image:url(../../assets/battlemap/ui/d10.png)	
+}
+
+#d10Btn:hover {
+	-fx-background-image:url(../../assets/battlemap/ui/d10h.png)	
+}
+
+#d12Btn {
+	-fx-background-image:url(../../assets/battlemap/ui/d12.png)	
+}
+
+#d12Btn:hover {
+	-fx-background-image:url(../../assets/battlemap/ui/d12h.png)	
+}
+
+#d20Btn {
+	-fx-background-image:url(../../assets/battlemap/ui/d20.png)	
+}
+
+#d20Btn:hover {
+	-fx-background-image:url(../../assets/battlemap/ui/d20h.png)	
+}
+
+#menuTitleLabel {
+	-fx-font-size: 20.0;
+	-fx-font-family: 'MrsEaves-Bold';
+	-fx-text-fill: #FFFFFF;
+}
+
+#AdventurersListView {
+	-fx-background-color: none;
+}
+
+#menuTabPane {
+	-fx-effect: null;
+	fx-background: none;
 	-fx-background-color:none;
+}
+
+#guideLabel1 {
+	 -fx-font-size:25.0;
+	 -fx-text-fill: white;
+	 -fx-font-family: 'MrsEaves-Bold';
+}
+
+#guideLabel2 {
+	 -fx-font-size: 22.0;
+	 -fx-text-fill: #adadad;
+	 -fx-font-family: 'MrsEaves-Bold';
+}
+
+#menuTabPane .tab-header-background { 
+	-fx-background-color: none;
 }
 
 .MenuLabel {
 	-fx-text-fill: white;
 	
 }
+
