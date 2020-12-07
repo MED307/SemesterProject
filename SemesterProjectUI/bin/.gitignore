@@ -1,5 +1,4 @@
 /application/
-<<<<<<< Updated upstream
 /stone.png
 /water1.png
 /grass1.png
@@ -11,8 +10,7 @@
 /icon3.png
 /icon2.png
 /fonts/
-=======
->>>>>>> Stashed changes
 /enemygrass.png
 /playergrass.png
 /bard.png
+/wizard.png
