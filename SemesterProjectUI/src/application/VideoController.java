@@ -23,6 +23,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -56,6 +57,9 @@ public class VideoController
 	
 	@FXML
 	private Pane cameraControlPane;
+	
+	@FXML
+	private ListView<Player> playerListVIew;
 
 	@FXML
 	private 
@@ -159,6 +163,7 @@ public class VideoController
 	{
 		this.capture = new VideoCapture();
 		this.cameraActive = false;
+		playerListVIew.setCellFactory(chatRoomListView -> new PlayerListCellController());
 	}
 
 	@FXML
@@ -180,11 +185,16 @@ public class VideoController
 		if (!test)
 		{
 			test = true;
-		players.add(new Player("Brian", "fighter"));
+			
+			Player brian = new Player("Brian", "fighter");
+			players.add(brian);
+			playerListVIew.getItems().add(brian);
 		}
 		else
 		{
-		players.add(new Player("Steve", "bard"));
+		Player steve = new Player("Steve", "bard");
+		players.add(steve);
+		playerListVIew.getItems().add(steve);
 		}
 	}
 	

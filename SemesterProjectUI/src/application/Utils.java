@@ -8,6 +8,7 @@ import org.opencv.core.Mat;
 
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
@@ -71,9 +72,9 @@ public final class Utils
 		return image;
 	}
 	
-	public static boolean checkPlayerPos(ArrayList<Player> p, int x, int y)
+	public static boolean checkPlayerPos(ArrayList<Player> players, int x, int y)
 	{
-		for(Player e : p)
+		for(Player e : players)
 		{
 			if(e.getPos()[0] == x && e.getPos()[1] == y)
 			{

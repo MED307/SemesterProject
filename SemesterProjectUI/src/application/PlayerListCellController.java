@@ -12,21 +12,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 public class PlayerListCellController extends ListCell<Player>{
-
-	@FXML
-	Button stats;
-	
-	@FXML
-	Button edit;
-	
-	@FXML
-	Button remove;
 	
 	@FXML
 	Text name;
-	
-	@FXML
-	Text playerDesc;
 	
 	@FXML
 	AnchorPane pane;
@@ -60,19 +48,7 @@ public class PlayerListCellController extends ListCell<Player>{
                 }
 
             }
-        	if(this.isSelected()) {
-        		stats.setVisible(true);
-        		remove.setVisible(true);
-        		edit.setVisible(true);
-        	}
-        	else
-        	{
-        		stats.setVisible(false);
-        		remove.setVisible(false);
-        		edit.setVisible(false);
-        	}
-        	name.setText(player.getName());
-        	playerDesc.setText(player.getClasses());
+        	name.setText(player.getName() + " The " + player.getClasses());
         	setGraphic(pane);
         }
 	}
