@@ -51,8 +51,8 @@
                            <children>
                               <VBox id="SettingsMenu" layoutY="14.0" prefHeight="446.0" prefWidth="259.0">
                                  <children>
-                                    <Button fx:id="saveCampaignBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="280.0" text="Save Campaign" />
-                                    <Button fx:id="quitCampaignBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="283.0" text="Quit Campaign" />
+                                    <Button fx:id="saveCampaignBtn" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="280.0" text="Save Campaign" />
+                                    <Button fx:id="quitCampaignBtn" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="283.0" text="Quit Campaign" />
                                     <Button fx:id="exitProgramBtn" mnemonicParsing="false" onAction="#exitProgram" prefHeight="25.0" prefWidth="259.0" text="Exit Program" />
                                  </children>
                               </VBox>
@@ -98,7 +98,7 @@
          <children>
             <Button id="CameraBtn" fx:id="cameraBtn" mnemonicParsing="false" onAction="#showCamera" prefHeight="42.0" prefWidth="246.0" />
             <Button id="UpdateBtn" fx:id="blobFound" mnemonicParsing="false" onAction="#getBlobOnClick" prefHeight="42.0" prefWidth="248.0" />
-            <Button id="HelpBtn" fx:id="helpBtn" mnemonicParsing="false" prefHeight="42.0" prefWidth="247.0" />
+            <Button id="HelpBtn" fx:id="helpBtn" disable="true" mnemonicParsing="false" prefHeight="42.0" prefWidth="247.0" />
          </children>
       </HBox>
       <Pane id="CameraPane" fx:id="cameraControlPane" layoutY="309.0" prefHeight="247.0" prefWidth="256.0" visible="false">
