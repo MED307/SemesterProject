@@ -23,7 +23,9 @@ public class Grid {
 	
 	BufferedImage grass;
 
-	BufferedImage player;
+	BufferedImage fighter;
+	
+	BufferedImage bard;
 	
 	BufferedImage enemy;
 	
@@ -43,7 +45,8 @@ public class Grid {
 			stone = ImageIO.read(getClass().getResource("/stonegrass.png"));
 			water = ImageIO.read(getClass().getResource("/water1.png"));
 			grass = ImageIO.read(getClass().getResource("/grass1.png"));
-			player = ImageIO.read(getClass().getResource("/playergrass.png"));
+			fighter = ImageIO.read(getClass().getResource("/playergrass.png"));
+			bard = ImageIO.read(getClass().getResource("/bard.png"));
 			enemy = ImageIO.read(getClass().getResource("/enemygrass.png"));
 		}
 		catch(IOException e)
@@ -145,13 +148,7 @@ public class Grid {
 					//changes the color to the corresponding color on the water image
 					rgb = water.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
 				}
-				
-				//if type is player
-				else if (type.compareTo("player") == 0)
-				{
-					//changes the color to the corresponding color on the water image
-					rgb = player.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
-				}
+
 				//if type is enemy
 				else if (type.compareTo("enemy") == 0)
 				{
@@ -172,6 +169,38 @@ public class Grid {
 		}
 	}
 	
+	//changes the visuals of a specific squares, by redrawing that square using another buffered image
+		public void setSquare(int x, int y, String type, String playerClass)
+		{
+			//goes through each y value of that specific square
+			for(int j = (y*(squareWidth) + strokeWidth); j < ((squareWidth)*(y+1)) - strokeWidth + 1; j++) 
+			{	
+				//goes through each x value of that specific square
+				for(int i = gridList.get(y).get(x) + strokeWidth ; i < ((squareWidth)*(x+1)) - strokeWidth + 1; i++) 
+				{
+					//basis color as a RGB integer
+					int rgb = new Color(0,0,0).getRGB();
+					
+					//if type is player
+					if (type.compareTo("player") == 0)
+					{
+						if (playerClass.compareTo("fighter") == 0)
+							rgb = fighter.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+						else if (playerClass.compareTo("bard") == 0);
+					}
+
+					//if invalid type is given, draw grass instead
+					else
+					{
+						//changes the color to the corresponding color on the grass image
+						rgb = grass.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+					}
+					
+					//changes the color of the pixel
+					grid.setRGB(i, j, rgb);
+				}
+			}
+		}
 	
 	
 	//returns the buffered images as a standard image, for FXML to display

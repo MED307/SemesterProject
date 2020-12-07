@@ -175,8 +175,8 @@ public class VideoController
 	@FXML
 	protected void addPlayer()
 	{
-		players.add(new Player("Brian", "Fighter"));
-		players.add(new Player("Steve", "Fighter"));
+		players.add(new Player("Brian", "fighter"));
+		players.add(new Player("Steve", "bard"));
 	}
 	
 	@FXML
@@ -689,7 +689,12 @@ public class VideoController
 							newPlayerX = gridSquares[i].getLocationX();
 							newPlayerY = gridSquares[i].getLocationY();
 						}
-						grid.setSquare(gridSquares[i].getLocationX(), gridSquares[i].getLocationY(), type);
+						for (Player e : players)
+						{
+							if (e.getPos()[0] == gridSquares[i].getLocationX() && e.getPos()[1] == gridSquares[i].getLocationY()) {
+								grid.setSquare(gridSquares[i].getLocationX(), gridSquares[i].getLocationY(), type, e.getClasses());
+							}
+						}
 						currentFrame1.setImage(grid.Display());
 					}
 				}
