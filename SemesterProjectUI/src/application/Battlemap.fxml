@@ -36,7 +36,7 @@
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <Label id="menuTitleLabel" alignment="CENTER" layoutY="12.0" prefHeight="30.0" prefWidth="259.0" text="Adventurers" textFill="WHITE" />
-                              <Button id="AddAdventurerBtn" fx:id="addAdventurerBtn" onAction="#addPlayer" layoutX="205.0" layoutY="15.0" mnemonicParsing="false" text="+Add" />
+                              <Button id="AddAdventurerBtn" fx:id="addAdventurerBtn" layoutX="205.0" layoutY="15.0" mnemonicParsing="false" onAction="#addPlayer" text="+Add" />
                               <ListView id="AdventurersListView" fx:id="playerListVIew" layoutY="39.0" prefHeight="424.0" prefWidth="259.0" />
                            </children>
                         </AnchorPane>
@@ -127,19 +127,19 @@
             <Button layoutX="455.0" layoutY="5.0" mnemonicParsing="false" text="X" />
          </children>
       </Pane>
-      <Pane id="CameraPane" fx:id="cameraControlPane" layoutY="310.0" prefHeight="247.0" prefWidth="256.0" visible="false">
+      <Pane id="CameraPane" fx:id="cameraControlPane" layoutY="310.0" prefHeight="247.0" prefWidth="259.0" visible="false">
          <children>
-            <VBox prefHeight="200.0" prefWidth="100.0">
+            <VBox prefHeight="236.0" prefWidth="259.0">
                <children>
                   <HBox prefHeight="82.0" prefWidth="245.0">
                      <children>
-                        <Button fx:id="cameraControlBtn" mnemonicParsing="false" onAction="#startCamera" text="Start Camra" />
+                        <Button fx:id="cameraControlBtn" mnemonicParsing="false" onAction="#startCamera" text="Start Camera" />
                         <Button fx:id="getGrid" mnemonicParsing="false" onAction="#gridOnClick" prefHeight="25.0" prefWidth="62.0" text="Get Grid" />
                         <Button fx:id="gridFound" mnemonicParsing="false" onAction="#gridFoundOnClick" prefHeight="25.0" prefWidth="81.0" text="Found Grid" />
                         <Button fx:id="closCameraControlBtn" mnemonicParsing="false" onAction="#showCamera" prefHeight="25.0" prefWidth="9.0" text="X" />
                      </children>
                   </HBox>
-                  <ImageView fx:id="currentFrame" fitHeight="184.0" fitWidth="245.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="currentFrame" fitHeight="188.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../assets/battlemap/ui/cameraPlaceHolder.png" />
                      </image>
