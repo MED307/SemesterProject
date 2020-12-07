@@ -1,8 +1,8 @@
 package application;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -14,6 +14,8 @@ import javafx.scene.image.Image;
 public class Grid {
 	
 	BufferedImage grid;
+	BufferedImage terrain;
+	BufferedImage entities;
 	
 	BufferedImage tree;
 	
@@ -23,7 +25,11 @@ public class Grid {
 	
 	BufferedImage grass;
 
-	BufferedImage player;
+	BufferedImage fighter;
+	
+	BufferedImage bard;
+	
+	BufferedImage wizard;
 	
 	BufferedImage enemy;
 	
@@ -39,11 +45,13 @@ public class Grid {
 		try 
 		{
 			//loads the images in from the resource folder
-			tree = ImageIO.read(getClass().getResource("/treegrass.png"));
-			stone = ImageIO.read(getClass().getResource("/stonegrass.png"));
+			tree = ImageIO.read(getClass().getResource("/tree.png"));
+			stone = ImageIO.read(getClass().getResource("/stone.png"));
 			water = ImageIO.read(getClass().getResource("/water1.png"));
 			grass = ImageIO.read(getClass().getResource("/grass1.png"));
-			player = ImageIO.read(getClass().getResource("/playergrass.png"));
+			fighter = ImageIO.read(getClass().getResource("/playergrass.png"));
+			bard = ImageIO.read(getClass().getResource("/bard.png"));
+			wizard = ImageIO.read(getClass().getResource("/wizard.png"));
 			enemy = ImageIO.read(getClass().getResource("/enemygrass.png"));
 		}
 		catch(IOException e)
@@ -56,7 +64,9 @@ public class Grid {
 		sizeY = y;
 		
 		//creates an image of that size
-		grid = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_3BYTE_BGR);
+		grid = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
+		terrain = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
+		entities = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
 		
 		//creates a 2D arrayList of each squares x start position
 		for (int j = 0; j < sizeY; j++)
@@ -113,6 +123,16 @@ public class Grid {
         }
 	}
 	
+	public void resetEntities()
+	{
+		entities = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
+	}
+	
+	public void resetTerrain()
+	{
+		terrain = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
+	}
+	
 	//changes the visuals of a specific squares, by redrawing that square using another buffered image
 	public void setSquare(int x, int y, String type)
 	{
@@ -128,8 +148,10 @@ public class Grid {
 				//if type is tree
 				if (type.compareTo("tree") == 0)
 				{
-					//changes the color to the corresponding color on the tree image
 					rgb = tree.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+
+					//changes the color of the pixel
+					terrain.setRGB(i, j, rgb);
 				}
 				
 				//if type is stone
@@ -137,6 +159,9 @@ public class Grid {
 				{
 					//changes the color to the corresponding color on the stone image
 					rgb = stone.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+
+					//changes the color of the pixel
+					terrain.setRGB(i, j, rgb);
 				}
 				
 				//if type is water
@@ -144,19 +169,19 @@ public class Grid {
 				{
 					//changes the color to the corresponding color on the water image
 					rgb = water.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+					
+					//changes the color of the pixel
+					terrain.setRGB(i, j, rgb);
 				}
-				
-				//if type is player
-				else if (type.compareTo("player") == 0)
-				{
-					//changes the color to the corresponding color on the water image
-					rgb = player.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
-				}
+
 				//if type is enemy
 				else if (type.compareTo("enemy") == 0)
 				{
 					//changes the color to the corresponding color on the water image
 					rgb = enemy.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+
+					//changes the color of the pixel
+					entities.setRGB(i, j, rgb);
 				}
 				
 				//if invalid type is given, draw grass instead
@@ -164,20 +189,70 @@ public class Grid {
 				{
 					//changes the color to the corresponding color on the grass image
 					rgb = grass.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+					
+					//changes the color of the pixel
+					grid.setRGB(i, j, rgb);
 				}
 				
-				//changes the color of the pixel
-				grid.setRGB(i, j, rgb);
+
 			}
 		}
 	}
 	
+	//changes the visuals of a specific squares, by redrawing that square using another buffered image
+		public void setSquare(int x, int y, String type, String playerClass)
+		{
+			//goes through each y value of that specific square
+			for(int j = (y*(squareWidth) + strokeWidth); j < ((squareWidth)*(y+1)) - strokeWidth + 1; j++) 
+			{	
+				//goes through each x value of that specific square
+				for(int i = gridList.get(y).get(x) + strokeWidth ; i < ((squareWidth)*(x+1)) - strokeWidth + 1; i++) 
+				{
+					//basis color as a RGB integer
+					int rgb = new Color(0,0,0).getRGB();
+					
+					//if type is player
+					if (type.compareTo("player") == 0)
+					{
+						if (playerClass.compareTo("fighter") == 0) 
+						{
+							rgb = fighter.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+						}
+						else if (playerClass.compareTo("bard") == 0)
+						{
+							rgb = bard.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+						}
+						else if (playerClass.compareTo("bard") == 0)
+						{
+							rgb = wizard.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+						}
+					}
+
+					//if invalid type is given, draw grass instead
+					else
+					{
+						//changes the color to the corresponding color on the grass image
+						rgb = grass.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+					}
+					
+					//changes the color of the pixel
+					entities.setRGB(i, j, rgb);
+				}
+			}
+		}
 	
 	
 	//returns the buffered images as a standard image, for FXML to display
 	public Image Display()
 	{
-		return SwingFXUtils.toFXImage(grid, null);
+		BufferedImage c = new BufferedImage(grid.getWidth(), grid.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics g = c.getGraphics();
+		g.drawImage(grid,0,0,null);
+		g.drawImage(terrain,0,0,null);
+		g.drawImage(entities,0,0,null);
+		g.dispose();
+
+		return SwingFXUtils.toFXImage(c, null);
 	}
 	
 	

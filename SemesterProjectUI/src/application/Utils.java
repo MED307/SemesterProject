@@ -36,6 +36,13 @@ public final class Utils
 		}
 	}
 	
+	public static BufferedImage convert2Alpha(BufferedImage i)
+	{
+		BufferedImage newImage = new BufferedImage(i.getWidth(), i.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		return newImage;
+		
+	}
+	
 	/**
 	 * Support for the {@link mat2image()} method
 	 * 
