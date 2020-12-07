@@ -101,7 +101,7 @@
             <Button id="HelpBtn" fx:id="helpBtn" disable="true" mnemonicParsing="false" prefHeight="42.0" prefWidth="247.0" />
          </children>
       </HBox>
-      <Pane id="HelpPane" fx:id="helpPane" layoutX="258.0" layoutY="310.0" prefHeight="247.0" prefWidth="482.0">
+      <Pane id="HelpPane" fx:id="helpPane" layoutX="258.0" layoutY="310.0" prefHeight="247.0" prefWidth="482.0" visible="false">
          <children>
             <Label id="HelpHeader" layoutX="14.0" layoutY="13.0" text="How to use" />
             <VBox layoutX="9.0" layoutY="42.0" prefHeight="184.0" prefWidth="469.0">
