@@ -49,9 +49,6 @@ public class VideoController
 	private Slider hueStart;
 
 	@FXML
-	private Slider hueStop;
-
-	@FXML
 	private ImageView currentFrame;
 
 	@FXML
@@ -101,9 +98,13 @@ public class VideoController
 
 	private int valueStop = 127;
 
+	private int hueStop = 30;
+
 	Mat gridImage = new Mat();
 
 	Grid grid; 
+	
+	boolean terrainFound = false;
 
 	Blob[] gridSquares;
 
@@ -172,11 +173,19 @@ public class VideoController
 		}
 	}
 	
+	boolean test;
 	@FXML
 	protected void addPlayer()
 	{
+		if (!test)
+		{
+			test = true;
 		players.add(new Player("Brian", "fighter"));
+		}
+		else
+		{
 		players.add(new Player("Steve", "bard"));
+		}
 	}
 	
 	@FXML
@@ -269,27 +278,31 @@ public class VideoController
 				}
 			}
 			
+			hueStop = 10;
+			
 			grid.resetEntities();
-			grid.resetTerrain();
 				
+			//if(!terrainFound)
+			{
+				terrainFound = true;
+				hueStart.setValue(87);
+				grabFrame();
+				getBlob(thisFrame,gridColour, "tree");
+				
+				hueStart.setValue(105);
+				grabFrame();
+				getBlob(thisFrame,gridColour, "water");
+				
+				hueStart.setValue(175);
+				grabFrame();
+				getBlob(thisFrame,gridColour, "stone");
+				
+				hueStart.setValue(14);
+				grabFrame();
+				getBlob(thisFrame,gridColour, "enemy");
+			}
 			
-			hueStart.setValue(80);
-			grabFrame();
-			getBlob(thisFrame,gridColour, "tree");
-			
-			hueStart.setValue(105);
-			grabFrame();
-			getBlob(thisFrame,gridColour, "water");
-			
-			hueStart.setValue(165);
-			grabFrame();
-			getBlob(thisFrame,gridColour, "stone");
-			
-			hueStart.setValue(0);
-			grabFrame();
-			getBlob(thisFrame,gridColour, "enemy");
-			
-			hueStart.setValue(145);
+			hueStart.setValue(162);
 			grabFrame();
 			getBlob(thisFrame,gridColour, "player");
 		}
@@ -332,7 +345,7 @@ public class VideoController
 
 						//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV color space threshold
 						minValues = new Scalar(this.hueStart.getValue(), this.saturationStart, this.valueStart);
-						maxValues = new Scalar(this.hueStart.getValue() + 30, this.saturationStop, this.valueStop);
+						maxValues = new Scalar(this.hueStart.getValue() + hueStop, this.saturationStop, this.valueStop);
 
 						//Checks if the Image is within those thresholds
 						Core.inRange(hsvOutput, minValues, maxValues, frame);
@@ -344,7 +357,7 @@ public class VideoController
 
 						//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV colorspace treshold
 						minValues = new Scalar(this.hueStart.getValue(), this.saturationStart, this.valueStart);
-						maxValues = new Scalar(this.hueStart.getValue() + 30, this.saturationStop, this.valueStop);
+						maxValues = new Scalar(this.hueStart.getValue() + hueStop, this.saturationStop, this.valueStop);
 
 						//a static method for thresholding called inRange() from the Core class from the OpenCV library is used
 						Core.inRange(frame, minValues, maxValues, frame);
@@ -409,7 +422,7 @@ public class VideoController
 					}
 					
 					//kernel for use to do open and close
-					Mat Element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
+					Mat Element = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(9, 9));
 
 					if(open) {
 						//a new matrix of type Mat from the OpevCV library is created for the output image after erosion has been applied
@@ -659,7 +672,7 @@ public class VideoController
 					{
 						for (Player e : players)
 						{
-							if (!e.isPlaced())
+							if (!e.isPlaced() && Utils.checkPlayerPos(players, gridSquares[i].getLocationX(), gridSquares[i].getLocationY()))
 							{
 								e.setPos(gridSquares[i].getLocationX(), gridSquares[i].getLocationY());
 								e.setMoved(false);
@@ -688,8 +701,14 @@ public class VideoController
 		{
 			for (Player e : players)
 			{
+				System.out.println(e.getName() + ": " + " x: "+ e.getPos()[0] + " y: " + e.getPos()[1]);
+				if (players.size() > terrainBlobs.size())
+				{
+					e.setPlaced(false);
+				}
 				if (e.isMoved())
 				{
+
 					e.setPos(newPlayerX, newPlayerY);
 				}
 				else
@@ -697,8 +716,10 @@ public class VideoController
 					e.setMoved(true);
 				}
 				if (e.getPos()[0] < 500)
-				grid.setSquare(e.getPos()[0], e.getPos()[1], type, e.getClasses());
-				currentFrame1.setImage(grid.Display());
+				{
+					grid.setSquare(e.getPos()[0], e.getPos()[1], type, e.getClasses());
+					currentFrame1.setImage(grid.Display());
+				}
 			}
 		}
 	}    
