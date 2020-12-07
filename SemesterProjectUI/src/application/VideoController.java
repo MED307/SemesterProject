@@ -268,6 +268,9 @@ public class VideoController
 					grid.setSquare(i, j, "");
 				}
 			}
+			
+			grid.resetEntities();
+			grid.resetTerrain();
 				
 			
 			hueStart.setValue(80);
@@ -278,7 +281,7 @@ public class VideoController
 			grabFrame();
 			getBlob(thisFrame,gridColour, "water");
 			
-			hueStart.setValue(160);
+			hueStart.setValue(165);
 			grabFrame();
 			getBlob(thisFrame,gridColour, "stone");
 			
@@ -286,7 +289,7 @@ public class VideoController
 			grabFrame();
 			getBlob(thisFrame,gridColour, "enemy");
 			
-			hueStart.setValue(140);
+			hueStart.setValue(145);
 			grabFrame();
 			getBlob(thisFrame,gridColour, "player");
 		}
@@ -639,16 +642,6 @@ public class VideoController
 		
 		int newPlayerX = 1000;
 		int newPlayerY = 1000;
-		if(type.compareTo("player") == 0)
-		{
-			for (Player e : players)
-			{
-				System.out.println(e.getName() + "Before :");
-				System.out.println(e.isMoved());
-				System.out.println("x: " + e.getPos()[0] + " y: " + e.getPos()[1]);
-				System.out.println();
-			}
-		}
 		//goes through each square of the grid
 		for (int i = 0; i < gridSquares.length;i++) 
 		{	
@@ -671,10 +664,6 @@ public class VideoController
 								e.setPos(gridSquares[i].getLocationX(), gridSquares[i].getLocationY());
 								e.setMoved(false);
 								e.setPlaced(true);
-								System.out.println(e.getName() + "During :");
-								System.out.println(e.isMoved());
-								System.out.println("x: " + e.getPos()[0] + " y: " + e.getPos()[1]);
-								System.out.println();
 								break;
 							}
 							
@@ -689,13 +678,8 @@ public class VideoController
 							newPlayerX = gridSquares[i].getLocationX();
 							newPlayerY = gridSquares[i].getLocationY();
 						}
-						for (Player e : players)
-						{
-							if (e.getPos()[0] == gridSquares[i].getLocationX() && e.getPos()[1] == gridSquares[i].getLocationY()) {
-								grid.setSquare(gridSquares[i].getLocationX(), gridSquares[i].getLocationY(), type, e.getClasses());
-							}
-						}
-						currentFrame1.setImage(grid.Display());
+
+						
 					}
 				}
 			}
@@ -707,16 +691,14 @@ public class VideoController
 				if (e.isMoved())
 				{
 					e.setPos(newPlayerX, newPlayerY);
-					System.out.println(e.getName()  + "After :");
-					System.out.println(e.isMoved());
-					System.out.println("x: " + e.getPos()[0] + " y: " + e.getPos()[1]);
-					System.out.println();
 				}
 				else
 				{
 					e.setMoved(true);
 				}
-	
+				if (e.getPos()[0] < 500)
+				grid.setSquare(e.getPos()[0], e.getPos()[1], type, e.getClasses());
+				currentFrame1.setImage(grid.Display());
 			}
 		}
 	}    
