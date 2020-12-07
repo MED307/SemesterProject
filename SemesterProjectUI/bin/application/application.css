@@ -127,10 +127,6 @@
 	-fx-alignment: CENTER;
 }
 
-#CameraPane {
-	-fx-background-color: #3b0707;
-}
-
 #MenuPane{
 	-fx-background-image:url(../../assets/battlemap/ui/rightPane.png);
 }
@@ -287,6 +283,24 @@
 	-fx-text-fill: #FFFFFF;
 }
 
+#CameraPane {
+	-fx-background-color: #3b0707;
+}
+
+#HelpPane {
+	-fx-background-color: #3b0707;
+}
+
+#HelpHeader {
+	-fx-font-size: 20.0;
+	-fx-font-family: 'MrsEaves-Bold';
+	-fx-text-fill:white;
+}
+
+.helpText {
+	-fx-text-fill:white;
+}
+
 #AdventurersListView {
 	-fx-background-color: none;
 }
@@ -317,4 +331,5 @@
 	-fx-text-fill: white;
 	
 }
+
 

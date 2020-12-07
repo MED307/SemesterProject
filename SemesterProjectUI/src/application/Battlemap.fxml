@@ -101,7 +101,31 @@
             <Button id="HelpBtn" fx:id="helpBtn" disable="true" mnemonicParsing="false" prefHeight="42.0" prefWidth="247.0" />
          </children>
       </HBox>
-      <Pane id="CameraPane" fx:id="cameraControlPane" layoutY="309.0" prefHeight="247.0" prefWidth="256.0" visible="false">
+      <Pane id="HelpPane" fx:id="helpPane" layoutX="258.0" layoutY="310.0" prefHeight="247.0" prefWidth="482.0">
+         <children>
+            <Label id="HelpHeader" layoutX="14.0" layoutY="13.0" text="How to use" />
+            <VBox layoutX="9.0" layoutY="42.0" prefHeight="184.0" prefWidth="469.0">
+               <children>
+                  <Label prefHeight="30.0" prefWidth="430.0" styleClass="helpText" text="- Open the [Camera] window down to the left and [Start Camera]." />
+                  <HBox prefHeight="32.0" prefWidth="469.0">
+                     <children>
+                        <Label prefHeight="61.0" prefWidth="382.0" styleClass="helpText" text="- Adjust the brightness slider untill each grid can be seen in a gradient." />
+                        <ImageView fitHeight="29.0" fitWidth="87.0">
+                           <image>
+                              <Image url="@../../assets/battlemap/ui/gridexample.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <Label prefHeight="30.0" prefWidth="465.0" styleClass="helpText" text="- Press the [Get Grid] button. If the grid shown is incorrect, adjust brightness again." />
+                  <Label prefHeight="30.0" prefWidth="459.0" styleClass="helpText" text="- Click the [Found Grid] and close the camera window [x]." />
+                  <Label prefHeight="30.0" prefWidth="465.0" styleClass="helpText" text="- Physically update your battlemap and press [Update Map] to see any changes made." />
+               </children>
+            </VBox>
+            <Button layoutX="455.0" layoutY="5.0" mnemonicParsing="false" text="X" />
+         </children>
+      </Pane>
+      <Pane id="CameraPane" fx:id="cameraControlPane" layoutY="310.0" prefHeight="247.0" prefWidth="256.0" visible="false">
          <children>
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
