@@ -13,12 +13,14 @@ public class PopUp {
 	
 	private Campaign currentCampaign;
 
-	public void displayCampaign(String title, String FXML) throws IOException
+	public void addUser(String title, String FXML) throws IOException
 	{
 		
 		Stage window = new Stage();
 		
 		FXMLLoader loader = new FXMLLoader();
+		
+		loader.setLocation(getClass().getResource(FXML));
 		
 		AnchorPane root = (AnchorPane)loader.load();
 		

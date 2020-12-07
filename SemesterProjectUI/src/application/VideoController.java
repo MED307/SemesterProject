@@ -67,6 +67,9 @@ public class VideoController
 	@FXML 
 	Label rollResultsLabel;
 	
+	//List of players on the map
+	private ArrayList<Player> players =  new ArrayList<>();
+	
 	
 	// a timer for acquiring the video stream
 	private ScheduledExecutorService timer;
@@ -145,11 +148,9 @@ public class VideoController
 
 	public void dieRoll(int die)
 	{
-		int min = 1;
 		int max = die;
-		int range = (max - min) + 1;
-		int roll = (int) (Math.random() * range) + min;
-		rollResultsLabel.setText("Roll Results of D"+die);
+		int roll = (int) (Math.random() * max) + 1;
+		rollResultsLabel.setText("Roll Results of D"+ die);
 		rollResultValueLabel.setText(" " + roll);
 	}
 
@@ -169,6 +170,13 @@ public class VideoController
 			cameraControlPane.setVisible(false);
 			controlsActive = false;
 		}
+	}
+	
+	@FXML
+	protected void addPlayer()
+	{
+		players.add(new Player("Brian", "Fighter"));
+		players.add(new Player("Steve", "Fighter"));
 	}
 	
 	@FXML
@@ -273,6 +281,14 @@ public class VideoController
 			hueStart.setValue(160);
 			grabFrame();
 			getBlob(thisFrame,gridColour, "stone");
+			
+			hueStart.setValue(0);
+			grabFrame();
+			getBlob(thisFrame,gridColour, "enemy");
+			
+			hueStart.setValue(140);
+			grabFrame();
+			getBlob(thisFrame,gridColour, "player");
 		}
 	}
 	
@@ -621,18 +637,81 @@ public class VideoController
 			squareColors[i] = gridImage.get(terrainBlobs.get(i).getLocationY(),terrainBlobs.get(i).getLocationX())[0];
 		}
 		
+		int newPlayerX = 1000;
+		int newPlayerY = 1000;
+		if(type.compareTo("player") == 0)
+		{
+			for (Player e : players)
+			{
+				System.out.println(e.getName() + "Before :");
+				System.out.println(e.isMoved());
+				System.out.println("x: " + e.getPos()[0] + " y: " + e.getPos()[1]);
+				System.out.println();
+			}
+		}
 		//goes through each square of the grid
 		for (int i = 0; i < gridSquares.length;i++) 
 		{	
 			//goes through each color determined on line 571
 			for(int j = 0; j < squareColors.length; j++) 
 			{
-				// if they differ less than 0.1 from each other, then make that square on the grid a version of the blob currently being detected for (Type)
+				// if they differ less than 0.1 from each other, then make that square on the grid a version of the blob currently being detected for (Type) (except Player)
 				if((gridSquares[i].getColor() - squareColors[j]) < 0.1 && (gridSquares[i].getColor() - squareColors[j]) > -0.1 )
-				{				
+				{
+
 					grid.setSquare(gridSquares[i].getLocationX(), gridSquares[i].getLocationY(), type);
 					currentFrame1.setImage(grid.Display());
+					
+					if (type.compareTo("player") == 0)
+					{
+						for (Player e : players)
+						{
+							if (!e.isPlaced())
+							{
+								e.setPos(gridSquares[i].getLocationX(), gridSquares[i].getLocationY());
+								e.setMoved(false);
+								e.setPlaced(true);
+								System.out.println(e.getName() + "During :");
+								System.out.println(e.isMoved());
+								System.out.println("x: " + e.getPos()[0] + " y: " + e.getPos()[1]);
+								System.out.println();
+								break;
+							}
+							
+							if (e.getPos()[0] == gridSquares[i].getLocationX() && e.getPos()[1] == gridSquares[i].getLocationY())
+							{
+								e.setMoved(false);
+							}
+
+						}
+						if (Utils.checkPlayerPos(players, gridSquares[i].getLocationX(), gridSquares[i].getLocationY()))
+						{
+							newPlayerX = gridSquares[i].getLocationX();
+							newPlayerY = gridSquares[i].getLocationY();
+						}
+						grid.setSquare(gridSquares[i].getLocationX(), gridSquares[i].getLocationY(), type);
+						currentFrame1.setImage(grid.Display());
+					}
 				}
+			}
+		}
+		if (type.compareTo("player") == 0)
+		{
+			for (Player e : players)
+			{
+				if (e.isMoved())
+				{
+					e.setPos(newPlayerX, newPlayerY);
+					System.out.println(e.getName()  + "After :");
+					System.out.println(e.isMoved());
+					System.out.println("x: " + e.getPos()[0] + " y: " + e.getPos()[1]);
+					System.out.println();
+				}
+				else
+				{
+					e.setMoved(true);
+				}
+	
 			}
 		}
 	}    

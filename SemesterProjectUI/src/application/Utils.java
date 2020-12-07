@@ -2,6 +2,7 @@ package application;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.util.ArrayList;
 
 import org.opencv.core.Mat;
 
@@ -61,5 +62,17 @@ public final class Utils
 		System.arraycopy(sourcePixels, 0, targetPixels, 0, sourcePixels.length);
 		
 		return image;
+	}
+	
+	public static boolean checkPlayerPos(ArrayList<Player> p, int x, int y)
+	{
+		for(Player e : p)
+		{
+			if(e.getPos()[0] == x && e.getPos()[1] == y)
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 }

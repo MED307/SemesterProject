@@ -22,6 +22,10 @@ public class Grid {
 	BufferedImage water;
 	
 	BufferedImage grass;
+
+	BufferedImage player;
+	
+	BufferedImage enemy;
 	
 	ArrayList<ArrayList<Integer>> gridList = new ArrayList<>();
 	
@@ -39,6 +43,8 @@ public class Grid {
 			stone = ImageIO.read(getClass().getResource("/stonegrass.png"));
 			water = ImageIO.read(getClass().getResource("/water1.png"));
 			grass = ImageIO.read(getClass().getResource("/grass1.png"));
+			player = ImageIO.read(getClass().getResource("/playergrass.png"));
+			enemy = ImageIO.read(getClass().getResource("/enemygrass.png"));
 		}
 		catch(IOException e)
 		{
@@ -138,6 +144,19 @@ public class Grid {
 				{
 					//changes the color to the corresponding color on the water image
 					rgb = water.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+				}
+				
+				//if type is player
+				else if (type.compareTo("player") == 0)
+				{
+					//changes the color to the corresponding color on the water image
+					rgb = player.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+				}
+				//if type is enemy
+				else if (type.compareTo("enemy") == 0)
+				{
+					//changes the color to the corresponding color on the water image
+					rgb = enemy.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
 				}
 				
 				//if invalid type is given, draw grass instead
