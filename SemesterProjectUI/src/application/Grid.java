@@ -49,10 +49,10 @@ public class Grid {
 			stone = ImageIO.read(getClass().getResource("/stone.png"));
 			water = ImageIO.read(getClass().getResource("/water1.png"));
 			grass = ImageIO.read(getClass().getResource("/grass1.png"));
-			fighter = ImageIO.read(getClass().getResource("/playergrass.png"));
+			fighter = ImageIO.read(getClass().getResource("/fighter.png"));
 			bard = ImageIO.read(getClass().getResource("/bard.png"));
 			wizard = ImageIO.read(getClass().getResource("/wizard.png"));
-			enemy = ImageIO.read(getClass().getResource("/enemygrass.png"));
+			enemy = ImageIO.read(getClass().getResource("/enemy1.png"));
 		}
 		catch(IOException e)
 		{
@@ -226,17 +226,10 @@ public class Grid {
 						{
 							rgb = wizard.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
 						}
+						
+						//changes the color of the pixel
+						entities.setRGB(i, j, rgb);
 					}
-
-					//if invalid type is given, draw grass instead
-					else
-					{
-						//changes the color to the corresponding color on the grass image
-						rgb = grass.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
-					}
-					
-					//changes the color of the pixel
-					entities.setRGB(i, j, rgb);
 				}
 			}
 		}
@@ -245,6 +238,8 @@ public class Grid {
 	//returns the buffered images as a standard image, for FXML to display
 	public Image Display()
 	{
+		
+		//adds the 3 images on top of each other creating the single image to be displayed.
 		BufferedImage c = new BufferedImage(grid.getWidth(), grid.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics g = c.getGraphics();
 		g.drawImage(grid,0,0,null);
