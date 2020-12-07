@@ -22,6 +22,7 @@ import org.opencv.videoio.VideoCapture;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -59,6 +60,12 @@ public class VideoController
 	@FXML
 	private Pane cameraControlPane;
 
+	@FXML
+	private 
+	Label rollResultValueLabel;
+	
+	@FXML 
+	Label rollResultsLabel;
 	
 	
 	// a timer for acquiring the video stream
@@ -99,7 +106,52 @@ public class VideoController
 
 	Scalar minValues;
 	Scalar maxValues;
+	
+	@FXML
+	private void rollD20(){
+		dieRoll(20);
+	}
+	
+	@FXML
+	private void rollD12(){
+		dieRoll(12);
+	}
+	
+	@FXML
+	private void rollD10(){
+		dieRoll(10);
+	}
+	
+	@FXML
+	private void rollD8(){
+		dieRoll(8);
+	}
+	
+	@FXML
+	private void rollD6(){
+		dieRoll(6);
+	}
+	
+	@FXML
+	private void rollD4(){
+		dieRoll(4);
+	}
 
+	@FXML
+	protected void exitProgram() 
+	{
+		System.exit(0);
+	}
+
+	public void dieRoll(int die)
+	{
+		int min = 1;
+		int max = die;
+		int range = (max - min) + 1;
+		int roll = (int) (Math.random() * range) + min;
+		rollResultsLabel.setText("Roll Results of D"+die);
+		rollResultValueLabel.setText(" " + roll);
+	}
 
 	public void initialize()
 	{
