@@ -13,10 +13,12 @@ import javafx.scene.image.Image;
 
 public class Grid {
 	
+	//layers of the finale image
 	BufferedImage grid;
 	BufferedImage terrain;
 	BufferedImage entities;
 	
+	//terrain
 	BufferedImage tree;
 	
 	BufferedImage stone;
@@ -24,15 +26,27 @@ public class Grid {
 	BufferedImage water;
 	
 	BufferedImage grass;
-
+	
+	BufferedImage enemy;
+	
+	
+	//class Icons
+	
 	BufferedImage fighter;
 	
 	BufferedImage bard;
 	
 	BufferedImage wizard;
 	
-	BufferedImage enemy;
+	BufferedImage barb;
 	
+	BufferedImage druid;
+	
+	BufferedImage monk;
+	
+	BufferedImage rogue;
+	
+	//2D arraylist for the coordinates of where each square starts on the image
 	ArrayList<ArrayList<Integer>> gridList = new ArrayList<>();
 	
 	private int sizeX;
@@ -53,6 +67,10 @@ public class Grid {
 			bard = ImageIO.read(getClass().getResource("/bard.png"));
 			wizard = ImageIO.read(getClass().getResource("/wizard.png"));
 			enemy = ImageIO.read(getClass().getResource("/enemy1.png"));
+			barb = ImageIO.read(getClass().getResource("/barb.png"));
+			druid = ImageIO.read(getClass().getResource("/druid.png"));
+			monk = ImageIO.read(getClass().getResource("/monk.png"));
+			rogue = ImageIO.read(getClass().getResource("/rogue.png"));
 		}
 		catch(IOException e)
 		{
@@ -123,6 +141,7 @@ public class Grid {
         }
 	}
 	
+	//reset the layers
 	public void resetEntities()
 	{
 		entities = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
@@ -199,7 +218,7 @@ public class Grid {
 		}
 	}
 	
-	//changes the visuals of a specific squares, by redrawing that square using another buffered image
+	//Overloaded method to draw the characters as their respected class
 		public void setSquare(int x, int y, String type, String playerClass)
 		{
 			//goes through each y value of that specific square
@@ -214,14 +233,18 @@ public class Grid {
 					//if type is player
 					if (type.compareTo("player") == 0)
 					{
+						
+						//checks the class
 						if (playerClass.compareTo("fighter") == 0) 
 						{
 							rgb = fighter.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
 						}
+						//checks the class
 						else if (playerClass.compareTo("bard") == 0)
 						{
 							rgb = bard.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
 						}
+						//checks the class
 						else if (playerClass.compareTo("bard") == 0)
 						{
 							rgb = wizard.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));

@@ -42,7 +42,7 @@ import javafx.scene.layout.Pane;
  */
 public class VideoController
 {
-	//the FXML button for opening the camera
+	//the FXML elements
 	@FXML
 	private Button cameraControlBtn;
 
@@ -68,9 +68,9 @@ public class VideoController
 	@FXML 
 	Label rollResultsLabel;
 	
+	
 	//List of players on the map
 	private ArrayList<Player> players =  new ArrayList<>();
-	
 	
 	// a timer for acquiring the video stream
 	private ScheduledExecutorService timer;
@@ -94,6 +94,8 @@ public class VideoController
 
 	private Boolean close = false;
 	
+	
+	//HSV values for thresholding the incoming image
 	private int saturationStart = 127;
 
 	private int saturationStop = 127;
@@ -104,17 +106,21 @@ public class VideoController
 
 	private int hueStop = 30;
 
-	Mat gridImage = new Mat();
-
-	Grid grid; 
 	
-	boolean terrainFound = false;
+	//saved image of the grid found, before changing the HSV values and begin thresholding for colors
+	Mat gridImage = new Mat();
+	
+	//the virtual Grid
+	Grid grid; 
 
+	//list of all the squares in the grid as blobs
 	Blob[] gridSquares;
-
+	
+	//scalar values used for thresholding
 	Scalar minValues;
 	Scalar maxValues;
 	
+	//FXML functions for rolling the different types of dices
 	@FXML
 	private void rollD20(){
 		dieRoll(20);
@@ -145,20 +151,25 @@ public class VideoController
 		dieRoll(4);
 	}
 
+	//function for terminating the program
 	@FXML
 	protected void exitProgram() 
 	{
 		System.exit(0);
 	}
 
+	//die roller
 	public void dieRoll(int die)
 	{
-		int max = die;
-		int roll = (int) (Math.random() * max) + 1;
+		//gets a random number between 0.0 and 1.0 then time if the size of the die, and plus one, then cast it to an int
+		int roll = (int) (Math.random() * die) + 1;
+		
+		//display the result
 		rollResultsLabel.setText("Roll Results of D"+ die);
 		rollResultValueLabel.setText(" " + roll);
 	}
 
+	//run right as the program starts
 	public void initialize()
 	{
 		this.capture = new VideoCapture();
@@ -260,58 +271,71 @@ public class VideoController
 	@FXML
 	protected void gridFoundOnClick()
 	{
-
+		
+		//changes the threshold values when the grid has been found
 		if(!gridFound) {
 			gridFound= true;
 			saturationStart = 50;
 			saturationStop = 220;
 			valueStart = 0;
 			valueStop = 255;
+			hueStop = 10;
 			open = true;
 			close = true;
 		}
+		//return the values back to normal
 		else {
 			gridFound = false;
+			saturationStart = 125;
+			saturationStop = 125;
+			valueStart = 125;
+			valueStop = 125;
+			hueStop = 30;
+			open = false;
+			close = false;
 		}
 	}
  
 	@FXML
 	protected void getBlobOnClick()
 	{
+		
+		//if grid is found
 		if(gridFound)
 		{
+			//goes through each grid square
 			for (int i = 0; i < grid.getColoumns(); i ++) 
 			{
 				for (int j = 0; j < grid.getRows(); j++)
 				{
+					//set the square to grass
 					grid.setSquare(i, j, "");
 				}
 			}
 			
-			hueStop = 10;
 			
 			grid.resetEntities();
-				
-			//if(!terrainFound)
-			{
-				terrainFound = true;
-				hueStart.setValue(87);
-				grabFrame();
-				getBlob(thisFrame,gridColour, "tree");
-				
-				hueStart.setValue(105);
-				grabFrame();
-				getBlob(thisFrame,gridColour, "water");
-				
-				hueStart.setValue(175);
-				grabFrame();
-				getBlob(thisFrame,gridColour, "stone");
-				
-				hueStart.setValue(14);
-				grabFrame();
-				getBlob(thisFrame,gridColour, "enemy");
-			}
+			//finds all the objects with a hue of green
+			hueStart.setValue(87);
+			grabFrame();
+			getBlob(thisFrame,gridColour, "tree");
 			
+			//finds all objects with a hue of blue
+			hueStart.setValue(105);
+			grabFrame();
+			getBlob(thisFrame,gridColour, "water");
+			
+			//red
+			hueStart.setValue(175);
+			grabFrame();
+			getBlob(thisFrame,gridColour, "stone");
+				
+			//yellow
+			hueStart.setValue(14);
+			grabFrame();
+			getBlob(thisFrame,gridColour, "enemy");
+			
+			//purple
 			hueStart.setValue(162);
 			grabFrame();
 			getBlob(thisFrame,gridColour, "player");
@@ -671,31 +695,38 @@ public class VideoController
 			//goes through each color determined on line 571
 			for(int j = 0; j < squareColors.length; j++) 
 			{
-				// if they differ less than 0.1 from each other, then make that square on the grid a version of the blob currently being detected for (Type) (except Player)
+				// if they differ less than 0.1 from each other, then make that square on the grid a version of the blob currently being detected for (Type)
 				if((gridSquares[i].getColor() - squareColors[j]) < 0.1 && (gridSquares[i].getColor() - squareColors[j]) > -0.1 )
 				{
-
+					//set the grid to be of type
 					grid.setSquare(gridSquares[i].getLocationX(), gridSquares[i].getLocationY(), type);
 					currentFrame1.setImage(grid.Display());
 					
+					//if type is player
 					if (type.compareTo("player") == 0)
 					{
+						//look through each player
 						for (Player e : players)
 						{
+							//if the player is not already placed and another player does not already have this position
 							if (!e.isPlaced() && Utils.checkPlayerPos(players, gridSquares[i].getLocationX(), gridSquares[i].getLocationY()))
 							{
+								//set the position of the player to be the found square and set it to have been placed
 								e.setPos(gridSquares[i].getLocationX(), gridSquares[i].getLocationY());
 								e.setMoved(false);
 								e.setPlaced(true);
 								break;
 							}
 							
+							//if players position is the same as the found square set the player to not have been moved
 							if (e.getPos()[0] == gridSquares[i].getLocationX() && e.getPos()[1] == gridSquares[i].getLocationY())
 							{
 								e.setMoved(false);
 							}
 
 						}
+						
+						//if no one has this position set them to be the newPlayerPos
 						if (Utils.checkPlayerPos(players, gridSquares[i].getLocationX(), gridSquares[i].getLocationY()))
 						{
 							newPlayerX = gridSquares[i].getLocationX();
@@ -707,26 +738,37 @@ public class VideoController
 				}
 			}
 		}
+		
+		//then after checking through all squares and the type is player
 		if (type.compareTo("player") == 0)
 		{
+			//for each player
 			for (Player e : players)
 			{
 				System.out.println(e.getName() + ": " + " x: "+ e.getPos()[0] + " y: " + e.getPos()[1]);
+				
+				//check if a player is missing, and that is not moved
 				if (players.size() > terrainBlobs.size())
 				{
+					//if the player has not yet been placed, tell it so
 					e.setPlaced(false);
 				}
+				
+				// if a player has moved
 				if (e.isMoved())
 				{
-
+					// give it the position of the square with no existing player
 					e.setPos(newPlayerX, newPlayerY);
 				}
 				else
 				{
+					//set the moved to true, as this will change if the position is found
 					e.setMoved(true);
 				}
+				//as a square not placed is set to be 1000, this only places squares which has been places
 				if (e.getPos()[0] < 500)
 				{
+					//sets the grid squares and displays the image
 					grid.setSquare(e.getPos()[0], e.getPos()[1], type, e.getClasses());
 					currentFrame1.setImage(grid.Display());
 				}

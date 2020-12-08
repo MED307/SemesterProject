@@ -37,20 +37,6 @@ public final class Utils
 		}
 	}
 	
-	public static BufferedImage convert2Alpha(BufferedImage i)
-	{
-		BufferedImage newImage = new BufferedImage(i.getWidth(), i.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-		return newImage;
-		
-	}
-	
-	/**
-	 * Support for the {@link mat2image()} method
-	 * 
-	 * @param original
-	 *            the {@link Mat} object in BGR or grayscale
-	 * @return the corresponding {@link BufferedImage}
-	 */
 	public static BufferedImage matToBufferedImage(Mat original)
 	{
 		BufferedImage image = null;
@@ -72,15 +58,19 @@ public final class Utils
 		return image;
 	}
 	
+	//looks through all players to see if any has the position specified in the parameters
 	public static boolean checkPlayerPos(ArrayList<Player> players, int x, int y)
 	{
+		//for each player in players
 		for(Player e : players)
 		{
+			//if their stored lcoation is this return false
 			if(e.getPos()[0] == x && e.getPos()[1] == y)
 			{
 				return false;
 			}
 		}
+		//otherwise return true
 		return true;
 	}
 }
