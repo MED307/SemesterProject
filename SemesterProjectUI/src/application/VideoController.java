@@ -56,6 +56,9 @@ public class VideoController
 	private ImageView currentFrame1;
 	
 	@FXML
+	private Pane helpPane;
+	
+	@FXML
 	private Pane cameraControlPane;
 	
 	@FXML
@@ -93,6 +96,8 @@ public class VideoController
 	private Boolean open = false;
 
 	private Boolean close = false;
+	
+	boolean helpActive = false;
 	
 	
 	//HSV values for thresholding the incoming image
@@ -177,15 +182,29 @@ public class VideoController
 		playerListVIew.setCellFactory(chatRoomListView -> new PlayerListCellController());
 	}
 
+	//open and close camera window
 	@FXML
 	protected void showCamera() {
-		if (!controlsActive){
+		if (controlsActive){
+			cameraControlPane.setVisible(false);
+			controlsActive = false;
+		}
+		else {
 			cameraControlPane.setVisible(true);
 			controlsActive = true;
 		}
+	}
+	
+	//open and close help window
+	@FXML
+	protected void showHelp() {
+		if (helpActive){
+			helpPane.setVisible(false);
+			helpActive = false;
+		}
 		else {
-			cameraControlPane.setVisible(false);
-			controlsActive = false;
+			helpPane.setVisible(true);
+			helpActive = true;
 		}
 	}
 	

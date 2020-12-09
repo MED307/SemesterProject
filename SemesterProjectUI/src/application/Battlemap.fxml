@@ -98,7 +98,7 @@
          <children>
             <Button id="CameraBtn" fx:id="cameraBtn" mnemonicParsing="false" onAction="#showCamera" prefHeight="42.0" prefWidth="246.0" />
             <Button id="UpdateBtn" fx:id="blobFound" mnemonicParsing="false" onAction="#getBlobOnClick" prefHeight="42.0" prefWidth="248.0" />
-            <Button id="HelpBtn" fx:id="helpBtn" disable="true" mnemonicParsing="false" prefHeight="42.0" prefWidth="247.0" />
+            <Button id="HelpBtn" fx:id="helpBtn" mnemonicParsing="false" onAction="#showHelp" prefHeight="42.0" prefWidth="247.0" />
          </children>
       </HBox>
       <Pane id="HelpPane" fx:id="helpPane" layoutX="258.0" layoutY="310.0" prefHeight="247.0" prefWidth="482.0" visible="false">
@@ -124,7 +124,7 @@
                   <Label prefHeight="30.0" prefWidth="465.0" styleClass="helpText" text="    - Do NOT move more than one(1) character token for each [Update Map]" />
                </children>
             </VBox>
-            <Button layoutX="455.0" layoutY="5.0" mnemonicParsing="false" text="X" />
+            <Button layoutX="455.0" layoutY="5.0" mnemonicParsing="false" onAction="#showHelp" text="X" />
          </children>
       </Pane>
       <Pane id="CameraPane" fx:id="cameraControlPane" layoutY="310.0" prefHeight="247.0" prefWidth="259.0" visible="false">
