@@ -302,18 +302,7 @@ public class VideoController
 		
 		//if grid is found
 		if(gridFound)
-		{
-			//goes through each grid square
-			for (int i = 0; i < grid.getColoumns(); i ++) 
-			{
-				for (int j = 0; j < grid.getRows(); j++)
-				{
-					//set the square to grass
-					grid.setSquare(i, j, "");
-				}
-			}
-			
-			
+		{		
 			grid.resetEntities();
 			//finds all the objects with a hue of green
 			hueStart.setValue(87);

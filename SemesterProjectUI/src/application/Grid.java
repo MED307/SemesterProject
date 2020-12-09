@@ -47,7 +47,7 @@ public class Grid {
 	BufferedImage rogue;
 	
 	//2D arraylist for the coordinates of where each square starts on the image
-	ArrayList<ArrayList<Integer>> gridList = new ArrayList<>();
+	ArrayList<ArrayList<ArrayList<Integer>>> gridList = new ArrayList<>();
 	
 	private int sizeX;
 	private int sizeY;
@@ -93,7 +93,11 @@ public class Grid {
 			
 			for (int i = 0; i < sizeX; i ++)
 	    	{
-				gridList.get(j).add((squareWidth)*i);
+				gridList.get(j).get(0).add((squareWidth)*i);
+	    	}
+			for (int i = 0; i < sizeY; i ++)
+	    	{
+				gridList.get(j).get(1).add((squareWidth)*i);
 	    	}
 		}
 		set();
@@ -103,17 +107,14 @@ public class Grid {
 	
 	//creates the grid lines
 	public void set()
-	{
+	{	
 		//goes through the whole grid
 		for (int x = 0; x < grid.getWidth(); x++) 
 		{	
             for (int y = 0; y < grid.getHeight(); y++) 
             {
             	// color of the grid
-            	int rgb = new Color(0,120,0).getRGB();
-            	
-            	//sets the pixel to be that color
-                grid.setRGB(x, y, rgb);
+            	int rgb;
                 
                 //for each square plus the first and last square
             	for (int i = 0; i < sizeX+2; i ++)
@@ -139,6 +140,15 @@ public class Grid {
             	}
             }
         }
+		//goes through each grid square
+		for (int i = 0; i < sizeX; i ++) 
+		{
+			for (int j = 0; j < sizeY; j++)
+			{
+				//set the square to grass
+				setSquare(i, j, "");
+			}
+		}
 	}
 	
 	//reset the layers
@@ -156,10 +166,10 @@ public class Grid {
 	public void setSquare(int x, int y, String type)
 	{
 		//goes through each y value of that specific square
-		for(int j = (y*(squareWidth) + strokeWidth); j < ((squareWidth)*(y+1)) - strokeWidth + 1; j++) 
+		for(int j = gridList.get(y).get(x).get(1) + strokeWidth; j < ((squareWidth)*(y+1)) - strokeWidth + 1; j++) 
 		{	
 			//goes through each x value of that specific square
-			for(int i = gridList.get(y).get(x) + strokeWidth ; i < ((squareWidth)*(x+1)) - strokeWidth + 1; i++) 
+			for(int i = gridList.get(y).get(x).get(0) + strokeWidth ; i < ((squareWidth)*(x+1)) - strokeWidth + 1; i++) 
 			{
 				//basis color as a RGB integer
 				int rgb = new Color(0,0,0).getRGB();
@@ -167,7 +177,7 @@ public class Grid {
 				//if type is tree
 				if (type.compareTo("tree") == 0)
 				{
-					rgb = tree.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+					rgb = tree.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
 
 					//changes the color of the pixel
 					terrain.setRGB(i, j, rgb);
@@ -177,7 +187,7 @@ public class Grid {
 				else if (type.compareTo("stone") == 0)
 				{
 					//changes the color to the corresponding color on the stone image
-					rgb = stone.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+					rgb = stone.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
 
 					//changes the color of the pixel
 					terrain.setRGB(i, j, rgb);
@@ -187,7 +197,7 @@ public class Grid {
 				else if (type.compareTo("water") == 0)
 				{
 					//changes the color to the corresponding color on the water image
-					rgb = water.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+					rgb = water.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
 					
 					//changes the color of the pixel
 					terrain.setRGB(i, j, rgb);
@@ -197,7 +207,7 @@ public class Grid {
 				else if (type.compareTo("enemy") == 0)
 				{
 					//changes the color to the corresponding color on the water image
-					rgb = enemy.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+					rgb = enemy.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
 
 					//changes the color of the pixel
 					entities.setRGB(i, j, rgb);
@@ -207,7 +217,7 @@ public class Grid {
 				else
 				{
 					//changes the color to the corresponding color on the grass image
-					rgb = grass.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+					rgb = grass.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
 					
 					//changes the color of the pixel
 					grid.setRGB(i, j, rgb);
@@ -222,10 +232,10 @@ public class Grid {
 		public void setSquare(int x, int y, String type, String playerClass)
 		{
 			//goes through each y value of that specific square
-			for(int j = (y*(squareWidth) + strokeWidth); j < ((squareWidth)*(y+1)) - strokeWidth + 1; j++) 
+			for(int j = gridList.get(y).get(x).get(1) + strokeWidth; j < ((squareWidth)*(y+1)) - strokeWidth + 1; j++) 
 			{	
 				//goes through each x value of that specific square
-				for(int i = gridList.get(y).get(x) + strokeWidth ; i < ((squareWidth)*(x+1)) - strokeWidth + 1; i++) 
+				for(int i = gridList.get(y).get(x).get(0) + strokeWidth ; i < ((squareWidth)*(x+1)) - strokeWidth + 1; i++) 
 				{
 					//basis color as a RGB integer
 					int rgb = new Color(0,0,0).getRGB();
@@ -237,17 +247,17 @@ public class Grid {
 						//checks the class
 						if (playerClass.compareTo("fighter") == 0) 
 						{
-							rgb = fighter.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+							rgb = fighter.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
 						}
 						//checks the class
 						else if (playerClass.compareTo("bard") == 0)
 						{
-							rgb = bard.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+							rgb = bard.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
 						}
 						//checks the class
 						else if (playerClass.compareTo("bard") == 0)
 						{
-							rgb = wizard.getRGB(i - (gridList.get(y).get(x) + strokeWidth), j - ((y*(squareWidth)) + strokeWidth));
+							rgb = wizard.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
 						}
 						
 						//changes the color of the pixel
