@@ -57,7 +57,7 @@ public class addPlayerController {
 		}
 		
 		
-		else if (this.playerName.getText() != null && this.classes.getText() != null) 
+		else if (this.playerName.getText() != null && this.classSelectComboBox.getSelectionModel().getSelectedItem() != null) 
 		{
 			this.setNewName(this.playerName.getText());
 			this.setNewClass(this.classSelectComboBox.getSelectionModel().getSelectedItem());
