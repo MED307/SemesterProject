@@ -46,6 +46,18 @@ public class Grid {
 	
 	BufferedImage rogue;
 	
+	BufferedImage bloodhunt;
+	
+	BufferedImage cleric;
+	
+	BufferedImage paladin;
+	
+	BufferedImage ranger;
+	
+	BufferedImage sorc;
+	
+	BufferedImage warlock;
+	
 	//2D arraylist for the coordinates of where each square starts on the image
 	ArrayList<ArrayList<ArrayList<Integer>>> gridList = new ArrayList<>();
 	
@@ -63,14 +75,22 @@ public class Grid {
 			stone = ImageIO.read(getClass().getResource("/stone.png"));
 			water = ImageIO.read(getClass().getResource("/water1.png"));
 			grass = ImageIO.read(getClass().getResource("/grass1.png"));
+			enemy = ImageIO.read(getClass().getResource("/enemy1.png"));
+			
+			//load class icons
 			fighter = ImageIO.read(getClass().getResource("/fighter.png"));
 			bard = ImageIO.read(getClass().getResource("/bard.png"));
 			wizard = ImageIO.read(getClass().getResource("/wizard.png"));
-			enemy = ImageIO.read(getClass().getResource("/enemy1.png"));
 			barb = ImageIO.read(getClass().getResource("/barb.png"));
 			druid = ImageIO.read(getClass().getResource("/druid.png"));
 			monk = ImageIO.read(getClass().getResource("/monk.png"));
 			rogue = ImageIO.read(getClass().getResource("/rogue.png"));
+			bloodhunt = ImageIO.read(getClass().getResource("/bloodhunt.png"));
+			cleric = ImageIO.read(getClass().getResource("/cleric.png"));
+			paladin = ImageIO.read(getClass().getResource("/paladin.png"));
+			ranger = ImageIO.read(getClass().getResource("/ranger.png"));
+			sorc = ImageIO.read(getClass().getResource("/sorc.png"));
+			warlock = ImageIO.read(getClass().getResource("/warlock.png"));
 		}
 		catch(IOException e)
 		{
@@ -91,15 +111,15 @@ public class Grid {
 		{
 			gridList.add(new ArrayList<>());
 			
+			
 			for (int i = 0; i < sizeX; i ++)
 	    	{
-				gridList.get(j).get(0).add((squareWidth)*i);
-	    	}
-			for (int i = 0; i < sizeY; i ++)
-	    	{
-				gridList.get(j).get(1).add((squareWidth)*i);
+				gridList.get(j).add(new ArrayList<>());
+				gridList.get(j).get(i).add((squareWidth)*i);
+				gridList.get(j).get(i).add((squareWidth)*j);
 	    	}
 		}
+
 		set();
 		
 	}
@@ -229,8 +249,9 @@ public class Grid {
 	}
 	
 	//Overloaded method to draw the characters as their respected class
-		public void setSquare(int x, int y, String type, String playerClass)
+		public void setSquare(int x, int y, String type, String classes)
 		{
+			String playerClass = classes.toLowerCase();
 			//goes through each y value of that specific square
 			for(int j = gridList.get(y).get(x).get(1) + strokeWidth; j < ((squareWidth)*(y+1)) - strokeWidth + 1; j++) 
 			{	
@@ -243,7 +264,6 @@ public class Grid {
 					//if type is player
 					if (type.compareTo("player") == 0)
 					{
-						
 						//checks the class
 						if (playerClass.compareTo("fighter") == 0) 
 						{
@@ -255,9 +275,59 @@ public class Grid {
 							rgb = bard.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
 						}
 						//checks the class
-						else if (playerClass.compareTo("bard") == 0)
+						else if (playerClass.compareTo("barbarian") == 0)
+						{
+							rgb = barb.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
+						}
+						//checks the class
+						else if (playerClass.compareTo("wizard") == 0)
 						{
 							rgb = wizard.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
+						}
+						//checks the class
+						else if (playerClass.compareTo("druid") == 0)
+						{
+							rgb = druid.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
+						}
+						//checks the class
+						else if (playerClass.compareTo("monk") == 0)
+						{
+							rgb = monk.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
+						}
+						//checks the class
+						else if (playerClass.compareTo("rogue") == 0)
+						{
+							rgb = rogue.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
+						}
+						//checks the class
+						else if (playerClass.compareTo("bloodhunter") == 0)
+						{
+							rgb = bloodhunt.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
+						}
+						//checks the class
+						else if (playerClass.compareTo("cleric") == 0)
+						{
+							rgb = cleric.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
+						}
+						//checks the class
+						else if (playerClass.compareTo("paladin") == 0)
+						{
+							rgb = paladin.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
+						}
+						//checks the class
+						else if (playerClass.compareTo("ranger") == 0)
+						{
+							rgb = ranger.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
+						}
+						//checks the class
+						else if (playerClass.compareTo("sorcerer") == 0)
+						{
+							rgb = sorc.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
+						}
+						//checks the class
+						else if (playerClass.compareTo("warlock") == 0)
+						{
+							rgb = warlock.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
 						}
 						
 						//changes the color of the pixel

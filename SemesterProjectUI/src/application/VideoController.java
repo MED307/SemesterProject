@@ -1,5 +1,6 @@
 package application;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -212,20 +213,16 @@ public class VideoController
 	@FXML
 	protected void addPlayer()
 	{
-		if (!test)
-		{
-			test = true;
-			
-			Player brian = new Player("Brian", "fighter");
-			players.add(brian);
-			playerListVIew.getItems().add(brian);
+		PopUp pop = new PopUp();
+		Player p = null;
+		try {
+			p = pop.addPlayer("New Player", "addPlayer.fxml");
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		else
-		{
-		Player steve = new Player("Steve", "bard");
-		players.add(steve);
-		playerListVIew.getItems().add(steve);
-		}
+		players.add(p);
+		playerListVIew.getItems().add(p);
+
 	}
 	
 	@FXML
