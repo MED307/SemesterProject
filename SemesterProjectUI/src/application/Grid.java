@@ -71,9 +71,9 @@ public class Grid {
 		try 
 		{
 			//loads the images in from the resource folder
-			tree = ImageIO.read(getClass().getResource("/tree.png"));
-			stone = ImageIO.read(getClass().getResource("/stone.png"));
-			water = ImageIO.read(getClass().getResource("/water1.png"));
+			tree = ImageIO.read(getClass().getResourceAsStream("/tree.png"));
+			stone = ImageIO.read(getClass().getResourceAsStream("/stone.png"));
+			water = ImageIO.read(getClass().getResourceAsStream("/water1.png"));
 			grass = ImageIO.read(getClass().getResource("/grass1.png"));
 			enemy = ImageIO.read(getClass().getResource("/enemy1.png"));
 			

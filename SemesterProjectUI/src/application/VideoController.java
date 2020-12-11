@@ -399,7 +399,7 @@ public class VideoController
 
 						//creates two scalars with one containing the minimum and the other containing the maximum values of the HSV colorspace treshold
 						minValues = new Scalar(this.hueStart.getValue(), this.saturationStart, this.valueStart);
-						maxValues = new Scalar(this.hueStart.getValue() + hueStop, this.saturationStop, this.valueStop);
+						maxValues = new Scalar(255, this.saturationStop, this.valueStop);
 
 						//a static method for thresholding called inRange() from the Core class from the OpenCV library is used
 						Core.inRange(frame, minValues, maxValues, frame);
@@ -732,7 +732,7 @@ public class VideoController
 								e.setMoved(false);
 							}
 
-						}
+						} 
 						
 						//if no one has this position set them to be the newPlayerPos
 						if (Utils.checkPlayerPos(players, gridSquares[i].getLocationX(), gridSquares[i].getLocationY()))

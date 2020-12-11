@@ -128,12 +128,12 @@
 }
 
 #MenuPane{
-	-fx-background-image:url(../../assets/battlemap/ui/rightPane.png);
+	-fx-background-image:url(/battlemap/ui/rightPane.png);
 }
 
 #AdventurersTab {
 	-fx-background-color: none;
-	-fx-background-image:url(../../assets/battlemap/ui/adventurers.png);	
+	-fx-background-image:url(/battlemap/ui/adventurers.png);	
 }
 
 #AddAdventurerBtn {
@@ -152,31 +152,31 @@
 
 #AdventurersTab:hover {
 	-fx-background-color: none;
-	-fx-background-image:url(../../assets/battlemap/ui/adventurersh.png);	
+	-fx-background-image:url(/battlemap/ui/adventurersh.png);	
 }
 
 #AdventurersTab:selected {
-	-fx-background-image:url(../../assets/battlemap/ui/adventurersh.png), url(../../assets/battlemap/ui/tabSelected2.png) ;
+	-fx-background-image:url(/battlemap/ui/adventurersh.png), url(/battlemap/ui/tabSelected2.png) ;
 	-fx-background-color: none;	
 }
 
 #SettingsTab {
 	-fx-background-color: none;
-	-fx-background-image:url(../../assets/battlemap/ui/settings2.png);	
+	-fx-background-image:url(/battlemap/ui/settings2.png);	
 }
 
 #SettingsTab:hover {
 	-fx-background-color: none;
-	-fx-background-image:url(../../assets/battlemap/ui/settings2h.png);
+	-fx-background-image:url(/battlemap/ui/settings2h.png);
 }
 
 #SettingsTab:selected {
-	-fx-background-image:url(../../assets/battlemap/ui/settings2h.png), url(../../assets/battlemap/ui/tabSelected2.png) ;
+	-fx-background-image:url(/battlemap/ui/settings2h.png), url(/battlemap/ui/tabSelected2.png) ;
 	-fx-background-color: none;	
 }
 
 #SettingsTab pane {
-	-fx-background-image:url(../../assets/battlemap/ui/adventurersh.png);	
+	-fx-background-image:url(/battlemap/ui/adventurersh.png);	
 }
 
 #SettingsMenu Button {
@@ -206,75 +206,75 @@
 }
 
 #CameraBtn {
-	-fx-background-image:url(../../assets/battlemap/ui/camera.png)
+	-fx-background-image:url(/battlemap/ui/camera.png)
 }
 
 #UpdateBtn {
-	-fx-background-image:url(../../assets/battlemap/ui/updatemap.png)
+	-fx-background-image:url(/battlemap/ui/updatemap.png)
 }
 
 #UpdateBtn:hover {
-	-fx-background-image:url(../../assets/battlemap/ui/updatemaph.png)
+	-fx-background-image:url(/battlemap/ui/updatemaph.png)
 }
 
 #CameraBtn:hover {
-	-fx-background-image:url(../../assets/battlemap/ui/camerah.png)
+	-fx-background-image:url(/battlemap/ui/camerah.png)
 }
 
 #HelpBtn {
-	-fx-background-image:url(../../assets/battlemap/ui/helpbtn.png)
+	-fx-background-image:url(/battlemap/ui/helpbtn.png)
 }
 
 #HelpBtn:hover {
-	-fx-background-image:url(../../assets/battlemap/ui/helpbtnh.png)
+	-fx-background-image:url(/battlemap/ui/helpbtnh.png)
 }
 
 #d4Btn {
-	-fx-background-image:url(../../assets/battlemap/ui/d4.png)	
+	-fx-background-image:url(/battlemap/ui/d4.png)	
 }
 
 #d4Btn:hover {
-	-fx-background-image:url(../../assets/battlemap/ui/d4h.png)	
+	-fx-background-image:url(/battlemap/ui/d4h.png)	
 }
 
 #d6Btn {
-	-fx-background-image:url(../../assets/battlemap/ui/d6.png)	
+	-fx-background-image:url(/battlemap/ui/d6.png)	
 }
 
 #d6Btn:hover {
-	-fx-background-image:url(../../assets/battlemap/ui/d6h.png)	
+	-fx-background-image:url(/battlemap/ui/d6h.png)	
 }
 
 #d8Btn {
-	-fx-background-image:url(../../assets/battlemap/ui/d8.png)	
+	-fx-background-image:url(/battlemap/ui/d8.png)	
 }
 
 #d8Btn:hover {
-	-fx-background-image:url(../../assets/battlemap/ui/d8h.png)	
+	-fx-background-image:url(/battlemap/ui/d8h.png)	
 }
 
 #d10Btn {
-	-fx-background-image:url(../../assets/battlemap/ui/d10.png)	
+	-fx-background-image:url(/battlemap/ui/d10.png)	
 }
 
 #d10Btn:hover {
-	-fx-background-image:url(../../assets/battlemap/ui/d10h.png)	
+	-fx-background-image:url(/battlemap/ui/d10h.png)	
 }
 
 #d12Btn {
-	-fx-background-image:url(../../assets/battlemap/ui/d12.png)	
+	-fx-background-image:url(/battlemap/ui/d12.png)	
 }
 
 #d12Btn:hover {
-	-fx-background-image:url(../../assets/battlemap/ui/d12h.png)	
+	-fx-background-image:url(/battlemap/ui/d12h.png)	
 }
 
 #d20Btn {
-	-fx-background-image:url(../../assets/battlemap/ui/d20.png)	
+	-fx-background-image:url(/battlemap/ui/d20.png)	
 }
 
 #d20Btn:hover {
-	-fx-background-image:url(../../assets/battlemap/ui/d20h.png)	
+	-fx-background-image:url(/battlemap/ui/d20h.png)	
 }
 
 #menuTitleLabel {
@@ -378,7 +378,7 @@
 {
     -fx-background: white;
     -fx-background-color: transparent;
-    -fx-text-fill: -fx-text-base-color;;
+    -fx-text-fill: -fx-text-base-color;
 }
 
 .combo-box .list-cell:filled:selected:focused, .list-cell:filled:selected 

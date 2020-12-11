@@ -56,9 +56,9 @@ public class Main extends Application {
 	}
 	
 	public static void main(String[] args) {
-	
-		// load the native OpenCV library
-				System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+
+		String test = "/lib/opencv/build/java/x64/" + Core.NATIVE_LIBRARY_NAME;
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 				
 			launch(args);
 	
