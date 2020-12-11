@@ -20,7 +20,7 @@
 
 <AnchorPane minHeight="10.0" minWidth="10.0" prefHeight="150.0" prefWidth="300.0" style="-fx-background-color: #3b0707;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.addPlayerController"> <!-- The base ratios  -->
    <children>
-      <TextField id="inputLoginUsername" fx:id="playerName" layoutX="101.0" layoutY="49.0" prefHeight="25.0" prefWidth="159.0" promptText="Character name" style="-fx-background-color: #3e3a42; -fx-color: white;" styleClass="fillColor" text="test" />
+      <TextField id="inputLoginUsername" fx:id="playerName" layoutX="101.0" layoutY="49.0" prefHeight="25.0" prefWidth="159.0" promptText="Character name" style="-fx-background-color: #3e3a42; -fx-color: white;" styleClass="fillColor" />
       <Label layoutX="22.0" layoutY="53.0" text="Name" textFill="WHITE" />
       <Label layoutX="21.0" layoutY="82.0" text="Class" textFill="WHITE" />
       <Label layoutX="115.0" layoutY="14.0" text="Create Player" textFill="WHITE">
