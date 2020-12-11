@@ -3,6 +3,7 @@ package application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -24,9 +25,19 @@ public class addPlayerController {
 	@FXML
 	private Text popErrorRoomTxt;
 	
+	@FXML
+	private ComboBox<String> classSelectComboBox;
+	
 	private String newName;
 	
 	private String newClass;	
+	
+	@FXML
+	public void initialize() {
+		classSelectComboBox.getItems().removeAll(classSelectComboBox.getItems());
+		classSelectComboBox.getItems().addAll("Artificer", "Barbarian", "Bard", "Bloodhunter", "Cleric", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard");
+		classSelectComboBox.getSelectionModel().select("Choose Class");
+	}
 	
 	public void create(ActionEvent event)
 	{
@@ -37,7 +48,7 @@ public class addPlayerController {
 			popErrorRoomTxt.setVisible(true);
 		}
 		
-		if (classes.getText().trim().isEmpty()) {
+		if (classSelectComboBox.getSelectionModel().getSelectedItem() == null) {
 			System.out.println("Error");
 			infoText.setVisible(false);
 			popErrorRoomTxt.setText("Error: Missing Class");
@@ -45,10 +56,11 @@ public class addPlayerController {
 			
 		}
 		
+		
 		else if (this.playerName.getText() != null && this.classes.getText() != null) 
 		{
 			this.setNewName(this.playerName.getText());
-			this.setNewClass(this.classes.getText());
+			this.setNewClass(this.classSelectComboBox.getSelectionModel().getSelectedItem());
 			((Stage)(((Button)event.getSource()).getScene().getWindow())).close(); 
 		}
 	}

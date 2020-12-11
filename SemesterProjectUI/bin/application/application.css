@@ -301,6 +301,10 @@
 	-fx-text-fill:white;
 }
 
+.helpSubText {
+	-fx-text-fill:#B2B2B2;
+}
+
 #AdventurersListView {
 	-fx-background-color: none;
 }

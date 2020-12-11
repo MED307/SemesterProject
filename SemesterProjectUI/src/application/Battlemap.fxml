@@ -101,15 +101,18 @@
             <Button id="HelpBtn" fx:id="helpBtn" mnemonicParsing="false" onAction="#showHelp" prefHeight="42.0" prefWidth="247.0" />
          </children>
       </HBox>
-      <Pane id="HelpPane" fx:id="helpPane" layoutX="258.0" layoutY="310.0" prefHeight="247.0" prefWidth="482.0" visible="false">
+      <Pane id="HelpPane" fx:id="helpPane" layoutX="258.0" layoutY="310.0" prefHeight="247.0" prefWidth="482.0">
          <children>
             <Label id="HelpHeader" layoutX="14.0" layoutY="13.0" text="How to use" />
-            <VBox layoutX="9.0" layoutY="42.0" prefHeight="201.0" prefWidth="469.0">
+            <VBox layoutX="9.0" layoutY="30.0" prefHeight="213.0" prefWidth="469.0">
                <children>
                   <Label prefHeight="30.0" prefWidth="430.0" styleClass="helpText" text="- Open the [Camera] window down to the left and [Start Camera]." />
                   <HBox prefHeight="32.0" prefWidth="469.0">
                      <children>
-                        <Label prefHeight="61.0" prefWidth="382.0" styleClass="helpText" text="- Adjust the brightness slider untill each grid can be seen in a gradient." />
+                        <Label prefHeight="61.0" prefWidth="382.0" styleClass="helpText" text="- Adjust the brightness slider untill each grid can be seen in a gradient.">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin></Label>
                         <ImageView fitHeight="29.0" fitWidth="87.0">
                            <image>
                               <Image url="@../../assets/battlemap/ui/gridexample.png" />
@@ -117,11 +120,25 @@
                         </ImageView>
                      </children>
                   </HBox>
-                  <Label prefHeight="30.0" prefWidth="465.0" styleClass="helpText" text="- Press the [Get Grid] button. If the grid shown is incorrect, adjust brightness again." />
+                  <Label graphicTextGap="2.0" prefHeight="20.0" prefWidth="465.0" styleClass="helpSubText" text="   - Avoid any flickering and keep grid clear of drawings or cover any if present">
+                     <VBox.margin>
+                        <Insets top="-4.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label prefHeight="30.0" prefWidth="465.0" styleClass="helpText" text="- Press the [Get Grid] button. If the grid shown is incorrect, adjust brightness again.">
+                     <VBox.margin>
+                        <Insets top="2.0" />
+                     </VBox.margin></Label>
                   <Label prefHeight="30.0" prefWidth="459.0" styleClass="helpText" text="- Click the [Found Grid] and close the camera window [x]." />
                   <Label prefHeight="30.0" prefWidth="465.0" styleClass="helpText" text="- Physically update your battlemap and press [Update Map] to see any changes made." />
-                  <Label prefHeight="17.0" prefWidth="471.0" styleClass="helpText" text="    - Each adventure must be added before their token is placed." />
-                  <Label prefHeight="30.0" prefWidth="465.0" styleClass="helpText" text="    - Do NOT move more than one(1) character token for each [Update Map]" />
+                  <Label prefHeight="17.0" prefWidth="471.0" styleClass="helpSubText" text="    - Each adventure must be added to the list before their token is placed.">
+                     <VBox.margin>
+                        <Insets top="-1.0" />
+                     </VBox.margin></Label>
+                  <Label prefHeight="30.0" prefWidth="465.0" styleClass="helpSubText" text="    - Do NOT move more than one(1) character token for each [Update Map]">
+                     <VBox.margin>
+                        <Insets top="-1.0" />
+                     </VBox.margin></Label>
                </children>
             </VBox>
             <Button layoutX="455.0" layoutY="5.0" mnemonicParsing="false" onAction="#showHelp" text="X" />
