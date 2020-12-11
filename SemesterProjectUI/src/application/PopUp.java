@@ -31,7 +31,7 @@ public class PopUp {
 		
 		Scene popUp = new Scene(root);
 		
-		//popUp.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		popUp.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		
 		window.setResizable(false);
 		

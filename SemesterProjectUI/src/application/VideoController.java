@@ -220,8 +220,11 @@ public class VideoController
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		players.add(p);
-		playerListVIew.getItems().add(p);
+		if (p != null)
+		{
+			players.add(p);
+			playerListVIew.getItems().add(p);
+		}
 
 	}
 	
