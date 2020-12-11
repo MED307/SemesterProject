@@ -366,3 +366,25 @@
 	-fx-text-fill: white;
 }
 
+
+
+#chooseClassCoboBox {
+	-fx-text-fill: white;
+	-fx-font-size:15.0;
+	-fx-prompt-text-fill: blue;
+}
+
+.combo-box .list-cell 
+{
+    -fx-background: white;
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-base-color;;
+}
+
+.combo-box .list-cell:filled:selected:focused, .list-cell:filled:selected 
+{
+	-fx-font-size:12.0;
+    -fx-background: white;
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-base-color;
+}
