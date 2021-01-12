@@ -29,6 +29,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 
 /**
  * The controller associated with the only view of our application. The
@@ -49,6 +50,12 @@ public class VideoController
 
 	@FXML
 	private Slider hueStart;
+	
+	@FXML
+	private Slider nextCamera;
+	
+	@FXML
+	private Text SliderNumber;
 
 	@FXML
 	private ImageView currentFrame;
@@ -181,6 +188,11 @@ public class VideoController
 		this.capture = new VideoCapture();
 		this.cameraActive = false;
 		playerListVIew.setCellFactory(chatRoomListView -> new PlayerListCellController());
+		nextCamera.valueProperty().addListener((obs, oldval, newVal) ->
+			{nextCamera.setValue(Math.round(newVal.doubleValue()));
+			double test = nextCamera.getValue();
+			SliderNumber.setText("" + test);
+			});
 	}
 
 	//open and close camera window
@@ -234,7 +246,7 @@ public class VideoController
 		if (!this.cameraActive)
 		{
 			// start the video capture
-			this.capture.open(0);
+			this.capture.open((int)this.nextCamera.getValue());
 
 			// is the video stream available?
 			if (this.capture.isOpened())
@@ -326,27 +338,27 @@ public class VideoController
 			//finds all the objects with a hue of green
 			hueStart.setValue(87);
 			grabFrame();
-			getBlob(thisFrame,gridColour, "tree");
+			getBlob(thisFrame,gridColour, Grid.TREE);
 			
 			//finds all objects with a hue of blue
 			hueStart.setValue(105);
 			grabFrame();
-			getBlob(thisFrame,gridColour, "water");
+			getBlob(thisFrame,gridColour, Grid.WATER);
 			
 			//red
 			hueStart.setValue(175);
 			grabFrame();
-			getBlob(thisFrame,gridColour, "stone");
+			getBlob(thisFrame,gridColour, Grid.STONE);
 				
 			//yellow
 			hueStart.setValue(14);
 			grabFrame();
-			getBlob(thisFrame,gridColour, "enemy");
+			getBlob(thisFrame,gridColour, Grid.ENEMY);
 			
 			//purple
 			hueStart.setValue(162);
 			grabFrame();
-			getBlob(thisFrame,gridColour, "player");
+			getBlob(thisFrame,gridColour, Grid.PLAYER);
 		}
 	}
 	
@@ -588,7 +600,7 @@ public class VideoController
 		}
 	}
 
-	public void getBlob (Mat frame, ArrayList<Double>gridColour, String type) 
+	public void getBlob (Mat frame, ArrayList<Double>gridColour, int type) 
 	{	
 		//does the same kind of blob detection as when finding the grid
 		Mat dist_8u = new Mat();
@@ -711,7 +723,7 @@ public class VideoController
 					currentFrame1.setImage(grid.Display());
 					
 					//if type is player
-					if (type.compareTo("player") == 0)
+					if (type == Grid.PLAYER)
 					{
 						//look through each player
 						for (Player e : players)
@@ -748,7 +760,7 @@ public class VideoController
 		}
 		
 		//then after checking through all squares and the type is player
-		if (type.compareTo("player") == 0)
+		if (type == Grid.PLAYER)
 		{
 			//for each player
 			for (Player e : players)
@@ -777,7 +789,7 @@ public class VideoController
 				if (e.getPos()[0] < 500)
 				{
 					//sets the grid squares and displays the image
-					grid.setSquare(e.getPos()[0], e.getPos()[1], type, e.getClasses());
+					grid.setSquare(e.getPos()[0], e.getPos()[1], Grid.PLAYER, e.getClasses());
 					currentFrame1.setImage(grid.Display());
 				}
 			}

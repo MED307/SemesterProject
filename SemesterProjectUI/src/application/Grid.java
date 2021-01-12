@@ -12,6 +12,15 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
 public class Grid {
+
+	public static final int GRASS= 0;
+	public static final int TREE = 1;
+	public static final int STONE = 2;
+	public static final int WATER = 3;
+	public static final int ENEMY = 4;
+	public static final int PLAYER = 5;
+
+	
 	
 	//layers of the finale image
 	BufferedImage grid;
@@ -60,6 +69,9 @@ public class Grid {
 	
 	//2D arraylist for the coordinates of where each square starts on the image
 	ArrayList<ArrayList<ArrayList<Integer>>> gridList = new ArrayList<>();
+	
+	//the grid in types
+	ArrayList<ArrayList<Integer>> gridInTypes;
 	
 	private int sizeX;
 	private int sizeY;
@@ -110,10 +122,12 @@ public class Grid {
 		for (int j = 0; j < sizeY; j++)
 		{
 			gridList.add(new ArrayList<>());
+			gridInTypes.add(new ArrayList<>());
 			
 			
 			for (int i = 0; i < sizeX; i ++)
 	    	{
+				gridInTypes.get(j).add(GRASS);
 				gridList.get(j).add(new ArrayList<>());
 				gridList.get(j).get(i).add((squareWidth)*i);
 				gridList.get(j).get(i).add((squareWidth)*j);
@@ -166,7 +180,7 @@ public class Grid {
 			for (int j = 0; j < sizeY; j++)
 			{
 				//set the square to grass
-				setSquare(i, j, "");
+				setSquare(i, j, GRASS);
 			}
 		}
 	}
@@ -183,7 +197,7 @@ public class Grid {
 	}
 	
 	//changes the visuals of a specific squares, by redrawing that square using another buffered image
-	public void setSquare(int x, int y, String type)
+	public void setSquare(int x, int y, int type)
 	{
 		//goes through each y value of that specific square
 		for(int j = gridList.get(y).get(x).get(1) + strokeWidth; j < ((squareWidth)*(y+1)) - strokeWidth + 1; j++) 
@@ -195,7 +209,7 @@ public class Grid {
 				int rgb = new Color(0,0,0).getRGB();
 				
 				//if type is tree
-				if (type.compareTo("tree") == 0)
+				if (type == TREE)
 				{
 					rgb = tree.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
 
@@ -204,7 +218,7 @@ public class Grid {
 				}
 				
 				//if type is stone
-				else if (type.compareTo("stone") == 0)
+				else if (type == STONE)
 				{
 					//changes the color to the corresponding color on the stone image
 					rgb = stone.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
@@ -214,7 +228,7 @@ public class Grid {
 				}
 				
 				//if type is water
-				else if (type.compareTo("water") == 0)
+				else if (type == WATER)
 				{
 					//changes the color to the corresponding color on the water image
 					rgb = water.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
@@ -224,7 +238,7 @@ public class Grid {
 				}
 
 				//if type is enemy
-				else if (type.compareTo("enemy") == 0)
+				else if (type == ENEMY)
 				{
 					//changes the color to the corresponding color on the water image
 					rgb = enemy.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
@@ -249,7 +263,7 @@ public class Grid {
 	}
 	
 	//Overloaded method to draw the characters as their respected class
-		public void setSquare(int x, int y, String type, String classes)
+		public void setSquare(int x, int y, int type, String classes)
 		{
 			String playerClass = classes.toLowerCase();
 			//goes through each y value of that specific square
@@ -262,7 +276,7 @@ public class Grid {
 					int rgb = new Color(0,0,0).getRGB();
 					
 					//if type is player
-					if (type.compareTo("player") == 0)
+					if (type == PLAYER)
 					{
 						//checks the class
 						if (playerClass.compareTo("fighter") == 0) 
