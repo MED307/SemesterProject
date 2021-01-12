@@ -71,7 +71,7 @@ public class Grid {
 	ArrayList<ArrayList<ArrayList<Integer>>> gridList = new ArrayList<>();
 	
 	//the grid in types
-	ArrayList<ArrayList<Integer>> gridInTypes;
+	ArrayList<ArrayList<Integer>> gridInTypes = new ArrayList<>();
 	
 	private int sizeX;
 	private int sizeY;
@@ -110,8 +110,8 @@ public class Grid {
 		}
 		
 		//saves the size
-		sizeX = x;
-		sizeY = y;
+		sizeX = y;
+		sizeY = x;
 		
 		//creates an image of that size
 		grid = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);

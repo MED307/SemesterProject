@@ -117,7 +117,7 @@ public class VideoController
 
 	private int valueStop = 127;
 
-	private int hueStop = 30;
+	private int hueStop = 40;
 
 	
 	//saved image of the grid found, before changing the HSV values and begin thresholding for colors
@@ -346,7 +346,7 @@ public class VideoController
 			getBlob(thisFrame,gridColour, Grid.WATER);
 			
 			//red
-			hueStart.setValue(175);
+			hueStart.setValue(170);
 			grabFrame();
 			getBlob(thisFrame,gridColour, Grid.STONE);
 				
@@ -356,9 +356,9 @@ public class VideoController
 			getBlob(thisFrame,gridColour, Grid.ENEMY);
 			
 			//purple
-			hueStart.setValue(162);
-			grabFrame();
-			getBlob(thisFrame,gridColour, Grid.PLAYER);
+			//hueStart.setValue(162);
+			//grabFrame();
+			//getBlob(thisFrame,gridColour, Grid.PLAYER);
 		}
 	}
 	
@@ -596,7 +596,7 @@ public class VideoController
 			gridSquares[i] = new Blob();
 			gridSquares[i].setColor(gridColour.get(i));
 			gridSquares[i].setLocationX(i % coloumns);
-			gridSquares[i].setLocationY(i / rows);
+			gridSquares[i].setLocationY(i / coloumns);
 		}
 	}
 
@@ -720,7 +720,7 @@ public class VideoController
 				{
 					//set the grid to be of type
 					grid.setSquare(gridSquares[i].getLocationX(), gridSquares[i].getLocationY(), type);
-					currentFrame1.setImage(grid.Display());
+					System.out.println(gridSquares[i].getLocationX() + " " + gridSquares[i].getLocationY());
 					
 					//if type is player
 					if (type == Grid.PLAYER)
@@ -790,9 +790,10 @@ public class VideoController
 				{
 					//sets the grid squares and displays the image
 					grid.setSquare(e.getPos()[0], e.getPos()[1], Grid.PLAYER, e.getClasses());
-					currentFrame1.setImage(grid.Display());
+					
 				}
 			}
 		}
+		currentFrame1.setImage(grid.Display());
 	}    
 }
