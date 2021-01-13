@@ -12,18 +12,28 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
 public class Grid {
+
+	public static final int GRASS= 0;
+	public static final int TREE = 1;
+	public static final int STONE = 2;
+	public static final int WATER = 3;
+	public static final int ENEMY = 4;
+	public static final int PLAYER = 5;
+
+	
 	
 	//layers of the finale image
-	BufferedImage grid;
-	BufferedImage terrain;
-	BufferedImage entities;
+	BufferedImage gridLayer;
+	BufferedImage terrainLayer;
+	BufferedImage waterLayer;
+	BufferedImage entitiesLayer;
 	
 	//terrain
 	BufferedImage tree;
 	
 	BufferedImage stone;
 	
-	BufferedImage water;
+	BufferedImage[] water;
 	
 	BufferedImage grass;
 	
@@ -61,6 +71,9 @@ public class Grid {
 	//2D arraylist for the coordinates of where each square starts on the image
 	ArrayList<ArrayList<ArrayList<Integer>>> gridList = new ArrayList<>();
 	
+	//the grid in types
+	ArrayList<ArrayList<Integer>> gridInTypes = new ArrayList<>();
+	
 	private int sizeX;
 	private int sizeY;
 	private int squareWidth = 100;
@@ -73,7 +86,7 @@ public class Grid {
 			//loads the images in from the resource folder
 			tree = ImageIO.read(getClass().getResourceAsStream("/tree.png"));
 			stone = ImageIO.read(getClass().getResourceAsStream("/stone.png"));
-			water = ImageIO.read(getClass().getResourceAsStream("/water1.png"));
+			water[0] = ImageIO.read(getClass().getResourceAsStream("/water1.png"));
 			grass = ImageIO.read(getClass().getResource("/grass1.png"));
 			enemy = ImageIO.read(getClass().getResource("/enemy1.png"));
 			
@@ -98,22 +111,24 @@ public class Grid {
 		}
 		
 		//saves the size
-		sizeX = x;
-		sizeY = y;
+		sizeX = y;
+		sizeY = x;
 		
 		//creates an image of that size
-		grid = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
-		terrain = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
-		entities = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
+		gridLayer = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
+		terrainLayer = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
+		entitiesLayer = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
 		
 		//creates a 2D arrayList of each squares x start position
 		for (int j = 0; j < sizeY; j++)
 		{
 			gridList.add(new ArrayList<>());
+			gridInTypes.add(new ArrayList<>());
 			
 			
 			for (int i = 0; i < sizeX; i ++)
 	    	{
+				gridInTypes.get(j).add(GRASS);
 				gridList.get(j).add(new ArrayList<>());
 				gridList.get(j).get(i).add((squareWidth)*i);
 				gridList.get(j).get(i).add((squareWidth)*j);
@@ -129,9 +144,9 @@ public class Grid {
 	public void set()
 	{	
 		//goes through the whole grid
-		for (int x = 0; x < grid.getWidth(); x++) 
+		for (int x = 0; x < gridLayer.getWidth(); x++) 
 		{	
-            for (int y = 0; y < grid.getHeight(); y++) 
+            for (int y = 0; y < gridLayer.getHeight(); y++) 
             {
             	// color of the grid
             	int rgb;
@@ -144,7 +159,7 @@ public class Grid {
                 	{
                 		//changes the color of the pixel to black
                 		rgb = new Color(0,0,0).getRGB();
-                        grid.setRGB(x, y, rgb);
+                        gridLayer.setRGB(x, y, rgb);
                 	}
             	}
             	
@@ -155,7 +170,7 @@ public class Grid {
 	            	{
 	            		//changes the color of the pixel to black
 	            		rgb = new Color(0,0,0).getRGB();
-	                    grid.setRGB(x, y, rgb); 
+	                    gridLayer.setRGB(x, y, rgb); 
 	            	}
             	}
             }
@@ -166,7 +181,7 @@ public class Grid {
 			for (int j = 0; j < sizeY; j++)
 			{
 				//set the square to grass
-				setSquare(i, j, "");
+				setSquare(i, j, GRASS);
 			}
 		}
 	}
@@ -174,17 +189,148 @@ public class Grid {
 	//reset the layers
 	public void resetEntities()
 	{
-		entities = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
+		entitiesLayer = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
 	}
 	
 	public void resetTerrain()
 	{
-		terrain = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
+		terrainLayer = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
+	}
+	
+	public void setSquare(int x, int y, int type)
+	{
+		gridInTypes.get(y).set(x, type);
 	}
 	
 	//changes the visuals of a specific squares, by redrawing that square using another buffered image
-	public void setSquare(int x, int y, String type)
+	public void drawSquare(int x, int y, int type)
 	{
+		BufferedImage WaterStructure = new BufferedImage(water[0].getWidth(), water[0].getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		if (type == WATER)
+		{
+			for (int h = 0; h < 4; h++)
+			{
+					switch(h) {
+						case 0:
+							if (gridInTypes.get(y).get(x-1) == WATER)
+							{
+								if (gridInTypes.get(y-1).get(x) == WATER)
+								{
+									if (gridInTypes.get(y-1).get(x-1) == WATER)
+									{
+										//waterStructure = full water
+									}
+									else
+									{
+										//waterStructure = curved knob
+									}
+									
+								}
+								else
+								{
+									//waterStructure = line down side
+								}
+							}
+							else if (gridInTypes.get(y-1).get(x) == WATER)
+							{
+								//waterStructure = line across top
+							}
+							else
+							{
+								//waterStructure = closed Corner
+							}
+
+							break;
+						case 1:
+							if (gridInTypes.get(y).get(x + 1) == WATER)
+							{
+								if (gridInTypes.get(y-1).get(x) == WATER)
+								{
+									if (gridInTypes.get(y-1).get(x + 1) == WATER)
+									{
+										//waterStructure = full water
+									}
+									else
+									{
+										//waterStructure = curved knob
+									}
+									
+								}
+								else
+								{
+									//waterStructure = line down side
+								}
+							}
+							else if (gridInTypes.get(y-1).get(x) == WATER)
+							{
+								//waterStructure = line across top
+							}
+							else
+							{
+								//waterStructure = closed Corner
+							}
+							break;
+						case 2:
+							if (gridInTypes.get(y).get(x-1) == WATER)
+							{
+								if (gridInTypes.get(y+1).get(x) == WATER)
+								{
+									if (gridInTypes.get(y+1).get(x-1) == WATER)
+									{
+										//waterStructure = full water
+									}
+									else
+									{
+										//waterStructure = curved knob
+									}
+									
+								}
+								else
+								{
+									//waterStructure = line down side
+								}
+							}
+							else if (gridInTypes.get(y+1).get(x) == WATER)
+							{
+								//waterStructure = line across top
+							}
+							else
+							{
+								//waterStructure = closed Corner
+							}
+							break;
+						case 3:
+							if (gridInTypes.get(y).get(x + 1) == WATER)
+							{
+								if (gridInTypes.get(y + 1).get(x) == WATER)
+								{
+									if (gridInTypes.get(y + 1).get(x + 1) == WATER)
+									{
+										//waterStructure = full water
+									}
+									else
+									{
+										//waterStructure = curved knob
+									}
+									
+								}
+								else
+								{
+									//waterStructure = line down side
+								}
+							}
+							else if (gridInTypes.get(y + 1).get(x) == WATER)
+							{
+								//waterStructure = line across top
+							}
+							else
+							{
+								//waterStructure = closed Corner
+							}
+							break;
+					}
+				}
+		}
 		//goes through each y value of that specific square
 		for(int j = gridList.get(y).get(x).get(1) + strokeWidth; j < ((squareWidth)*(y+1)) - strokeWidth + 1; j++) 
 		{	
@@ -195,42 +341,44 @@ public class Grid {
 				int rgb = new Color(0,0,0).getRGB();
 				
 				//if type is tree
-				if (type.compareTo("tree") == 0)
+				if (type == TREE)
 				{
 					rgb = tree.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
 
 					//changes the color of the pixel
-					terrain.setRGB(i, j, rgb);
+					terrainLayer.setRGB(i, j, rgb);
 				}
 				
 				//if type is stone
-				else if (type.compareTo("stone") == 0)
+				else if (type == STONE)
 				{
 					//changes the color to the corresponding color on the stone image
 					rgb = stone.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
 
 					//changes the color of the pixel
-					terrain.setRGB(i, j, rgb);
+					terrainLayer.setRGB(i, j, rgb);
 				}
 				
 				//if type is water
-				else if (type.compareTo("water") == 0)
+				else if (type == WATER)
 				{
+					
 					//changes the color to the corresponding color on the water image
-					rgb = water.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
+					rgb = water[0].getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
 					
 					//changes the color of the pixel
-					terrain.setRGB(i, j, rgb);
+					terrainLayer.setRGB(i, j, rgb);
+					waterLayer.setRGB(i, j, rgb);
 				}
 
 				//if type is enemy
-				else if (type.compareTo("enemy") == 0)
+				else if (type == ENEMY)
 				{
 					//changes the color to the corresponding color on the water image
 					rgb = enemy.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
 
 					//changes the color of the pixel
-					entities.setRGB(i, j, rgb);
+					entitiesLayer.setRGB(i, j, rgb);
 				}
 				
 				//if invalid type is given, draw grass instead
@@ -240,7 +388,7 @@ public class Grid {
 					rgb = grass.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
 					
 					//changes the color of the pixel
-					grid.setRGB(i, j, rgb);
+					gridLayer.setRGB(i, j, rgb);
 				}
 				
 
@@ -249,7 +397,7 @@ public class Grid {
 	}
 	
 	//Overloaded method to draw the characters as their respected class
-		public void setSquare(int x, int y, String type, String classes)
+		public void setSquare(int x, int y, int type, String classes)
 		{
 			String playerClass = classes.toLowerCase();
 			//goes through each y value of that specific square
@@ -262,7 +410,7 @@ public class Grid {
 					int rgb = new Color(0,0,0).getRGB();
 					
 					//if type is player
-					if (type.compareTo("player") == 0)
+					if (type == PLAYER)
 					{
 						//checks the class
 						if (playerClass.compareTo("fighter") == 0) 
@@ -331,7 +479,7 @@ public class Grid {
 						}
 						
 						//changes the color of the pixel
-						entities.setRGB(i, j, rgb);
+						entitiesLayer.setRGB(i, j, rgb);
 					}
 				}
 			}
@@ -343,11 +491,12 @@ public class Grid {
 	{
 		
 		//adds the 3 images on top of each other creating the single image to be displayed.
-		BufferedImage c = new BufferedImage(grid.getWidth(), grid.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		BufferedImage c = new BufferedImage(gridLayer.getWidth(), gridLayer.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics g = c.getGraphics();
-		g.drawImage(grid,0,0,null);
-		g.drawImage(terrain,0,0,null);
-		g.drawImage(entities,0,0,null);
+		g.drawImage(gridLayer,0,0,null);
+		g.drawImage(terrainLayer,0,0,null);
+		g.drawImage(waterLayer,0,0,null);
+		g.drawImage(entitiesLayer,0,0,null);
 		g.dispose();
 
 		return SwingFXUtils.toFXImage(c, null);
