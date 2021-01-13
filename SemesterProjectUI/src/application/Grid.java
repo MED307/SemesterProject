@@ -19,6 +19,11 @@ public class Grid {
 	public static final int WATER = 3;
 	public static final int ENEMY = 4;
 	public static final int PLAYER = 5;
+	
+	private static final int FULL = 1;
+	private static final int LINE = 2;
+	private static final int OPENCORNER = 3;
+	private static final int CLOSECORNER = 4;
 
 	
 	
@@ -33,7 +38,7 @@ public class Grid {
 	
 	BufferedImage stone;
 	
-	BufferedImage[] water;
+	ArrayList<BufferedImage> water =  new ArrayList<>();
 	
 	BufferedImage grass;
 	
@@ -86,7 +91,11 @@ public class Grid {
 			//loads the images in from the resource folder
 			tree = ImageIO.read(getClass().getResourceAsStream("/tree.png"));
 			stone = ImageIO.read(getClass().getResourceAsStream("/stone.png"));
-			water[0] = ImageIO.read(getClass().getResourceAsStream("/water1.png"));
+			water.add(ImageIO.read(getClass().getResourceAsStream("/water1.png")));
+			water.add(ImageIO.read(getClass().getResourceAsStream("/water001.png")));
+			water.add(ImageIO.read(getClass().getResourceAsStream("/water002.png")));
+			water.add(ImageIO.read(getClass().getResourceAsStream("/water003.png")));
+			water.add(ImageIO.read(getClass().getResourceAsStream("/water004.png")));
 			grass = ImageIO.read(getClass().getResource("/grass1.png"));
 			enemy = ImageIO.read(getClass().getResource("/enemy1.png"));
 			
@@ -116,6 +125,7 @@ public class Grid {
 		
 		//creates an image of that size
 		gridLayer = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
+		waterLayer = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
 		terrainLayer = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
 		entitiesLayer = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
 		
@@ -184,6 +194,7 @@ public class Grid {
 				setSquare(i, j, GRASS);
 			}
 		}
+		drawSquare();
 	}
 	
 	//reset the layers
@@ -203,197 +214,78 @@ public class Grid {
 	}
 	
 	//changes the visuals of a specific squares, by redrawing that square using another buffered image
-	public void drawSquare(int x, int y, int type)
+	public void drawSquare()
 	{
-		BufferedImage WaterStructure = new BufferedImage(water[0].getWidth(), water[0].getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-		if (type == WATER)
+		for (int y = 0; y < gridInTypes.size(); y ++)
 		{
-			for (int h = 0; h < 4; h++)
+			for (int x = 0; x < gridInTypes.get(y).size(); x ++)
 			{
-					switch(h) {
-						case 0:
-							if (gridInTypes.get(y).get(x-1) == WATER)
-							{
-								if (gridInTypes.get(y-1).get(x) == WATER)
-								{
-									if (gridInTypes.get(y-1).get(x-1) == WATER)
-									{
-										//waterStructure = full water
-									}
-									else
-									{
-										//waterStructure = curved knob
-									}
-									
-								}
-								else
-								{
-									//waterStructure = line down side
-								}
-							}
-							else if (gridInTypes.get(y-1).get(x) == WATER)
-							{
-								//waterStructure = line across top
-							}
-							else
-							{
-								//waterStructure = closed Corner
-							}
-
-							break;
-						case 1:
-							if (gridInTypes.get(y).get(x + 1) == WATER)
-							{
-								if (gridInTypes.get(y-1).get(x) == WATER)
-								{
-									if (gridInTypes.get(y-1).get(x + 1) == WATER)
-									{
-										//waterStructure = full water
-									}
-									else
-									{
-										//waterStructure = curved knob
-									}
-									
-								}
-								else
-								{
-									//waterStructure = line down side
-								}
-							}
-							else if (gridInTypes.get(y-1).get(x) == WATER)
-							{
-								//waterStructure = line across top
-							}
-							else
-							{
-								//waterStructure = closed Corner
-							}
-							break;
-						case 2:
-							if (gridInTypes.get(y).get(x-1) == WATER)
-							{
-								if (gridInTypes.get(y+1).get(x) == WATER)
-								{
-									if (gridInTypes.get(y+1).get(x-1) == WATER)
-									{
-										//waterStructure = full water
-									}
-									else
-									{
-										//waterStructure = curved knob
-									}
-									
-								}
-								else
-								{
-									//waterStructure = line down side
-								}
-							}
-							else if (gridInTypes.get(y+1).get(x) == WATER)
-							{
-								//waterStructure = line across top
-							}
-							else
-							{
-								//waterStructure = closed Corner
-							}
-							break;
-						case 3:
-							if (gridInTypes.get(y).get(x + 1) == WATER)
-							{
-								if (gridInTypes.get(y + 1).get(x) == WATER)
-								{
-									if (gridInTypes.get(y + 1).get(x + 1) == WATER)
-									{
-										//waterStructure = full water
-									}
-									else
-									{
-										//waterStructure = curved knob
-									}
-									
-								}
-								else
-								{
-									//waterStructure = line down side
-								}
-							}
-							else if (gridInTypes.get(y + 1).get(x) == WATER)
-							{
-								//waterStructure = line across top
-							}
-							else
-							{
-								//waterStructure = closed Corner
-							}
-							break;
+				BufferedImage waterStructure = determineWater(x,y,gridInTypes.get(y).get(x));
+				//goes through each y value of that specific square
+				for(int j = gridList.get(y).get(x).get(1) + strokeWidth; j < ((squareWidth)*(y+1)) - strokeWidth + 1; j++) 
+				{	
+					//goes through each x value of that specific square
+					for(int i = gridList.get(y).get(x).get(0) + strokeWidth ; i < ((squareWidth)*(x+1)) - strokeWidth + 1; i++) 
+					{
+						//basis color as a RGB integer
+						int rgb = new Color(0,0,0).getRGB();
+						
+						//if type is tree
+						if (gridInTypes.get(y).get(x) == TREE)
+						{
+							rgb = tree.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
+		
+							//changes the color of the pixel
+							terrainLayer.setRGB(i, j, rgb);
+						}
+						
+						//if type is stone
+						else if (gridInTypes.get(y).get(x) == STONE)
+						{
+							//changes the color to the corresponding color on the stone image
+							rgb = stone.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
+		
+							//changes the color of the pixel
+							terrainLayer.setRGB(i, j, rgb);
+						}
+						
+						//if type is water
+						else if (gridInTypes.get(y).get(x) == WATER)
+						{
+							
+							//changes the color to the corresponding color on the water image
+							rgb = waterStructure.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
+							
+							//changes the color of the pixel;
+							waterLayer.setRGB(i, j, rgb);
+						}
+		
+						//if type is enemy
+						else if (gridInTypes.get(y).get(x) == ENEMY)
+						{
+							//changes the color to the corresponding color on the water image
+							rgb = enemy.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
+		
+							//changes the color of the pixel
+							entitiesLayer.setRGB(i, j, rgb);
+						}
+						
+						//if invalid type is given, draw grass instead
+						else
+						{
+							//changes the color to the corresponding color on the grass image
+							rgb = grass.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
+							
+							//changes the color of the pixel
+							gridLayer.setRGB(i, j, rgb);
+						}
+						
+		
 					}
 				}
+				
 		}
-		//goes through each y value of that specific square
-		for(int j = gridList.get(y).get(x).get(1) + strokeWidth; j < ((squareWidth)*(y+1)) - strokeWidth + 1; j++) 
-		{	
-			//goes through each x value of that specific square
-			for(int i = gridList.get(y).get(x).get(0) + strokeWidth ; i < ((squareWidth)*(x+1)) - strokeWidth + 1; i++) 
-			{
-				//basis color as a RGB integer
-				int rgb = new Color(0,0,0).getRGB();
-				
-				//if type is tree
-				if (type == TREE)
-				{
-					rgb = tree.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
-
-					//changes the color of the pixel
-					terrainLayer.setRGB(i, j, rgb);
-				}
-				
-				//if type is stone
-				else if (type == STONE)
-				{
-					//changes the color to the corresponding color on the stone image
-					rgb = stone.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
-
-					//changes the color of the pixel
-					terrainLayer.setRGB(i, j, rgb);
-				}
-				
-				//if type is water
-				else if (type == WATER)
-				{
-					
-					//changes the color to the corresponding color on the water image
-					rgb = water[0].getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
-					
-					//changes the color of the pixel
-					terrainLayer.setRGB(i, j, rgb);
-					waterLayer.setRGB(i, j, rgb);
-				}
-
-				//if type is enemy
-				else if (type == ENEMY)
-				{
-					//changes the color to the corresponding color on the water image
-					rgb = enemy.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
-
-					//changes the color of the pixel
-					entitiesLayer.setRGB(i, j, rgb);
-				}
-				
-				//if invalid type is given, draw grass instead
-				else
-				{
-					//changes the color to the corresponding color on the grass image
-					rgb = grass.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
-					
-					//changes the color of the pixel
-					gridLayer.setRGB(i, j, rgb);
-				}
-				
-
-			}
-		}
+	}
 	}
 	
 	//Overloaded method to draw the characters as their respected class
@@ -510,5 +402,260 @@ public class Grid {
 	public int getRows() {
 		return sizeY;
 	}
+	
+	private BufferedImage determineWater(int x, int y, int type)
+	{
+		BufferedImage waterStructure = new BufferedImage(water.get(0).getWidth(), water.get(0).getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		if (type == WATER)
+		{
+			for (int h = 0; h < 4; h++)
+			{
+					switch(h) {
+						case 0:
+							if ( x >= 1 && gridInTypes.get(y).get(x-1) == WATER)
+							{
+								if ( y >= 1 && gridInTypes.get(y-1).get(x) == WATER)
+								{
+									if (gridInTypes.get(y-1).get(x-1) == WATER)
+									{
+										for (int i = 0; i < (waterStructure.getHeight() - water.get(FULL).getHeight()); i++)
+										{
+											for (int j = 0; j < (waterStructure.getWidth() - water.get(FULL).getWidth()); j++)
+											{
+												waterStructure.setRGB(i, j, water.get(FULL).getRGB(i, j));
+											}
+										}
+									}
+									else
+									{
+										for (int i = 0; i < (waterStructure.getHeight() - water.get(OPENCORNER).getHeight()); i++)
+										{
+											for (int j = 0; j < (waterStructure.getWidth() - water.get(OPENCORNER).getWidth()); j++)
+											{
+												waterStructure.setRGB(i, j, water.get(3).getRGB(i, j));
+											}
+										}
+									}
+									
+								}
+								else
+								{
+									for (int i = 0; i < (waterStructure.getHeight() - water.get(LINE).getHeight()); i++)
+									{
+										for (int j = 0; j < (waterStructure.getWidth() - water.get(LINE).getWidth()); j++)
+										{
+											waterStructure.setRGB(i, j, water.get(LINE).getRGB(i, j));
+										}
+									}
+								}
+							}
+							else if ( y >= 1 && gridInTypes.get(y-1).get(x) == WATER)
+							{
+								for (int i = 0; i < (waterStructure.getHeight() - water.get(LINE).getHeight()); i++)
+								{
+									for (int j = 0; j < (waterStructure.getWidth() - water.get(LINE).getWidth()); j++)
+									{
+										waterStructure.setRGB(i, j, water.get(LINE).getRGB(j, i));
+									}
+								}
+							}
+							else
+							{
+								for (int i = 0; i < (waterStructure.getHeight() - water.get(CLOSECORNER).getHeight()); i++)
+								{
+									for (int j = 0; j < (waterStructure.getWidth() - water.get(CLOSECORNER).getWidth()); j++)
+									{
+										waterStructure.setRGB(i, j, water.get(CLOSECORNER).getRGB(i, j));
+									}
+								}
+							}
+
+							break;
+							
+						case 1:
+							if ( x >= 1 && gridInTypes.get(y).get(x-1) == WATER)
+							{
+								if (y < (gridInTypes.size() - 1) && gridInTypes.get(y+1).get(x) == WATER)
+								{
+									if (gridInTypes.get(y+1).get(x-1) == WATER)
+									{
+										for (int i = 0; i < (waterStructure.getHeight() - water.get(FULL).getHeight()); i++)
+										{
+											for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - water.get(FULL).getWidth()); j--)
+											{
+												waterStructure.setRGB(i, j - 1, water.get(FULL).getRGB(i, waterStructure.getWidth() - j));
+											}
+										}
+									}
+									else
+									{
+										for (int i = 0; i < (waterStructure.getHeight() - water.get(OPENCORNER).getHeight()); i++)
+										{
+											for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - water.get(OPENCORNER).getWidth()); j--)
+											{
+												waterStructure.setRGB(i, j - 1, water.get(OPENCORNER).getRGB(i,waterStructure.getWidth() - j));
+											}
+										}
+									}
+									
+								}
+								else
+								{
+									for (int i = 0; i < (waterStructure.getHeight() - water.get(LINE).getHeight()); i++)
+									{
+										for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - water.get(LINE).getWidth()); j--)
+										{
+											waterStructure.setRGB(i, j - 1, water.get(LINE).getRGB(i, waterStructure.getWidth() - j));
+										}
+									}
+								}
+							}
+							else if (y < (gridInTypes.size() - 1) && gridInTypes.get(y+1).get(x) == WATER)
+							{
+								for (int i = 0; i < (waterStructure.getHeight() - water.get(LINE).getHeight()); i++)
+								{
+									for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - water.get(LINE).getWidth()); j--)
+									{
+										waterStructure.setRGB(i, j - 1, water.get(LINE).getRGB(waterStructure.getWidth() - j, i));
+									}
+								}
+							}
+							else
+							{
+								for (int i = 0; i < (waterStructure.getHeight() - water.get(CLOSECORNER).getHeight()); i++)
+								{
+									for (int j = waterStructure.getWidth()-1; j > (waterStructure.getWidth() - water.get(CLOSECORNER).getWidth()); j--)
+									{
+										waterStructure.setRGB(i, j - 1, water.get(CLOSECORNER).getRGB(waterStructure.getWidth() - j, i));
+										
+									}
+								}
+							}
+							
+							break;
+						case 2:
+							if (x < (gridInTypes.get(y).size() - 1) && gridInTypes.get(y).get(x + 1) == WATER)
+							{
+								if (y >= 1 && gridInTypes.get(y-1).get(x) == WATER)
+								{
+									if (gridInTypes.get(y-1).get(x + 1) == WATER)
+									{
+										for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - water.get(FULL).getHeight()); i--)
+										{
+											for (int j = 0; j < (waterStructure.getWidth() - water.get(FULL).getWidth()); j++)
+											{
+												waterStructure.setRGB(i - 1, j, water.get(FULL).getRGB(waterStructure.getHeight() - i, j));
+											}
+										}
+									}
+									else
+									{
+										for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - water.get(OPENCORNER).getHeight()); i--)
+										{
+											for (int j = 0; j < (waterStructure.getWidth() - water.get(OPENCORNER).getWidth()); j++)
+											{
+												waterStructure.setRGB(i - 1, j, water.get(OPENCORNER).getRGB(waterStructure.getHeight() - i, j));
+											}
+										}
+									}
+									
+								}
+								else
+								{
+									for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - water.get(LINE).getHeight()); i--)
+									{
+										for (int j = 0; j < (waterStructure.getWidth() - water.get(LINE).getWidth()); j++)
+										{
+											waterStructure.setRGB(i - 1, j, water.get(LINE).getRGB( waterStructure.getHeight() - i, j));
+										}
+									}
+								}
+							}
+							else if (y >= 1 && gridInTypes.get(y-1).get(x) == WATER)
+							{
+								for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - water.get(LINE).getHeight()); i--)
+								{
+									for (int j = 0; j < (waterStructure.getWidth() - water.get(LINE).getWidth()); j++)
+									{
+										waterStructure.setRGB(i - 1, j, water.get(LINE).getRGB(j, waterStructure.getHeight() - i));
+									}
+								}
+							}
+							else
+							{
+								for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - water.get(CLOSECORNER).getHeight()); i--)
+								{
+									for (int j = 0; j < (waterStructure.getWidth() - water.get(CLOSECORNER).getWidth()); j++)
+									{
+										waterStructure.setRGB(i - 1, j, water.get(CLOSECORNER).getRGB(waterStructure.getHeight() - i, j));
+									}
+								}
+							}
+							break;
+						case 3:
+							if (x < (gridInTypes.get(y).size() - 1) && gridInTypes.get(y).get(x + 1) == WATER)
+							{
+								if (y < (gridInTypes.size() - 1) && gridInTypes.get(y + 1).get(x) == WATER)
+								{
+									if (gridInTypes.get(y + 1).get(x + 1) == WATER)
+									{
+										for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - water.get(FULL).getHeight()); i--)
+										{
+											for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - water.get(FULL).getWidth()); j--)
+											{
+												waterStructure.setRGB(i - 1, j - 1, water.get(FULL).getRGB(waterStructure.getHeight() - i, waterStructure.getWidth() - j));
+											}
+										}
+									}
+									else
+									{
+										for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - water.get(OPENCORNER).getHeight()); i--)
+										{
+											for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - water.get(OPENCORNER).getWidth()); j--)
+											{
+												waterStructure.setRGB(i - 1, j - 1, water.get(OPENCORNER).getRGB(waterStructure.getHeight() - i, waterStructure.getWidth() - j));
+											}
+										}
+									}
+									
+								}
+								else
+								{
+									for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - water.get(LINE).getHeight()); i--)
+									{
+										for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - water.get(LINE).getWidth()); j--)
+										{
+											waterStructure.setRGB(i - 1, j - 1, water.get(LINE).getRGB(waterStructure.getHeight() - i, waterStructure.getWidth() - j));
+										}
+									}
+								}
+							}
+							else if (y < (gridInTypes.size() - 1) && gridInTypes.get(y + 1).get(x) == WATER)
+							{
+								for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - water.get(LINE).getHeight()); i--)
+								{
+									for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - water.get(LINE).getWidth()); j--)
+									{
+										waterStructure.setRGB(i - 1, j - 1, water.get(LINE).getRGB(waterStructure.getHeight() - i, waterStructure.getWidth() - j));
+									}
+								}
+							}
+							else
+							{
+								for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - water.get(CLOSECORNER).getHeight()); i--)
+								{
+									for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - water.get(CLOSECORNER).getWidth()); j--)
+									{
+										waterStructure.setRGB(i - 1, j - 1, water.get(CLOSECORNER).getRGB(waterStructure.getHeight() - i, waterStructure.getWidth() - j));
+									}
+								}
+							}
+							break;
+					}
+				}
+		}
+		return waterStructure;
+	}
+
 	
 }

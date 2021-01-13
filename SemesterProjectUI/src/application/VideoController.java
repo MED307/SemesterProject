@@ -827,6 +827,7 @@ public class VideoController
 				}
 			}
 		}
+		grid.drawSquare();
 		currentFrame1.setImage(grid.Display());
 	}    
 }

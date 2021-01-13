@@ -20,12 +20,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<<<<<<< HEAD
-<AnchorPane id="BattlemapWrapper" minHeight="300.0" minWidth="500.0" prefHeight="600.0" prefWidth="1000.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.VideoController">
-
-=======
 <AnchorPane id="BattlemapWrapper" minHeight="300.0" minWidth="500.0" prefHeight="600.0" prefWidth="1000.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.VideoController">
->>>>>>> 8275b15bf1cc2e388d2271f2f7c7dcb648f98cf4
    <children>
       <Pane fx:id="guidePane" prefHeight="558.0" prefWidth="747.0">
          <children>
