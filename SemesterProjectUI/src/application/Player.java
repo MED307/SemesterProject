@@ -9,18 +9,30 @@ public class Player extends Character{
 	
 	private int[] pos =  {1000,1000};
 	
+	private int initiative;
+	
 	private String CampaignName;
-	Player(String name, String classes, Campaign campaign) 
+	Player(String name, String classes, Campaign campaign, int initiative_tmp) 
 	{
 		this.setName(name);
 		this.setClasses(classes);
 		this.setCampaignName(campaign.getCampaignName());
+		this.setInitiative(initiative_tmp);
 	}
 	
-	Player(String name, String classes) 
+	Player(String name, String classes, int initiative_tmp) 
 	{
 		this.setName(name);
 		this.setClasses(classes);
+		this.setInitiative(initiative_tmp);
+	}
+	
+	public int getInitiative() {
+		return initiative;
+	}
+	
+	public void setInitiative(int number) {
+		initiative = number;
 	}
 
 	public String getClasses() {

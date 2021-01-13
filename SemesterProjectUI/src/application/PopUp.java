@@ -46,7 +46,7 @@ public class PopUp {
 	    if (FXML.compareTo("addPlayer.fxml") == 0)
 	    {
 	        addPlayerController controller = loader.getController();
-	        player = new Player(controller.getNewName(), controller.getNewClass());
+	        player = new Player(controller.getNewName(), controller.getNewClass(), controller.getNewInitiative());
 	    }
 		
 	    return player;

@@ -15,17 +15,23 @@
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane id="BattlemapWrapper" minHeight="300.0" minWidth="500.0" prefHeight="600.0" prefWidth="1000.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.VideoController">
+
    <children>
       <Pane fx:id="guidePane" prefHeight="558.0" prefWidth="747.0">
          <children>
             <Label id="guideLabel1" fx:id="guideLabel1" alignment="CENTER" layoutY="173.0" prefHeight="30.0" prefWidth="747.0" text="Please start the camera below to set-up grid" textAlignment="CENTER" />
             <Label id="guideLabel2" fx:id="guideLabel2" alignment="CENTER" layoutY="199.0" prefHeight="30.0" prefWidth="747.0" text="Start by pressing &quot;Camera&quot;" textAlignment="CENTER" />
+           
          </children>
       </Pane>
+      
       <HBox alignment="CENTER" prefHeight="558.0" prefWidth="741.0">
+              
          <children>
             <ImageView id="GridView" fx:id="currentFrame1" disable="true" fitHeight="558.0" fitWidth="741.0" pickOnBounds="true" preserveRatio="true" visible="true" />
+ 
          </children>
+         
       </HBox>
       <Pane id="MenuPane" layoutX="741.0" prefHeight="600.0" prefWidth="259.0">
          <children>
@@ -38,6 +44,9 @@
                               <Label id="menuTitleLabel" alignment="CENTER" layoutY="12.0" prefHeight="30.0" prefWidth="259.0" text="Adventurers" textFill="WHITE" />
                               <Button id="AddAdventurerBtn" fx:id="addAdventurerBtn" layoutX="205.0" layoutY="15.0" mnemonicParsing="false" onAction="#addPlayer" text="+Add" />
                               <ListView id="AdventurersListView" fx:id="playerListVIew" layoutY="47.0" prefHeight="407.0" prefWidth="259.0" />
+                              <Button fx:id="nextTurn" disable="false" layoutX="32.0" layoutY="390.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="200.0" text="Next Turn" onAction="#nextTurn" />
+                              <Button fx:id="sortTurnOrder" disable="false" layoutX="32.0" layoutY="420.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="200.0" text="Sort list order" onAction="#sortListView" /> 
+                              <Label  id="menuTitleLabel" fx:id="turnOrder" alignment="CENTER" layoutX="20.0" layoutY="355.0" prefHeight="30.0" prefWidth="220.0" text= ".......TURN ORDER......." textAlignment="CENTER" />
                            </children>
                         </AnchorPane>
                   </content>

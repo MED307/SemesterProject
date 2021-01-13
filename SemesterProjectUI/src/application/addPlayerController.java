@@ -17,6 +17,9 @@ public class addPlayerController {
 	private TextField playerName;
 	
 	@FXML
+	private TextField initiativeAttribute;
+	
+	@FXML
 	private TextField classes;
 	
 	@FXML
@@ -30,7 +33,9 @@ public class addPlayerController {
 	
 	private String newName;
 	
-	private String newClass;	
+	private String newClass;
+	
+	private int newInitiative;
 	
 	@FXML
 	public void initialize() {
@@ -48,6 +53,13 @@ public class addPlayerController {
 			popErrorRoomTxt.setVisible(true);
 		}
 		
+		if (initiativeAttribute.getText().trim().isEmpty()) {
+			System.out.println("Error");
+			infoText.setVisible(false);
+			popErrorRoomTxt.setText("Error: Missing initiative");
+			popErrorRoomTxt.setVisible(true);
+		}
+		
 		if (classSelectComboBox.getSelectionModel().getSelectedItem() == null) {
 			System.out.println("Error");
 			infoText.setVisible(false);
@@ -57,10 +69,12 @@ public class addPlayerController {
 		}
 		
 		
-		else if (this.playerName.getText() != null && this.classSelectComboBox.getSelectionModel().getSelectedItem() != null) 
+		else if (this.playerName.getText() != null && this.initiativeAttribute.getText() != null && this.classSelectComboBox.getSelectionModel().getSelectedItem() != null) 
 		{
 			this.setNewName(this.playerName.getText());
 			this.setNewClass(this.classSelectComboBox.getSelectionModel().getSelectedItem());
+			this.setNewInitiative(Integer.parseInt(this.initiativeAttribute.getText()));
+			
 			((Stage)(((Button)event.getSource()).getScene().getWindow())).close(); 
 		}
 	}
@@ -71,6 +85,15 @@ public class addPlayerController {
 
 	public void setNewName(String newName) {
 		this.newName = newName;
+	}
+	
+
+	public int getNewInitiative() {
+		return newInitiative;
+	}
+
+	public void setNewInitiative(int newInitiative) {
+		this.newInitiative = newInitiative;
 	}
 
 	public String getNewClass() {

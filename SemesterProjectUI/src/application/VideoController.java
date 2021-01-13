@@ -29,6 +29,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 
 /**
  * The controller associated with the only view of our application. The
@@ -64,6 +65,8 @@ public class VideoController
 	
 	@FXML
 	private ListView<Player> playerListVIew;
+	
+	private Button nextTurn;
 
 	@FXML
 	private 
@@ -71,6 +74,10 @@ public class VideoController
 	
 	@FXML 
 	Label rollResultsLabel;
+	
+	
+	@FXML 
+	private Label turnOrder;
 	
 	
 	//List of players on the map
@@ -125,6 +132,33 @@ public class VideoController
 	//scalar values used for thresholding
 	Scalar minValues;
 	Scalar maxValues;
+	
+	
+	int index = 0;
+	@FXML
+	private void nextTurn(){
+		
+		
+		if(index < players.size()-1) {
+		
+		index++;
+		
+		}
+		else {
+		index = 0;
+		}
+		
+		turnOrder.setText(players.get(index).getName().substring(0,1).toUpperCase() + players.get(index).getName().substring(1) + "'s turn");
+	}
+	
+	@FXML
+	private void sortListView(){
+		
+		players.sort(new PlayerSorter());
+		playerListVIew.getItems().sort(new PlayerSorter());
+		turnOrder.setText(players.get(index).getName().substring(0,1).toUpperCase() + players.get(index).getName().substring(1) + "'s turn");
+		
+	}
 	
 	//FXML functions for rolling the different types of dices
 	@FXML

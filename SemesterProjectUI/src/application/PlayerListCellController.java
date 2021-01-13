@@ -48,7 +48,7 @@ public class PlayerListCellController extends ListCell<Player>{
                 }
 
             }
-        	name.setText(player.getName().substring(0,1).toUpperCase() + player.getName().substring(1) + " the " + player.getClasses().substring(0,1).toUpperCase() + player.getClasses().substring(1) );
+        	name.setText(player.getName().substring(0,1).toUpperCase() + player.getName().substring(1) + " the " + player.getClasses().substring(0,1).toUpperCase() + player.getClasses().substring(1) + "  Init: " + player.getInitiative() );
         	setGraphic(pane);
         }
 	}

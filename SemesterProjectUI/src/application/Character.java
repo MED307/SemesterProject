@@ -13,7 +13,7 @@ public class Character {
 	private int healthMax;
 	private int healthCurrent;
 	private int tempHealth;
-	private int initiative;
+
 	
 	
 	
@@ -99,11 +99,6 @@ public class Character {
 	public void setTempHealth(int tempHealth) {
 		this.tempHealth = tempHealth;
 	}
-	public int getInitiative() {
-		return initiative;
-	}
-	public void setInitiative(int initiative) {
-		this.initiative = initiative;
-	}
+
 	
 }
