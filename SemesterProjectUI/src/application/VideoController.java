@@ -76,17 +76,14 @@ public class VideoController
 	private Button nextTurn;
 
 	@FXML
-	private 
-	Label rollResultValueLabel;
+	private Label rollResultValueLabel;
 	
 	@FXML 
 	Label rollResultsLabel;
 	
-	
 	@FXML 
 	private Label turnOrder;
-	
-	
+		
 	//List of players on the map
 	private ArrayList<Player> players =  new ArrayList<>();
 	
@@ -126,6 +123,10 @@ public class VideoController
 
 	private int hueStop = 40;
 
+	//Value of a rolling die
+	private int rollingDieValue;
+	
+	//Animation timer clock
 	private Roller clock;
 	
 	//saved image of the grid found, before changing the HSV values and begin thresholding for colors
@@ -212,8 +213,7 @@ public class VideoController
 		System.exit(0);
 	}
 
-	//die roller
-
+	//Die roller Animation
 	private class Roller extends AnimationTimer
 	{
 		private long FRAMES_PER_SECOND = 50L;
@@ -243,12 +243,7 @@ public class VideoController
 		}
 	}
 	
-	private int rollingDieValue;
-	public void rollAnimation() {
-		rollingDieValue = 20;
-		clock.start();
-	}
-
+	//Die rolling
 	public void dieRoll(int die)
 	{
 		//gets a random number between 0.0 and 1.0 then time if the size of the die, and plus one, then cast it to an int
