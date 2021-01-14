@@ -20,6 +20,7 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -125,6 +126,7 @@ public class VideoController
 
 	private int hueStop = 40;
 
+	private Roller clock;
 	
 	//saved image of the grid found, before changing the HSV values and begin thresholding for colors
 	Mat gridImage = new Mat();
@@ -169,32 +171,38 @@ public class VideoController
 	//FXML functions for rolling the different types of dices
 	@FXML
 	private void rollD20(){
-		dieRoll(20);
+		rollingDieValue = 20;
+		clock.start();
 	}
 	
 	@FXML
 	private void rollD12(){
-		dieRoll(12);
+		rollingDieValue = 12;
+		clock.start();
 	}
 	
 	@FXML
 	private void rollD10(){
-		dieRoll(10);
+		rollingDieValue = 10;
+		clock.start();
 	}
 	
 	@FXML
 	private void rollD8(){
-		dieRoll(8);
+		rollingDieValue = 8;
+		clock.start();
 	}
 	
 	@FXML
 	private void rollD6(){
-		dieRoll(6);
+		rollingDieValue = 6;
+		clock.start();
 	}
 	
 	@FXML
 	private void rollD4(){
-		dieRoll(4);
+		rollingDieValue = 7;
+		clock.start();
 	}
 
 	//function for terminating the program
@@ -205,6 +213,42 @@ public class VideoController
 	}
 
 	//die roller
+
+	private class Roller extends AnimationTimer
+	{
+		private long FRAMES_PER_SECOND = 50L;
+		private long INTERVAL = 1000000000L / FRAMES_PER_SECOND;
+		private int MAX_ROLLS = 20;
+		
+		private long last = 0;
+		private int count = 0;
+		
+		public void handle(long arg0)
+		{
+			// TODO Auto-generated method stub
+			rollResultsLabel.setText("Now Rolling a D"+ rollingDieValue);
+			if (arg0 - last > INTERVAL)
+			{
+				int r = 2 + (int)(Math.random() * rollingDieValue);
+				rollResultValueLabel.setText(""+r);
+				last = arg0;
+				count++;
+				if (count > MAX_ROLLS)
+				{
+					clock.stop();
+					dieRoll(rollingDieValue);
+					count = 0;
+				}
+			}
+		}
+	}
+	
+	private int rollingDieValue;
+	public void rollAnimation() {
+		rollingDieValue = 20;
+		clock.start();
+	}
+
 	public void dieRoll(int die)
 	{
 		//gets a random number between 0.0 and 1.0 then time if the size of the die, and plus one, then cast it to an int
@@ -218,6 +262,7 @@ public class VideoController
 	//run right as the program starts
 	public void initialize()
 	{
+		clock = new Roller();
 		this.capture = new VideoCapture();
 		this.cameraActive = false;
 		playerListVIew.setCellFactory(chatRoomListView -> new PlayerListCellController());
