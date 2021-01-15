@@ -13,12 +13,19 @@ import javafx.scene.image.Image;
 
 public class Grid {
 
-	public static final int GRASS= 0;
+	public static final int BIOME= 0;
 	public static final int TREE = 1;
 	public static final int STONE = 2;
 	public static final int WATER = 3;
 	public static final int ENEMY = 4;
 	public static final int PLAYER = 5;
+	
+	public static final int BIOME_GRASS = 0;
+	public static final int BIOME_BRICK = 1;
+	public static final int BIOME_DUNGEON = 2;
+	public static final int BIOME_MAGMA = 3;
+	public static final int BIOME_SAND = 4;
+	public static final int BIOME_SNOW = 5;
 	
 	private static final int FULL = 1;
 	private static final int LINE = 2;
@@ -40,7 +47,7 @@ public class Grid {
 	
 	ArrayList<BufferedImage> water =  new ArrayList<>();
 	
-	BufferedImage grass;
+	ArrayList<BufferedImage> biome =  new ArrayList<>();
 	
 	BufferedImage enemy;
 	
@@ -81,6 +88,7 @@ public class Grid {
 	
 	private int sizeX;
 	private int sizeY;
+	private int biomeType = 0;
 	private int squareWidth = 100;
 	private int strokeWidth = 1;
 
@@ -96,7 +104,12 @@ public class Grid {
 			water.add(ImageIO.read(getClass().getResourceAsStream("/water002.png")));
 			water.add(ImageIO.read(getClass().getResourceAsStream("/water003.png")));
 			water.add(ImageIO.read(getClass().getResourceAsStream("/water004.png")));
-			grass = ImageIO.read(getClass().getResource("/grass1.png"));
+			biome.add(ImageIO.read(getClass().getResource("/grass1.png")));
+			biome.add(ImageIO.read(getClass().getResource("/tileset_brick1.png")));
+			biome.add(ImageIO.read(getClass().getResource("/tileset_dungeontile1.png")));
+			biome.add(ImageIO.read(getClass().getResource("/tileset_magma1.png")));
+			biome.add(ImageIO.read(getClass().getResource("/tileset_sand1.png")));
+			biome.add(ImageIO.read(getClass().getResource("/tileset_snow1.png")));
 			enemy = ImageIO.read(getClass().getResource("/enemy1.png"));
 			
 			//load class icons
@@ -138,7 +151,7 @@ public class Grid {
 			
 			for (int i = 0; i < sizeX; i ++)
 	    	{
-				gridInTypes.get(j).add(GRASS);
+				gridInTypes.get(j).add(BIOME);
 				gridList.get(j).add(new ArrayList<>());
 				gridList.get(j).get(i).add((squareWidth)*i);
 				gridList.get(j).get(i).add((squareWidth)*j);
@@ -191,7 +204,7 @@ public class Grid {
 			for (int j = 0; j < sizeY; j++)
 			{
 				//set the square to grass
-				setSquare(i, j, GRASS);
+				setSquare(i, j, BIOME);
 			}
 		}
 		drawSquare();
@@ -274,7 +287,7 @@ public class Grid {
 						else
 						{
 							//changes the color to the corresponding color on the grass image
-							rgb = grass.getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
+							rgb = biome.get(biomeType).getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
 							
 							//changes the color of the pixel
 							gridLayer.setRGB(i, j, rgb);
@@ -655,6 +668,16 @@ public class Grid {
 				}
 		}
 		return waterStructure;
+	}
+
+
+	public int getBiomeType() {
+		return biomeType;
+	}
+
+
+	public void setBiomeType(int biomeType) {
+		this.biomeType = biomeType;
 	}
 
 	
