@@ -675,7 +675,11 @@ public class VideoController
 		int coloumns =gridColour.size() / rows;
 		
 		//creates a virtual grid with those ratios
-		grid = new Grid(rows,coloumns);
+		grid = new Grid(rows,coloumns, 0);
+		environmentSlider.setMax(grid.getBiomeList());
+		environmentSlider.setMin(0);
+		environmentSlider.valueProperty().addListener((obs, oldval, newVal) -> 
+		environmentSlider.setValue(newVal.intValue()));
 		
 		//displays the grid
 		currentFrame1.setImage(grid.Display());
@@ -893,7 +897,8 @@ public class VideoController
 				}
 			}
 		}
-		grid.drawSquare();
+		environmentLabel.setText(environmentSlider.getValue() + "");
+		grid.drawSquare((int) environmentSlider.getValue());
 		currentFrame1.setImage(grid.Display());
 	}    
 }

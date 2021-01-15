@@ -88,11 +88,12 @@ public class Grid {
 	
 	private int sizeX;
 	private int sizeY;
+	private int biomeList;
 	private int biomeType = 0;
 	private int squareWidth = 100;
 	private int strokeWidth = 1;
 
-	public Grid(int x, int y)
+	public Grid(int x, int y, int biomeType)
 	{
 		try 
 		{
@@ -104,12 +105,12 @@ public class Grid {
 			water.add(ImageIO.read(getClass().getResourceAsStream("/water002.png")));
 			water.add(ImageIO.read(getClass().getResourceAsStream("/water003.png")));
 			water.add(ImageIO.read(getClass().getResourceAsStream("/water004.png")));
-			biome.add(ImageIO.read(getClass().getResource("/grass1.png")));
-			biome.add(ImageIO.read(getClass().getResource("/tileset_brick1.png")));
-			biome.add(ImageIO.read(getClass().getResource("/tileset_dungeontile1.png")));
-			biome.add(ImageIO.read(getClass().getResource("/tileset_magma1.png")));
-			biome.add(ImageIO.read(getClass().getResource("/tileset_sand1.png")));
-			biome.add(ImageIO.read(getClass().getResource("/tileset_snow1.png")));
+			biome.add(ImageIO.read(getClass().getResourceAsStream("/grass1.png")));
+			biome.add(ImageIO.read(getClass().getResourceAsStream("/tileset_brick1.png")));
+			biome.add(ImageIO.read(getClass().getResourceAsStream("/tileset_dungeontile1.png")));
+			biome.add(ImageIO.read(getClass().getResourceAsStream("/tileset_magma1.png")));
+			biome.add(ImageIO.read(getClass().getResourceAsStream("/tileset_sand1.png")));
+			biome.add(ImageIO.read(getClass().getResourceAsStream("/tileset_snow1.png")));
 			enemy = ImageIO.read(getClass().getResource("/enemy1.png"));
 			
 			//load class icons
@@ -136,6 +137,9 @@ public class Grid {
 		sizeX = y;
 		sizeY = x;
 		
+		//save amount of Biomes
+		setBiomeList(biome.size() - 1);
+		
 		//creates an image of that size
 		gridLayer = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
 		waterLayer = new BufferedImage(sizeX * squareWidth, sizeY * squareWidth, BufferedImage.TYPE_4BYTE_ABGR);
@@ -158,13 +162,13 @@ public class Grid {
 	    	}
 		}
 
-		set();
+		set(biomeType);
 		
 	}
 	
 	
 	//creates the grid lines
-	public void set()
+	public void set(int biomeType)
 	{	
 		//goes through the whole grid
 		for (int x = 0; x < gridLayer.getWidth(); x++) 
@@ -207,7 +211,7 @@ public class Grid {
 				setSquare(i, j, BIOME);
 			}
 		}
-		drawSquare();
+		drawSquare(biomeType);
 	}
 	
 	//reset the layers
@@ -227,7 +231,7 @@ public class Grid {
 	}
 	
 	//changes the visuals of a specific squares, by redrawing that square using another buffered image
-	public void drawSquare()
+	public void drawSquare(int biomeType)
 	{
 		for (int y = 0; y < gridInTypes.size(); y ++)
 		{
@@ -282,16 +286,12 @@ public class Grid {
 							//changes the color of the pixel
 							entitiesLayer.setRGB(i, j, rgb);
 						}
-						
-						//if invalid type is given, draw grass instead
-						else
-						{
-							//changes the color to the corresponding color on the grass image
-							rgb = biome.get(biomeType).getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
+
+						//changes the color to the corresponding color on the grass image
+						rgb = biome.get(biomeType).getRGB(i - (gridList.get(y).get(x).get(0) + strokeWidth), j - (gridList.get(y).get(x).get(1) + strokeWidth));
 							
-							//changes the color of the pixel
-							gridLayer.setRGB(i, j, rgb);
-						}
+						//changes the color of the pixel
+						gridLayer.setRGB(i, j, rgb);
 						
 		
 					}
@@ -649,7 +649,7 @@ public class Grid {
 								{
 									for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - water.get(LINE).getWidth()); j--)
 									{
-										waterStructure.setRGB(i - 1, j - 1, water.get(LINE).getRGB(waterStructure.getHeight() - i, waterStructure.getWidth() - j));
+										waterStructure.setRGB(i - 1, j - 1, water.get(LINE).getRGB(waterStructure.getWidth() - j, waterStructure.getHeight() - i));
 									}
 								}
 							}
@@ -678,6 +678,16 @@ public class Grid {
 
 	public void setBiomeType(int biomeType) {
 		this.biomeType = biomeType;
+	}
+
+
+	public int getBiomeList() {
+		return biomeList;
+	}
+
+
+	public void setBiomeList(int biomeList) {
+		this.biomeList = biomeList;
 	}
 
 	
