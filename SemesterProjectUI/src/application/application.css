@@ -131,6 +131,11 @@
 	-fx-background-image:url(/battlemap/ui/rightPane.png);
 }
 
+#AssetsTab {
+	-fx-background-color: none;
+	-fx-background-image:url(/battlemap/ui/assets.png);	
+}
+
 #AdventurersTab {
 	-fx-background-color: none;
 	-fx-background-image:url(/battlemap/ui/adventurers.png);	
@@ -148,6 +153,16 @@
 	-fx-font-family: 'Bookmania-SemiBold';
 	-fx-background-color: none;
 	-fx-text-fill:#e0dbd5;
+}
+
+#AssetsTab:hover {
+	-fx-background-color: none;
+	-fx-background-image:url(/battlemap/ui/assetsh.png);	
+}
+
+#AssetsTab:selected  {
+	-fx-background-color: none;
+	-fx-background-image:url(/battlemap/ui/assetsh.png), url(/battlemap/ui/tabSelected2.png) ;	
 }
 
 #AdventurersTab:hover {
@@ -283,6 +298,13 @@
 	-fx-text-fill: #FFFFFF;
 }
 
+#menuSubTitleLabel {
+	-fx-font-size: 15.0;
+	-fx-font-family: 'MrsEaves-Bold';
+	-fx-text-fill: #FFFFFF;
+}
+
+
 #CameraPane {
 	-fx-background-color: #3b0707;
 }
@@ -357,6 +379,11 @@
 }
 
 /* ------------------------------- Player list ----------------------------------------- */
+
+.menuText {
+	-fx-text-fill:white;
+
+}
 
 .CellBody {
 	-fx-background-color:none;	

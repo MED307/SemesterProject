@@ -73,17 +73,27 @@ public class VideoController
 	@FXML
 	private ListView<Player> playerListVIew;
 	
+	@FXML
 	private Button nextTurn;
+	
+	@FXML
+	private Button sortTurnOrder;
 
 	@FXML
 	private Label rollResultValueLabel;
 	
 	@FXML 
-	Label rollResultsLabel;
+	private Label rollResultsLabel;
 	
 	@FXML 
 	private Label turnOrder;
-		
+	
+	@FXML
+	private Slider environmentSlider;
+	
+	@FXML
+	private Label environmentLabel;
+	
 	//List of players on the map
 	private ArrayList<Player> players =  new ArrayList<>();
 	
@@ -123,6 +133,9 @@ public class VideoController
 
 	private int hueStop = 40;
 
+	//Bool for turn order
+	boolean firstPlayer = false;
+	
 	//Value of a rolling die
 	private int rollingDieValue;
 	
@@ -142,7 +155,9 @@ public class VideoController
 	Scalar minValues;
 	Scalar maxValues;
 	
-	
+	//Turn Features
+		
+	//Next Turn
 	int index = 0;
 	@FXML
 	private void nextTurn(){
@@ -160,6 +175,7 @@ public class VideoController
 		turnOrder.setText(players.get(index).getName().substring(0,1).toUpperCase() + players.get(index).getName().substring(1) + "'s turn");
 	}
 	
+	// Sort Turn order
 	@FXML
 	private void sortListView(){
 		
@@ -310,7 +326,17 @@ public class VideoController
 			players.add(p);
 			playerListVIew.getItems().add(p);
 		}
+		
+		enableTurn();
 
+	}
+	
+	private void enableTurn() {
+		if (firstPlayer == false) {
+			firstPlayer = true;
+			nextTurn.setDisable(false);
+			sortTurnOrder.setDisable(false);
+		}
 	}
 	
 	@FXML
