@@ -679,7 +679,12 @@ public class VideoController
 		environmentSlider.setMax(grid.getBiomeList());
 		environmentSlider.setMin(0);
 		environmentSlider.valueProperty().addListener((obs, oldval, newVal) -> 
-		environmentSlider.setValue(newVal.intValue()));
+		{
+			environmentSlider.setValue(newVal.intValue());			
+			environmentLabel.setText(grid.getBiomeNames().get((int) environmentSlider.getValue()));	
+		});
+
+
 		
 		//displays the grid
 		currentFrame1.setImage(grid.Display());

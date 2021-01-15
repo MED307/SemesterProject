@@ -48,7 +48,9 @@ public class Grid {
 	ArrayList<BufferedImage> water =  new ArrayList<>();
 	
 	ArrayList<BufferedImage> biome =  new ArrayList<>();
-	
+	ArrayList<String> biomeNames =  new ArrayList<>();
+
+
 	BufferedImage enemy;
 	
 	
@@ -106,11 +108,17 @@ public class Grid {
 			water.add(ImageIO.read(getClass().getResourceAsStream("/water003.png")));
 			water.add(ImageIO.read(getClass().getResourceAsStream("/water004.png")));
 			biome.add(ImageIO.read(getClass().getResourceAsStream("/grass1.png")));
+			biomeNames.add("Plains");
 			biome.add(ImageIO.read(getClass().getResourceAsStream("/tileset_brick1.png")));
+			biomeNames.add("Bricks");
 			biome.add(ImageIO.read(getClass().getResourceAsStream("/tileset_dungeontile1.png")));
+			biomeNames.add("Dungeon");
 			biome.add(ImageIO.read(getClass().getResourceAsStream("/tileset_magma1.png")));
+			biomeNames.add("Magma");
 			biome.add(ImageIO.read(getClass().getResourceAsStream("/tileset_sand1.png")));
+			biomeNames.add("Dessert");
 			biome.add(ImageIO.read(getClass().getResourceAsStream("/tileset_snow1.png")));
+			biomeNames.add("Tundra");
 			enemy = ImageIO.read(getClass().getResource("/enemy1.png"));
 			
 			//load class icons
@@ -688,6 +696,13 @@ public class Grid {
 
 	public void setBiomeList(int biomeList) {
 		this.biomeList = biomeList;
+	}
+	public ArrayList<String> getBiomeNames() {
+		return biomeNames;
+	}
+
+	public void setBiomeNames(ArrayList<String> biomeNames) {
+		this.biomeNames = biomeNames;
 	}
 
 	
