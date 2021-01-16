@@ -680,7 +680,8 @@ public class VideoController
 		environmentSlider.setMin(0);
 		environmentSlider.valueProperty().addListener((obs, oldval, newVal) -> 
 		{
-			environmentSlider.setValue(newVal.intValue());			
+			environmentSlider.setValue(newVal.intValue());
+			grid.setBiomeType((int) environmentSlider.getValue());
 			environmentLabel.setText(grid.getBiomeNames().get((int) environmentSlider.getValue()));	
 		});
 
@@ -902,7 +903,6 @@ public class VideoController
 				}
 			}
 		}
-		environmentLabel.setText(environmentSlider.getValue() + "");
 		grid.drawSquare((int) environmentSlider.getValue());
 		currentFrame1.setImage(grid.Display());
 	}    

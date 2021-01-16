@@ -20,17 +20,10 @@ public class Grid {
 	public static final int ENEMY = 4;
 	public static final int PLAYER = 5;
 	
-	public static final int BIOME_GRASS = 0;
-	public static final int BIOME_BRICK = 1;
-	public static final int BIOME_DUNGEON = 2;
-	public static final int BIOME_MAGMA = 3;
-	public static final int BIOME_SAND = 4;
-	public static final int BIOME_SNOW = 5;
-	
-	private static final int FULL = 1;
-	private static final int LINE = 2;
-	private static final int OPENCORNER = 3;
-	private static final int CLOSECORNER = 4;
+	private static final int FULL = 0;
+	private static final int LINE = 1;
+	private static final int OPENCORNER = 2;
+	private static final int CLOSECORNER = 3;
 
 	
 	
@@ -45,7 +38,8 @@ public class Grid {
 	
 	BufferedImage stone;
 	
-	ArrayList<BufferedImage> water =  new ArrayList<>();
+	BufferedImage baseWater;
+	ArrayList<ArrayList<BufferedImage>> liquids = new ArrayList<>();
 	
 	ArrayList<BufferedImage> biome =  new ArrayList<>();
 	ArrayList<String> biomeNames =  new ArrayList<>();
@@ -102,22 +96,35 @@ public class Grid {
 			//loads the images in from the resource folder
 			tree = ImageIO.read(getClass().getResourceAsStream("/tree.png"));
 			stone = ImageIO.read(getClass().getResourceAsStream("/stone.png"));
-			water.add(ImageIO.read(getClass().getResourceAsStream("/water1.png")));
-			water.add(ImageIO.read(getClass().getResourceAsStream("/water001.png")));
-			water.add(ImageIO.read(getClass().getResourceAsStream("/water002.png")));
-			water.add(ImageIO.read(getClass().getResourceAsStream("/water003.png")));
-			water.add(ImageIO.read(getClass().getResourceAsStream("/water004.png")));
+			baseWater = ImageIO.read(getClass().getResourceAsStream("/water1.png"));
+			/*
+			liquids.add(new ArrayList<>());
+			liquids.add(new ArrayList<>());
+			liquids.add(new ArrayList<>());
+			liquids.add(new ArrayList<>());
+			
+			liquids.get(0).add(ImageIO.read(getClass().getResourceAsStream("/water001.png")));
+			liquids.get(0).add(ImageIO.read(getClass().getResourceAsStream("/water002.png")));
+			liquids.get(0).add(ImageIO.read(getClass().getResourceAsStream("/water003.png")));
+			liquids.get(0).add(ImageIO.read(getClass().getResourceAsStream("/water004.png")));
+			*/
 			biome.add(ImageIO.read(getClass().getResourceAsStream("/grass1.png")));
+			addLiquid("water");
 			biomeNames.add("Plains");
 			biome.add(ImageIO.read(getClass().getResourceAsStream("/tileset_brick1.png")));
+			addLiquid("aqueduct");
 			biomeNames.add("Bricks");
 			biome.add(ImageIO.read(getClass().getResourceAsStream("/tileset_dungeontile1.png")));
+			addLiquid("aqueduct");
 			biomeNames.add("Dungeon");
 			biome.add(ImageIO.read(getClass().getResourceAsStream("/tileset_magma1.png")));
+			addLiquid("lava");
 			biomeNames.add("Magma");
 			biome.add(ImageIO.read(getClass().getResourceAsStream("/tileset_sand1.png")));
+			addLiquid("water");
 			biomeNames.add("Dessert");
 			biome.add(ImageIO.read(getClass().getResourceAsStream("/tileset_snow1.png")));
+			addLiquid("ice");
 			biomeNames.add("Tundra");
 			enemy = ImageIO.read(getClass().getResource("/enemy1.png"));
 			
@@ -426,7 +433,7 @@ public class Grid {
 	
 	private BufferedImage determineWater(int x, int y, int type)
 	{
-		BufferedImage waterStructure = new BufferedImage(water.get(0).getWidth(), water.get(0).getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		BufferedImage waterStructure = new BufferedImage(baseWater.getWidth(), baseWater.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 		if (type == WATER)
 		{
 			for (int h = 0; h < 4; h++)
@@ -439,21 +446,21 @@ public class Grid {
 								{
 									if (gridInTypes.get(y-1).get(x-1) == WATER)
 									{
-										for (int i = 0; i < (waterStructure.getHeight() - water.get(FULL).getHeight()); i++)
+										for (int i = 0; i < (waterStructure.getHeight() - liquids.get(biomeType).get(FULL).getHeight()); i++)
 										{
-											for (int j = 0; j < (waterStructure.getWidth() - water.get(FULL).getWidth()); j++)
+											for (int j = 0; j < (waterStructure.getWidth() - liquids.get(biomeType).get(FULL).getWidth()); j++)
 											{
-												waterStructure.setRGB(i, j, water.get(FULL).getRGB(i, j));
+												waterStructure.setRGB(i, j, liquids.get(biomeType).get(FULL).getRGB(i, j));
 											}
 										}
 									}
 									else
 									{
-										for (int i = 0; i < (waterStructure.getHeight() - water.get(OPENCORNER).getHeight()); i++)
+										for (int i = 0; i < (waterStructure.getHeight() - liquids.get(biomeType).get(OPENCORNER).getHeight()); i++)
 										{
-											for (int j = 0; j < (waterStructure.getWidth() - water.get(OPENCORNER).getWidth()); j++)
+											for (int j = 0; j < (waterStructure.getWidth() - liquids.get(biomeType).get(OPENCORNER).getWidth()); j++)
 											{
-												waterStructure.setRGB(i, j, water.get(3).getRGB(i, j));
+												waterStructure.setRGB(i, j, liquids.get(biomeType).get(3).getRGB(i, j));
 											}
 										}
 									}
@@ -461,32 +468,32 @@ public class Grid {
 								}
 								else
 								{
-									for (int i = 0; i < (waterStructure.getHeight() - water.get(LINE).getHeight()); i++)
+									for (int i = 0; i < (waterStructure.getHeight() - liquids.get(biomeType).get(LINE).getHeight()); i++)
 									{
-										for (int j = 0; j < (waterStructure.getWidth() - water.get(LINE).getWidth()); j++)
+										for (int j = 0; j < (waterStructure.getWidth() - liquids.get(biomeType).get(LINE).getWidth()); j++)
 										{
-											waterStructure.setRGB(i, j, water.get(LINE).getRGB(i, j));
+											waterStructure.setRGB(i, j, liquids.get(biomeType).get(LINE).getRGB(i, j));
 										}
 									}
 								}
 							}
 							else if ( y >= 1 && gridInTypes.get(y-1).get(x) == WATER)
 							{
-								for (int i = 0; i < (waterStructure.getHeight() - water.get(LINE).getHeight()); i++)
+								for (int i = 0; i < (waterStructure.getHeight() - liquids.get(biomeType).get(LINE).getHeight()); i++)
 								{
-									for (int j = 0; j < (waterStructure.getWidth() - water.get(LINE).getWidth()); j++)
+									for (int j = 0; j < (waterStructure.getWidth() - liquids.get(biomeType).get(LINE).getWidth()); j++)
 									{
-										waterStructure.setRGB(i, j, water.get(LINE).getRGB(j, i));
+										waterStructure.setRGB(i, j, liquids.get(biomeType).get(LINE).getRGB(j, i));
 									}
 								}
 							}
 							else
 							{
-								for (int i = 0; i < (waterStructure.getHeight() - water.get(CLOSECORNER).getHeight()); i++)
+								for (int i = 0; i < (waterStructure.getHeight() - liquids.get(biomeType).get(CLOSECORNER).getHeight()); i++)
 								{
-									for (int j = 0; j < (waterStructure.getWidth() - water.get(CLOSECORNER).getWidth()); j++)
+									for (int j = 0; j < (waterStructure.getWidth() - liquids.get(biomeType).get(CLOSECORNER).getWidth()); j++)
 									{
-										waterStructure.setRGB(i, j, water.get(CLOSECORNER).getRGB(i, j));
+										waterStructure.setRGB(i, j, liquids.get(biomeType).get(CLOSECORNER).getRGB(i, j));
 									}
 								}
 							}
@@ -500,21 +507,21 @@ public class Grid {
 								{
 									if (gridInTypes.get(y+1).get(x-1) == WATER)
 									{
-										for (int i = 0; i < (waterStructure.getHeight() - water.get(FULL).getHeight()); i++)
+										for (int i = 0; i < (waterStructure.getHeight() - liquids.get(biomeType).get(FULL).getHeight()); i++)
 										{
-											for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - water.get(FULL).getWidth()); j--)
+											for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - liquids.get(biomeType).get(FULL).getWidth()); j--)
 											{
-												waterStructure.setRGB(i, j - 1, water.get(FULL).getRGB(i, waterStructure.getWidth() - j));
+												waterStructure.setRGB(i, j - 1, liquids.get(biomeType).get(FULL).getRGB(i, waterStructure.getWidth() - j));
 											}
 										}
 									}
 									else
 									{
-										for (int i = 0; i < (waterStructure.getHeight() - water.get(OPENCORNER).getHeight()); i++)
+										for (int i = 0; i < (waterStructure.getHeight() - liquids.get(biomeType).get(OPENCORNER).getHeight()); i++)
 										{
-											for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - water.get(OPENCORNER).getWidth()); j--)
+											for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - liquids.get(biomeType).get(OPENCORNER).getWidth()); j--)
 											{
-												waterStructure.setRGB(i, j - 1, water.get(OPENCORNER).getRGB(i,waterStructure.getWidth() - j));
+												waterStructure.setRGB(i, j - 1, liquids.get(biomeType).get(OPENCORNER).getRGB(i,waterStructure.getWidth() - j));
 											}
 										}
 									}
@@ -522,32 +529,32 @@ public class Grid {
 								}
 								else
 								{
-									for (int i = 0; i < (waterStructure.getHeight() - water.get(LINE).getHeight()); i++)
+									for (int i = 0; i < (waterStructure.getHeight() - liquids.get(biomeType).get(LINE).getHeight()); i++)
 									{
-										for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - water.get(LINE).getWidth()); j--)
+										for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - liquids.get(biomeType).get(LINE).getWidth()); j--)
 										{
-											waterStructure.setRGB(i, j - 1, water.get(LINE).getRGB(i, waterStructure.getWidth() - j));
+											waterStructure.setRGB(i, j - 1, liquids.get(biomeType).get(LINE).getRGB(i, waterStructure.getWidth() - j));
 										}
 									}
 								}
 							}
 							else if (y < (gridInTypes.size() - 1) && gridInTypes.get(y+1).get(x) == WATER)
 							{
-								for (int i = 0; i < (waterStructure.getHeight() - water.get(LINE).getHeight()); i++)
+								for (int i = 0; i < (waterStructure.getHeight() - liquids.get(biomeType).get(LINE).getHeight()); i++)
 								{
-									for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - water.get(LINE).getWidth()); j--)
+									for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - liquids.get(biomeType).get(LINE).getWidth()); j--)
 									{
-										waterStructure.setRGB(i, j - 1, water.get(LINE).getRGB(waterStructure.getWidth() - j, i));
+										waterStructure.setRGB(i, j - 1, liquids.get(biomeType).get(LINE).getRGB(waterStructure.getWidth() - j, i));
 									}
 								}
 							}
 							else
 							{
-								for (int i = 0; i < (waterStructure.getHeight() - water.get(CLOSECORNER).getHeight()); i++)
+								for (int i = 0; i < (waterStructure.getHeight() - liquids.get(biomeType).get(CLOSECORNER).getHeight()); i++)
 								{
-									for (int j = waterStructure.getWidth()-1; j > (waterStructure.getWidth() - water.get(CLOSECORNER).getWidth()); j--)
+									for (int j = waterStructure.getWidth()-1; j > (waterStructure.getWidth() - liquids.get(biomeType).get(CLOSECORNER).getWidth()); j--)
 									{
-										waterStructure.setRGB(i, j - 1, water.get(CLOSECORNER).getRGB(waterStructure.getWidth() - j, i));
+										waterStructure.setRGB(i, j - 1, liquids.get(biomeType).get(CLOSECORNER).getRGB(waterStructure.getWidth() - j, i));
 										
 									}
 								}
@@ -561,21 +568,21 @@ public class Grid {
 								{
 									if (gridInTypes.get(y-1).get(x + 1) == WATER)
 									{
-										for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - water.get(FULL).getHeight()); i--)
+										for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - liquids.get(biomeType).get(FULL).getHeight()); i--)
 										{
-											for (int j = 0; j < (waterStructure.getWidth() - water.get(FULL).getWidth()); j++)
+											for (int j = 0; j < (waterStructure.getWidth() - liquids.get(biomeType).get(FULL).getWidth()); j++)
 											{
-												waterStructure.setRGB(i - 1, j, water.get(FULL).getRGB(waterStructure.getHeight() - i, j));
+												waterStructure.setRGB(i - 1, j, liquids.get(biomeType).get(FULL).getRGB(waterStructure.getHeight() - i, j));
 											}
 										}
 									}
 									else
 									{
-										for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - water.get(OPENCORNER).getHeight()); i--)
+										for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - liquids.get(biomeType).get(OPENCORNER).getHeight()); i--)
 										{
-											for (int j = 0; j < (waterStructure.getWidth() - water.get(OPENCORNER).getWidth()); j++)
+											for (int j = 0; j < (waterStructure.getWidth() - liquids.get(biomeType).get(OPENCORNER).getWidth()); j++)
 											{
-												waterStructure.setRGB(i - 1, j, water.get(OPENCORNER).getRGB(waterStructure.getHeight() - i, j));
+												waterStructure.setRGB(i - 1, j, liquids.get(biomeType).get(OPENCORNER).getRGB(waterStructure.getHeight() - i, j));
 											}
 										}
 									}
@@ -583,32 +590,32 @@ public class Grid {
 								}
 								else
 								{
-									for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - water.get(LINE).getHeight()); i--)
+									for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - liquids.get(biomeType).get(LINE).getHeight()); i--)
 									{
-										for (int j = 0; j < (waterStructure.getWidth() - water.get(LINE).getWidth()); j++)
+										for (int j = 0; j < (waterStructure.getWidth() - liquids.get(biomeType).get(LINE).getWidth()); j++)
 										{
-											waterStructure.setRGB(i - 1, j, water.get(LINE).getRGB( waterStructure.getHeight() - i, j));
+											waterStructure.setRGB(i - 1, j, liquids.get(biomeType).get(LINE).getRGB( waterStructure.getHeight() - i, j));
 										}
 									}
 								}
 							}
 							else if (y >= 1 && gridInTypes.get(y-1).get(x) == WATER)
 							{
-								for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - water.get(LINE).getHeight()); i--)
+								for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - liquids.get(biomeType).get(LINE).getHeight()); i--)
 								{
-									for (int j = 0; j < (waterStructure.getWidth() - water.get(LINE).getWidth()); j++)
+									for (int j = 0; j < (waterStructure.getWidth() - liquids.get(biomeType).get(LINE).getWidth()); j++)
 									{
-										waterStructure.setRGB(i - 1, j, water.get(LINE).getRGB(j, waterStructure.getHeight() - i));
+										waterStructure.setRGB(i - 1, j, liquids.get(biomeType).get(LINE).getRGB(j, waterStructure.getHeight() - i));
 									}
 								}
 							}
 							else
 							{
-								for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - water.get(CLOSECORNER).getHeight()); i--)
+								for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - liquids.get(biomeType).get(CLOSECORNER).getHeight()); i--)
 								{
-									for (int j = 0; j < (waterStructure.getWidth() - water.get(CLOSECORNER).getWidth()); j++)
+									for (int j = 0; j < (waterStructure.getWidth() - liquids.get(biomeType).get(CLOSECORNER).getWidth()); j++)
 									{
-										waterStructure.setRGB(i - 1, j, water.get(CLOSECORNER).getRGB(waterStructure.getHeight() - i, j));
+										waterStructure.setRGB(i - 1, j, liquids.get(biomeType).get(CLOSECORNER).getRGB(waterStructure.getHeight() - i, j));
 									}
 								}
 							}
@@ -620,21 +627,21 @@ public class Grid {
 								{
 									if (gridInTypes.get(y + 1).get(x + 1) == WATER)
 									{
-										for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - water.get(FULL).getHeight()); i--)
+										for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - liquids.get(biomeType).get(FULL).getHeight()); i--)
 										{
-											for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - water.get(FULL).getWidth()); j--)
+											for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - liquids.get(biomeType).get(FULL).getWidth()); j--)
 											{
-												waterStructure.setRGB(i - 1, j - 1, water.get(FULL).getRGB(waterStructure.getHeight() - i, waterStructure.getWidth() - j));
+												waterStructure.setRGB(i - 1, j - 1, liquids.get(biomeType).get(FULL).getRGB(waterStructure.getHeight() - i, waterStructure.getWidth() - j));
 											}
 										}
 									}
 									else
 									{
-										for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - water.get(OPENCORNER).getHeight()); i--)
+										for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - liquids.get(biomeType).get(OPENCORNER).getHeight()); i--)
 										{
-											for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - water.get(OPENCORNER).getWidth()); j--)
+											for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - liquids.get(biomeType).get(OPENCORNER).getWidth()); j--)
 											{
-												waterStructure.setRGB(i - 1, j - 1, water.get(OPENCORNER).getRGB(waterStructure.getHeight() - i, waterStructure.getWidth() - j));
+												waterStructure.setRGB(i - 1, j - 1, liquids.get(biomeType).get(OPENCORNER).getRGB(waterStructure.getHeight() - i, waterStructure.getWidth() - j));
 											}
 										}
 									}
@@ -642,32 +649,32 @@ public class Grid {
 								}
 								else
 								{
-									for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - water.get(LINE).getHeight()); i--)
+									for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - liquids.get(biomeType).get(LINE).getHeight()); i--)
 									{
-										for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - water.get(LINE).getWidth()); j--)
+										for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - liquids.get(biomeType).get(LINE).getWidth()); j--)
 										{
-											waterStructure.setRGB(i - 1, j - 1, water.get(LINE).getRGB(waterStructure.getHeight() - i, waterStructure.getWidth() - j));
+											waterStructure.setRGB(i - 1, j - 1, liquids.get(biomeType).get(LINE).getRGB(waterStructure.getHeight() - i, waterStructure.getWidth() - j));
 										}
 									}
 								}
 							}
 							else if (y < (gridInTypes.size() - 1) && gridInTypes.get(y + 1).get(x) == WATER)
 							{
-								for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - water.get(LINE).getHeight()); i--)
+								for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - liquids.get(biomeType).get(LINE).getHeight()); i--)
 								{
-									for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - water.get(LINE).getWidth()); j--)
+									for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - liquids.get(biomeType).get(LINE).getWidth()); j--)
 									{
-										waterStructure.setRGB(i - 1, j - 1, water.get(LINE).getRGB(waterStructure.getWidth() - j, waterStructure.getHeight() - i));
+										waterStructure.setRGB(i - 1, j - 1, liquids.get(biomeType).get(LINE).getRGB(waterStructure.getWidth() - j, waterStructure.getHeight() - i));
 									}
 								}
 							}
 							else
 							{
-								for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - water.get(CLOSECORNER).getHeight()); i--)
+								for (int i = waterStructure.getHeight() - 1; i > (waterStructure.getHeight() - liquids.get(biomeType).get(CLOSECORNER).getHeight()); i--)
 								{
-									for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - water.get(CLOSECORNER).getWidth()); j--)
+									for (int j = waterStructure.getWidth() - 1; j > (waterStructure.getWidth() - liquids.get(biomeType).get(CLOSECORNER).getWidth()); j--)
 									{
-										waterStructure.setRGB(i - 1, j - 1, water.get(CLOSECORNER).getRGB(waterStructure.getHeight() - i, waterStructure.getWidth() - j));
+										waterStructure.setRGB(i - 1, j - 1, liquids.get(biomeType).get(CLOSECORNER).getRGB(waterStructure.getHeight() - i, waterStructure.getWidth() - j));
 									}
 								}
 							}
@@ -676,6 +683,20 @@ public class Grid {
 				}
 		}
 		return waterStructure;
+	}
+	
+	public void addLiquid(String name)
+	{
+		liquids.add(new ArrayList<>());
+		for (int i = 1; i < 5; i++)
+		{
+			try {
+				liquids.get(liquids.size()-1).add(ImageIO.read(getClass().getResourceAsStream("/" + name + "00" + i + ".png")));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 
